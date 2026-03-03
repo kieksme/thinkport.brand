@@ -2,7 +2,7 @@
 
 ## 📦 What's Included
 
-This release contains all official Corporate Identity and Corporate Design materials for kieks.me GbR.
+This release contains all official Corporate Identity and Corporate Design materials for Thinkport GmbH.
 
 ### Assets Structure
 

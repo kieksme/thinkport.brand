@@ -582,7 +582,7 @@ Examples:
   node scripts/generate-image-linkedin.mjs \\
     --type title \\
     --color aqua \\
-    --text "kieks.me GbR" \\
+    --text "Thinkport GmbH" \\
     --output output/linkedin-title-aqua.jpg
 
   # Generate logo image

@@ -1,6 +1,6 @@
 # Font Licenses
 
-This document contains license information for the fonts used in the kieks.me GbR brand identity.
+This document contains license information for the fonts used in the Thinkport GmbH brand identity.
 
 ## Hanken Grotesk
 

@@ -6,7 +6,7 @@ Thank you for your interest in contributing to the kieks.me Corporate Identity a
 
 **All changes to this repository require explicit permission from authorized maintainers.**
 
-This repository contains official corporate identity materials that represent the kieks.me GbR brand. Unauthorized modifications could lead to brand inconsistencies and confusion in the market.
+This repository contains official corporate identity materials that represent the Thinkport GmbH brand. Unauthorized modifications could lead to brand inconsistencies and confusion in the market.
 
 **Remember:** This is not a typical open-source project. Changes require formal approval to maintain brand integrity.
 
@@ -194,4 +194,4 @@ Please open an issue or contact the brand team before submitting.
 
 ---
 
-Thank you for helping maintain and improve the kieks.me brand assets!
+Thank you for helping maintain and improve the Thinkport brand assets!

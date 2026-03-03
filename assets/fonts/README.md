@@ -1,6 +1,6 @@
 # Brand Fonts
 
-This directory contains the official kieks.me GbR brand fonts and typography assets.
+This directory contains the official Thinkport GmbH brand fonts and typography assets.
 
 **Note**: Assets are distributed as ZIP archives only. Individual font files are not available for download. Download the complete font assets as part of the [latest release ZIP](https://github.com/kieksme/kieks.me.cicd/releases).
 
@@ -20,7 +20,7 @@ assets/fonts/
 
 ### Primary Brand Font (Hausschrift)
 
-**Hanken Grotesk** is the official brand font (Hausschrift) for kieks.me GbR.
+**Hanken Grotesk** is the official brand font (Hausschrift) for Thinkport GmbH.
 
 - **Font Family**: Hanken Grotesk
 - **Usage**: Headings, UI elements, and brand-specific typography

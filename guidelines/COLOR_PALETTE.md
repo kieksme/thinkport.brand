@@ -2,7 +2,7 @@
 
 ## Brand Colors
 
-The kieks.me GbR color palette consists of primary and secondary colors that work together to create a cohesive visual identity.
+The Thinkport GmbH color palette consists of primary and secondary colors that work together to create a cohesive visual identity.
 
 ## Primary Colors
 
@@ -34,7 +34,7 @@ CMYK: C:0 M:0 Y:0 K:0
 
 ## Selection Colors
 
-The kieks.me brand uses three primary selection colors that can be used for accents, highlights, and interactive elements.
+The Thinkport brand uses three primary selection colors that can be used for accents, highlights, and interactive elements.
 
 ### Aqua
 

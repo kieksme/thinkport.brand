@@ -4,7 +4,7 @@ This document provides guidance on how to properly use the corporate identity ma
 
 ## 📖 General Usage Policy
 
-All employees, contractors, and authorized partners of kieks.me GbR are permitted to use the materials in this repository for company-related purposes.
+All employees, contractors, and authorized partners of Thinkport GmbH are permitted to use the materials in this repository for company-related purposes.
 
 ### ✅ Permitted Uses
 
@@ -36,7 +36,7 @@ You may use these materials for:
 
 Do NOT use these materials for:
 
-- Personal projects unrelated to kieks.me GbR
+- Personal projects unrelated to Thinkport GmbH
 - Competing businesses or conflicting interests
 - Unauthorized modifications or derivatives
 - Purposes that could damage the company's reputation
@@ -94,7 +94,7 @@ A: No. Logos must be used exactly as provided. Contact maintainers if you need a
 A: No. Brand colors are fixed. Use the approved palette only.
 
 **Q: Can I share these materials with external vendors?**
-A: Yes, if the vendor is working on an authorized kieks.me GbR project.
+A: Yes, if the vendor is working on an authorized Thinkport GmbH project.
 
 **Q: What if I need an asset that's not in the repository?**
 A: Contact the maintainers listed in CODEOWNERS to request new assets.
@@ -127,7 +127,7 @@ To stay informed about changes:
 
 ## ⚖️ Legal and Compliance
 
-- All materials are owned by kieks.me GbR
+- All materials are owned by Thinkport GmbH
 - Usage is governed by company policies and applicable laws
 - Unauthorized use or distribution may result in disciplinary action
 - See the [LICENSE](LICENSE) file for detailed licensing information

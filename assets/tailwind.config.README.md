@@ -1,6 +1,6 @@
 # Tailwind CSS Configuration
 
-This directory contains the complete Tailwind CSS theme configuration for kieks.me GbR brand assets, including both colors and fonts.
+This directory contains the complete Tailwind CSS theme configuration for Thinkport GmbH brand assets, including both colors and fonts.
 
 ## Available Files
 

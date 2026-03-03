@@ -59,7 +59,7 @@ function generateVCard(data) {
   }
 
   // Add organization/company name
-  const companyName = data.companyName || 'kieks.me GbR';
+  const companyName = data.companyName || 'Thinkport GmbH';
   lines.push(`ORG:${companyName}`);
 
   if (data.email) {
@@ -394,7 +394,7 @@ function renderFrontSide(page, data, fonts, images) {
   }
   
   // Company name (Source Sans 3 Regular/400, 7pt, light gray)
-  const companyName = data.companyName || 'kieks.me GbR';
+  const companyName = data.companyName || 'Thinkport GmbH';
   page.drawText(companyName, {
     x: contactX,
     y: currentY,
@@ -849,7 +849,7 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
   // Prepare template data
   const templateData = {
     ...contactData,
-    companyName: 'kieks.me GbR',
+    companyName: 'Thinkport GmbH',
   };
   
   // Normalize website URL

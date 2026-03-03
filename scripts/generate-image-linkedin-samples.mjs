@@ -37,7 +37,7 @@ async function generateSampleLinkedInImages() {
   // Text options for different image types
   const textOptions = {
     logo: null, // No text for logo images
-    title: 'kieks.me GbR',
+    title: 'Thinkport GmbH',
     'culture-main': 'Unternehmenskultur',
     'culture-module': 'Team',
     photo: null, // No text for photos

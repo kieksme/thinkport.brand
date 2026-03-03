@@ -1,6 +1,6 @@
 # Brand Colors
 
-This directory contains the official kieks.me GbR brand color palette, including developer files and visual swatches.
+This directory contains the official Thinkport GmbH brand color palette, including developer files and visual swatches.
 
 **Note**: Assets are distributed as ZIP archives only. Individual files are not available for download. Download the complete color assets as part of the [latest release ZIP](https://github.com/kieksme/kieks.me.cicd/releases).
 

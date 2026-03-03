@@ -2,7 +2,7 @@
 
 ![kieks.me Corporate Identity & Corporate Design](assets/readme-header.svg)
 
-Repository to hold and share Corporate Identity and Corporate Design of kieks.me GbR.
+Repository to hold and share Corporate Identity and Corporate Design of Thinkport GmbH.
 
 ## Download Assets
 
@@ -14,7 +14,7 @@ Visit the [Releases](https://github.com/kieksme/kieks.me.cicd/releases) page to 
 
 ## Purpose
 
-This repository serves as the central source of truth for all Corporate Identity (CI) and Corporate Design (CD) materials for kieks.me GbR. It contains brand assets, guidelines, templates, and resources to ensure consistent brand representation across all company communications and materials.
+This repository serves as the central source of truth for all Corporate Identity (CI) and Corporate Design (CD) materials for Thinkport GmbH. It contains brand assets, guidelines, templates, and resources to ensure consistent brand representation across all company communications and materials.
 
 ## Modification Policy
 
@@ -32,11 +32,11 @@ This repository serves as the central source of truth for all Corporate Identity
 - Use logos, colors, fonts, and templates for company projects
 - Reference brand guidelines for consistent communications
 - Download and utilize assets for internal and external company materials
-- Share materials with partners and vendors when representing kieks.me GbR
+- Share materials with partners and vendors when representing Thinkport GmbH
 
 ## What's Included
 
-This repository contains all the visual identity assets and brand guidelines for kieks.me GbR, organized into two main categories:
+This repository contains all the visual identity assets and brand guidelines for Thinkport GmbH, organized into two main categories:
 
 ### Fundamentals
 

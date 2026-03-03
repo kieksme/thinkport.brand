@@ -58,7 +58,7 @@ Use `{{#if variable}}...{{/if}}` to conditionally render content:
 
 ## Brand Guidelines
 
-The templates follow kieks.me brand guidelines:
+The templates follow Thinkport brand guidelines:
 - Colors from `assets/colors/colors.json`
 - Typography: Hanken Grotesk (headings), Source Sans 3 (body)
 - Logo: kieks.me horizontal aqua dark variant

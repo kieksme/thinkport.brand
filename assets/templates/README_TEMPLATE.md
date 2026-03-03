@@ -58,6 +58,6 @@ This repository is licensed under the {{LICENSE}} - see the [LICENSE](LICENSE) f
 
 [![kieks.me](https://img.shields.io/badge/kieks.me-Corporate%20Identity-00FFDC?style=for-the-badge)](https://github.com/kieksme/kieks.me.cicd)
 
-Made with ❤️ by [kieks.me GbR](https://kieks.me)
+Made with ❤️ by [Thinkport GmbH](https://kieks.me)
 
 </div>

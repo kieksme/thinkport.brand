@@ -1,6 +1,6 @@
 # Logos
 
-This directory contains official kieks.me GbR logos in various formats.
+This directory contains official Thinkport GmbH logos in various formats.
 
 **Note**: Assets are also available as a complete ZIP archive. Download all logo assets as part of the [latest release ZIP](https://github.com/kieksme/kieks.me.cicd/releases).
 

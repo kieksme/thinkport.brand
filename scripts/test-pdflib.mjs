@@ -19,7 +19,7 @@ const testData = {
   phone: '+49 123 456788',
   mobile: '+49 123 4567880',
   website: 'www.kieks.me',
-  companyName: 'kieks.me GbR',
+  companyName: 'Thinkport GmbH',
 };
 
 const outputDir = join(projectRoot, 'output');

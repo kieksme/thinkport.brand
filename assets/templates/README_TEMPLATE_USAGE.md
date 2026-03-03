@@ -41,7 +41,7 @@ The template uses the following placeholders that must be replaced:
 ```markdown
 # kieks.me.cicd
 
-Repository to hold and share Corporate Identity and Corporate Design of kieks.me GbR.
+Repository to hold and share Corporate Identity and Corporate Design of Thinkport GmbH.
 ```
 
 ## Section Guidelines
@@ -109,7 +109,7 @@ Specify the license type. Common options:
 
 ### Footer Section
 
-**Important:** The footer section with kieks.me branding should remain unchanged to maintain brand consistency across all repositories.
+**Important:** The footer section with Thinkport branding should remain unchanged to maintain brand consistency across all repositories.
 
 ## Customization Guidelines
 
@@ -133,9 +133,9 @@ Specify the license type. Common options:
 Here's an example of a filled template for a hypothetical repository:
 
 ```markdown
-# kieks.me.example
+# thinkport.example
 
-Example repository demonstrating kieks.me branding and structure.
+Example repository demonstrating Thinkport branding and structure.
 
 ## Download Assets
 
@@ -145,7 +145,7 @@ Example repository demonstrating kieks.me branding and structure.
 
 ## Purpose
 
-This repository serves as an example of how to structure and document kieks.me projects.
+This repository serves as an example of how to structure and document Thinkport projects.
 
 ## Installation
 
@@ -188,7 +188,7 @@ This repository is licensed under the GPL-3.0 - see the [LICENSE](LICENSE) file 
 
 [![kieks.me](https://img.shields.io/badge/kieks.me-Corporate%20Identity-00FFDC?style=for-the-badge)](https://github.com/kieksme/kieks.me.cicd)
 
-Made with ❤️ by [kieks.me GbR](https://kieks.me)
+Made with ❤️ by [Thinkport GmbH](https://kieks.me)
 
 </div>
 ```
