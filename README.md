@@ -8,7 +8,7 @@ Repository to hold and share Corporate Identity and Corporate Design of Thinkpor
 
 **Download the latest release of brand assets:**
 
-[![Download Latest Release](https://img.shields.io/github/v/release/kieksme/kieks.me.cicd?label=Download%20Latest%20Release&style=for-the-badge&logo=github&logoColor=white&color=00FFDC)](https://github.com/kieksme/kieks.me.cicd/releases/latest)
+[![Download Latest Release](https://img.shields.io/github/v/release/kieksme/kieks.me.cicd?label=Download%20Latest%20Release&style=for-the-badge&logo=github&logoColor=white&color=0B2649)](https://github.com/kieksme/kieks.me.cicd/releases/latest)
 
 Visit the [Releases](https://github.com/kieksme/kieks.me.cicd/releases) page to download the latest version of all brand assets as a complete package.
 

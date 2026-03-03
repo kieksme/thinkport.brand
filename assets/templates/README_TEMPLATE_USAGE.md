@@ -141,7 +141,7 @@ Example repository demonstrating Thinkport branding and structure.
 
 **Download the latest release:**
 
-[![Download Latest Release](https://img.shields.io/github/v/release/kieksme/kieks.me.example?label=Download%20Latest%20Release&style=for-the-badge&logo=github&logoColor=white&color=00FFDC)](https://github.com/kieksme/kieks.me.example/releases/latest)
+[![Download Latest Release](https://img.shields.io/github/v/release/kieksme/kieks.me.example?label=Download%20Latest%20Release&style=for-the-badge&logo=github&logoColor=white&color=0B2649)](https://github.com/kieksme/kieks.me.example/releases/latest)
 
 ## Purpose
 
@@ -186,7 +186,7 @@ This repository is licensed under the GPL-3.0 - see the [LICENSE](LICENSE) file 
 
 **Part of the [kieks.me](https://kieks.me) ecosystem**
 
-[![kieks.me](https://img.shields.io/badge/kieks.me-Corporate%20Identity-00FFDC?style=for-the-badge)](https://github.com/kieksme/kieks.me.cicd)
+[![kieks.me](https://img.shields.io/badge/kieks.me-Corporate%20Identity-0B2649?style=for-the-badge)](https://github.com/kieksme/kieks.me.cicd)
 
 Made with ❤️ by [Thinkport GmbH](https://kieks.me)
 

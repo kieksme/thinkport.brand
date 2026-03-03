@@ -825,7 +825,7 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
   cardProgress('QR-Code generiert', 'done');
   
   // Load and convert logo
-  const logoPath = join(projectRoot, 'assets', 'logos', 'kieks.me-single-circle.svg');
+  const logoPath = join(projectRoot, 'assets', 'logos', 'thinkport-solo-light.svg');
   cardProgress('Lade Logo …', 'generating');
   const logoPngBuffer = await svgToPng(logoPath, 1000, 1000);
   cardProgress('Logo geladen', 'done');

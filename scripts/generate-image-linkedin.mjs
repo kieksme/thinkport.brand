@@ -194,7 +194,7 @@ async function generateLinkedInImage(type, options) {
 
     // Add logo if provided or use default
     if (logoPath || type === 'logo') {
-      const logoToUse = logoPath || join(projectRoot, 'assets', 'logos', 'kieks.me-single-circle.svg');
+      const logoToUse = logoPath || join(projectRoot, 'assets', 'logos', 'thinkport-solo-light.svg');
       
       if (!existsSync(logoToUse)) {
         warn(`Logo not found: ${logoToUse}, skipping logo overlay`);
@@ -557,7 +557,7 @@ Usage:
 Options:
   --type <type>      Image type: logo, title, culture-main, culture-module, photo, post
   --color <color>    Brand color: aqua, navy, or fuchsia
-  --logo <path>      Logo file path (optional, defaults to kieks.me logo)
+  --logo <path>      Logo file path (optional, defaults to Thinkport solo logo)
   --text <text>      Text to display (optional)
   --output <path>    Output file path
   --format <format>  Output format: jpeg or png (default: jpeg for large images, png for logos)
@@ -592,7 +592,7 @@ Examples:
     --output output/linkedin-logo-navy.png
 
 Brand Colors:
-  - aqua:    #00FFDC
+  - aqua:    #0B2649
   - navy:    #1E2A45
   - fuchsia: #FF008F
 `);

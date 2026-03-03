@@ -174,9 +174,9 @@ The SVG uses:
 ### Colors
 
 - Background: Navy (#1E2A45)
-- Logo accents: Aqua (#00FFDC)
+- Logo accents: Aqua (#0B2649)
 - Text: White (#FFFFFF)
-- Decorative elements: Aqua (#00FFDC) and Fuchsia (#FF008F) with 10% opacity
+- Decorative elements: Aqua (#0B2649) and Fuchsia (#FF008F) with 10% opacity
 
 ## Questions?
 

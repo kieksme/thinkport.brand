@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="1024" height="1024">
+<style>
+  @keyframes rotate1 { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes rotate2 { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+  @keyframes colorShift {
+    0% { fill-opacity: 0.2; }
+    25% { fill-opacity: 0.8; }
+    50% { fill-opacity: 0.2; }
+    75% { fill-opacity: 0.8; }
+    100% { fill-opacity: 0.2; }
+  }
+  @keyframes zoom {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  /* Gruppe 1 - Startet sofort */
+  .polygon-1 { animation: rotate1 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; }
+  .polygon-2 { animation: rotate2 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 3s; }
+  .polygon-3 { animation: rotate1 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 6s; }
+  
+  /* Gruppe 2 - Startet nach 2s */
+  .polygon-4 { animation: rotate2 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 9s; }
+  .polygon-5 { animation: rotate1 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 12s; }
+  .polygon-6 { animation: rotate2 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 15s; }
+  
+  /* Gruppe 3 - Startet nach 4s */
+  .polygon-7 { animation: rotate1 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 18s; }
+  .polygon-8 { animation: rotate2 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 21s; }
+  .polygon-9 { animation: rotate1 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 24s; }
+  
+  /* Gruppe 4 - Startet nach 6s */
+  .polygon-10 { animation: rotate2 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 27s; }
+  .polygon-11 { animation: rotate1 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 30s; }
+  .polygon-12 { animation: rotate2 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 33s; }
+</style>
+<rect x="0" y="0" width="1024" height="1024" fill="#585c68" />
+<g transform="scale(4.000000) translate(0.5 0.5)">
+<polygon class="polygon-1" fill="#3f4350" fill-opacity="0.501961" points="7,140 -16,259 271,204" />
+<polygon class="polygon-2" fill="#4c596d" fill-opacity="0.501961" points="197,183 271,63 -16,32" />
+<polygon class="polygon-3" fill="#2e2f31" fill-opacity="0.501961" points="244,234 180,173 271,180" />
+<polygon class="polygon-4" fill="#3f4350" fill-opacity="0.501961" points="100,38 245,-4 168,54" />
+<polygon class="polygon-5" fill="#4c596d" fill-opacity="0.501961" points="195,26 271,-4 248,180" />
+<polygon class="polygon-6" fill="#3f4350" fill-opacity="0.501961" points="161,223 69,271 43,198" />
+<polygon class="polygon-7" fill="#2e2f31" fill-opacity="0.501961" points="164,205 -4,172 130,159" />
+<polygon class="polygon-8" fill="#3f4350" fill-opacity="0.501961" points="172,110 27,-16 3,130" />
+<polygon class="polygon-9" fill="#3f4350" fill-opacity="0.501961" points="210,176 154,241 265,219" />
+<polygon class="polygon-10" fill="#3f4350" fill-opacity="0.501961" points="146,184 271,159 85,45" />
+<polygon class="polygon-11" fill="#2e2f31" fill-opacity="0.501961" points="-6,-16 18,21 -4,26" />
+<polygon class="polygon-12" fill="#3f4350" fill-opacity="0.501961" points="115,23 161,53 251,38" />
+</g>
+</svg>

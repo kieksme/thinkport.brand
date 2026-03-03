@@ -67,7 +67,7 @@ export function loadBrandColors() {
 
 /**
  * Parse hex color to RGB
- * @param {string} hex - Hex color string (e.g., "#00FFDC")
+ * @param {string} hex - Hex color string (e.g., "#0B2649")
  * @returns {Object} RGB object with r, g, b values (0-255)
  */
 export function hexToRgb(hex) {
@@ -83,7 +83,7 @@ export function hexToRgb(hex) {
 
 /**
  * Convert hex color to RGB values normalized to 0-1 range (for PDF)
- * @param {string} hex - Hex color string (e.g., "#00FFDC")
+ * @param {string} hex - Hex color string (e.g., "#0B2649")
  * @returns {Object} RGB object with r, g, b values (0-1)
  */
 export function hexToRgbNormalized(hex) {

@@ -2,103 +2,74 @@
 
 ## Logo Variations
 
-Our logo comes in several variations to ensure versatility across different applications:
+Thinkport logos are provided in several variants for different contexts:
 
-### Primary Logo
+### Horizontal Logos
 
-- **Full Color**: Use whenever possible on light backgrounds
-- **Location**: `assets/logos/` directory - see available files in the repository
+- **Dark** (`thinkport-logo-horizontal-dark.svg`) – Use on dark backgrounds.
+- **Light** (`thinkport-logo-horizontal-light.svg`) – Use on light backgrounds.
+- PNG versions are available for fixed sizes (e.g. `thinkport-logo-horizontal-light-200x50.png`, `thinkport-logo-horizontal-light-hr.png`).
 
-### Secondary Variations
+### Icon & Venitus Variants
 
-- **Monochrome**: For single-color applications
-- **White**: For use on dark backgrounds
-- **Black**: For print applications
+- **Solo** (`thinkport-solo-light.svg`) – Icon-only, light version; suitable for app icons, avatars, and small placements.
+- **Venitus** (`thinkport-venitus-dark.svg`, `thinkport-venitus-light.svg`) – Thinkport with Venitus wordmark; use dark or light to match background.
+- **Icon** (`tp.svg`) – Minimal “tp” mark for very small or icon-only use.
+- **A Venitus Company** (`a-venitus-company-hoch.svg`) – “A Venitus Company” lockup (horizontal).
 
-### Animated Logos
+### File Locations
 
-- **Animated Horizontal Logos**: Interactive SVG versions featuring a playful "poke" animation
-- **Location**: `assets/logos/animated/` directory
-- **Available Variants**: All color variants (aqua, purple, red) in both dark and light versions
-- **Use Cases**: Digital presentations, websites, interactive media, loading screens
-- **Format**: SVG with embedded SMIL animations
-- **Animation Details**:
-  - Duration: 1 second per cycle
-  - Loop: Continuous (infinite)
-  - Effect: Finger element "pokes" the "k" letter with a bounce response
+- All logo files live in the `assets/logos/` directory in this repository.
+- In the built brand site, they are referenced as `/logos/<filename>` (e.g. `/logos/thinkport-logo-horizontal-dark.svg`).
 
 ## File Formats
 
-### Vector Formats (Preferred)
+### Vector (Preferred)
 
-- **SVG**: For web and digital applications
-- **AI/EPS**: For print and professional design work
+- **SVG** – Use for web and digital; scalable and small file size.
 
-### Raster Formats
+### Raster
 
-- **PNG**: Transparent background, for digital use
-- **Minimum Resolution**: 300 DPI for print, 72 DPI for web
+- **PNG** – Use when a raster asset is required (e.g. email clients, favicons, fixed dimensions).
 
 ## Clear Space
 
-Maintain adequate clear space around the logo to ensure visibility and impact:
-
-- Minimum clear space: Equal to the height of the logo's smallest element
-- No text, graphics, or other elements should appear within this space
+- Keep adequate clear space around the logo (no text or graphics in the immediate vicinity).
+- Minimum clear space: roughly the height of the smallest meaningful element in the logo.
 
 ## Minimum Size
 
-### Print
-
-- Minimum width: 25mm (0.98 inches)
-- Minimum height: As proportional to width
-
-### Digital
-
-- Minimum width: 100px
-- Minimum height: As proportional to width
+- **Print**: Minimum width 25 mm; keep proportions.
+- **Digital**: Minimum width 100 px; keep proportions.
 
 ## Proper Usage
 
 ### Do's
 
-✓ Use approved logo files from this repository  
-✓ Maintain original proportions  
-✓ Ensure adequate contrast with background  
-✓ Use appropriate variation for the context  
-✓ Maintain clear space around the logo
+- Use only the provided logo files from this repository.
+- Keep original proportions.
+- Ensure good contrast with the background.
+- Use the variant (dark/light) that fits the background.
+- Respect clear space.
 
 ### Don'ts
 
-✗ Don't stretch, compress, or distort  
-✗ Don't rotate the logo  
-✗ Don't change colors (use approved variations)  
-✗ Don't add effects (drop shadows, gradients, etc.)  
-✗ Don't place on busy or low-contrast backgrounds  
-✗ Don't recreate or modify the logo
+- Do not stretch, compress, or distort the logo.
+- Do not rotate the logo.
+- Do not change colors (use the approved dark/light variants).
+- Do not add effects (e.g. drop shadows, extra gradients).
+- Do not place on busy or low-contrast backgrounds.
+- Do not recreate or modify the logo.
 
 ## Background Guidelines
 
-### Preferred Backgrounds
-
-- White or very light backgrounds (for primary full-color logo)
-- Solid dark backgrounds (for white variation)
-- High contrast, uncluttered backgrounds
-
-### Backgrounds to Avoid
-
-- Busy patterns or images
-- Low contrast colors
-- Gradients (unless specifically designed for)
+- **Preferred**: White or very light backgrounds for the light logo; solid dark backgrounds for the dark logo.
+- **Avoid**: Busy patterns, low-contrast colors, or gradients unless specifically designed for.
 
 ## Color Specifications
 
-Refer to [Color Palette](COLOR_PALETTE.md) for exact color specifications for logo usage.
+See [COLOR_PALETTE.md](COLOR_PALETTE.md) for color specifications relevant to logo usage.
 
-## Examples
+## Questions
 
-*[To be added: Visual examples of correct and incorrect logo usage]*
-
-## Questions?
-
-If you're unsure about logo usage in a specific context, please consult with the brand team before proceeding.
+If you are unsure about logo usage in a specific context, contact the brand team before use.
