@@ -1,5 +1,41 @@
 {
   "selection": {
+    "darkBlue": {
+      "hex": "#0B2649",
+      "rgb": { "r": 11, "g": 38, "b": 73 },
+      "pantone": "533 C",
+      "usage": "Primary dark; trust, professionalism",
+      "shades": {
+        "lighter": { "hex": "#206FD6", "rgb": { "r": 32, "g": 111, "b": 214 } },
+        "medium": { "hex": "#174E96", "rgb": { "r": 23, "g": 78, "b": 150 } },
+        "darker": { "hex": "#0D2D57", "rgb": { "r": 13, "g": 45, "b": 87 } },
+        "darkest": { "hex": "#081A33", "rgb": { "r": 8, "g": 26, "b": 51 } }
+      }
+    },
+    "orange": {
+      "hex": "#FF5722",
+      "rgb": { "r": 255, "g": 87, "b": 34 },
+      "pantone": "1505 C",
+      "usage": "Accent; energy, call-to-action",
+      "shades": {
+        "darker": { "hex": "#E64C1E", "rgb": { "r": 230, "g": 76, "b": 30 } },
+        "medium": { "hex": "#BF4019", "rgb": { "r": 191, "g": 64, "b": 25 } },
+        "dark": { "hex": "#802A11", "rgb": { "r": 128, "g": 42, "b": 17 } },
+        "darkest": { "hex": "#401508", "rgb": { "r": 64, "g": 21, "b": 8 } }
+      }
+    },
+    "turquoise": {
+      "hex": "#00BCD4",
+      "rgb": { "r": 0, "g": 188, "b": 212 },
+      "pantone": "319 C",
+      "usage": "Accent; clarity, innovation",
+      "shades": {
+        "lighter": { "hex": "#00C6E0", "rgb": { "r": 0, "g": 198, "b": 224 } },
+        "slightlyDarker": { "hex": "#00B6CF", "rgb": { "r": 0, "g": 182, "b": 207 } },
+        "darker": { "hex": "#00A4BA", "rgb": { "r": 0, "g": 164, "b": 186 } },
+        "darkest": { "hex": "#004A54", "rgb": { "r": 0, "g": 74, "b": 84 } }
+      }
+    },
     "aqua": {
       "hex": "#00FFDC",
       "rgb": {
@@ -143,19 +179,11 @@
     }
   },
   "primary": {
-    "hex": "#000000",
-    "rgb": {
-      "r": 0,
-      "g": 0,
-      "b": 0
-    },
-    "cmyk": {
-      "c": 0,
-      "m": 0,
-      "y": 0,
-      "k": 100
-    },
-    "usage": "Primary buttons, headers, key brand elements"
+    "hex": "#0B2649",
+    "rgb": { "r": 11, "g": 38, "b": 73 },
+    "pantone": "533 C",
+    "cmyk": { "c": 100, "m": 60, "y": 0, "k": 73 },
+    "usage": "Primary brand color (Dark Blue); headers, key brand elements"
   },
   "secondary": {
     "hex": "#FFFFFF",

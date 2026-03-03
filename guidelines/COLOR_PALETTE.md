@@ -2,134 +2,96 @@
 
 ## Brand Colors
 
-The Thinkport GmbH color palette consists of primary and secondary colors that work together to create a cohesive visual identity.
+The Thinkport GmbH color palette consists of primary brand colors (Dark Blue, Orange, Turquoise) that work together for a consistent visual identity across all marketing and sales channels.
 
 ## Primary Colors
 
-### Primary Color
-
-*[To be defined: Your primary brand color]*
+### Dark Blue
 
 ```text
-Name: Primary Brand Color
-HEX: #000000
-RGB: rgb(0, 0, 0)
-CMYK: C:0 M:0 Y:0 K:100
+Name: Dark Blue
+HEX: #0B2649
+RGB: 11 38 73
+Pantone: 533 C
 ```
 
-**Usage**: Primary buttons, headers, key brand elements
+**Usage**: Trust, professionalism; primary dark backgrounds, headings, key brand elements
 
-### Secondary Color
-
-*[To be defined: Your secondary brand color]*
+### Orange
 
 ```text
-Name: Secondary Brand Color
-HEX: #FFFFFF
-RGB: rgb(255, 255, 255)
-CMYK: C:0 M:0 Y:0 K:0
+Name: Orange
+HEX: #FF5722
+RGB: 255 87 34
+Pantone: 1505 C
 ```
 
-**Usage**: Backgrounds, complementary elements
+**Usage**: Energy, call-to-action; accents, highlights, interactive elements
 
-## Selection Colors
-
-The Thinkport brand uses three primary selection colors that can be used for accents, highlights, and interactive elements.
-
-### Aqua
+### Turquoise
 
 ```text
-Name: Aqua
-HEX: #00FFDC
-RGB: rgb(0, 255, 220)
-CMYK: C:100 M:0 Y:14 K:0
+Name: Turquoise
+HEX: #00BCD4
+RGB: 0 188 212
+Pantone: 319 C
 ```
 
-**Usage**: Bright turquoise/aqua selection color
+**Usage**: Clarity, innovation; secondary accents, links, supporting visuals
 
-### Navy
+## Color Harmony and Shades
 
-```text
-Name: Navy
-HEX: #1E2A45
-RGB: rgb(30, 42, 69)
-CMYK: C:100 M:60 Y:0 K:73
-```
+Color shades and harmony rules provide additional variations for contrast and visual hierarchy. Use the [Adobe Color Wheel](https://color.adobe.com/create/color-wheel) with a base color in HEX (Cyan/Turquoise, Orange, or Dark Blue) to explore harmony rules.
 
-**Usage**: Dark blue/navy selection color
+### Analogous Harmony (Cyan #00BCD4)
 
-### Fuchsia
+Related harmony colors for Turquoise/Cyan:
 
-```text
-Name: Fuchsia
-HEX: #FF008F
-RGB: rgb(255, 0, 143)
-CMYK: C:0 M:100 Y:44 K:0
-```
+- **#00BCD4** – Base Turquoise
+- **#51F07F** – Light green
+- **#AFD955** – Lime
+- **#F0CF51** – Yellow
+- **#E6934E** – Orange accent
 
-**Usage**: Vibrant pink/fuchsia selection color
+Use for complementary palettes and secondary accents while keeping the base Turquoise as primary.
 
-## Color Shades
+### Turquoise (#00BCD4) Shading
 
-Color shades provide additional variations of the selection colors for improved contrast and visual hierarchy. These shades were generated using the [Adobe Color Wheel](https://color.adobe.com/create/color-wheel) to ensure professional color harmony.
+| HEX     | Usage / note        |
+|---------|---------------------|
+| #00C6E0 | Lighter variant     |
+| #00BCD4 | Base                |
+| #00B6CF | Slightly darker     |
+| #00A4BA | Darker              |
+| #004A54 | Dark for contrast   |
 
-### Aqua Shades
+### Orange (#FF5722) Shading
 
-#### Aqua Medium
+| HEX     | Usage / note        |
+|---------|---------------------|
+| #FF5722 | Base                |
+| #E64C1E | Darker              |
+| #BF4019 | Medium dark         |
+| #802A11 | Dark                |
+| #401508 | Very dark           |
 
-```text
-Name: Aqua Medium
-HEX: #00BFA5
-RGB: rgb(0, 191, 165)
-CMYK: C:100 M:0 Y:14 K:25
-```
+### Dark Blue (#0B2649) Shading
 
-**Usage**: Medium aqua shade for better contrast
+| HEX     | Usage / note        |
+|---------|---------------------|
+| #0B2649 | Base                |
+| #206FD6 | Lighter blue        |
+| #174E96 | Medium blue         |
+| #0D2D57 | Darker              |
+| #081A33 | Very dark           |
 
-#### Aqua Dark
+### Pantone (Screen Printing)
 
-```text
-Name: Aqua Dark
-HEX: #006B5F
-RGB: rgb(0, 107, 95)
-CMYK: C:100 M:0 Y:11 K:58
-```
+For consistent reproduction in print and industrial applications, use the Pantone Color System (CMYK Pantone + solid coated). Find in Illustrator:
 
-**Usage**: Dark aqua shade for links on white background (WCAG AA compliant with 4.5:1 contrast ratio)
-
-### Navy Shades
-
-Navy uses Tailwind's standard numbering system (50=lightest, 900=darkest):
-
-- **Navy 50** (`#F0F2F5`): Very light navy for subtle backgrounds
-- **Navy 100** (`#E1E5EB`): Light navy for backgrounds
-- **Navy 300** (`#5A6B8C`): Light navy shade for better readability
-- **Navy 400** (`#2F4169`): Medium navy shade
-- **Navy 500** (`#1E2A45`): Base navy color (default)
-
-**Usage Examples**:
-- `bg-navy-50` - Very light background
-- `text-navy-300` - Light text
-- `bg-navy-500` or `bg-navy` - Base color
-
-### Fuchsia Shades
-
-Fuchsia uses Tailwind's standard numbering system (50=lightest, 900=darkest):
-
-- **Fuchsia 50** (`#FFE6F5`): Very light fuchsia for subtle backgrounds
-- **Fuchsia 100** (`#FFCCEB`): Light fuchsia for backgrounds
-- **Fuchsia 500** (`#FF008F`): Base fuchsia color (default)
-- **Fuchsia 600** (`#BF006B`): Medium fuchsia shade
-- **Fuchsia 700** (`#800047`): Dark fuchsia shade
-
-**Usage Examples**:
-- `bg-fuchsia-50` - Very light background
-- `bg-fuchsia-600` - Medium shade for hover states
-- `bg-fuchsia-500` or `bg-fuchsia` - Base color
-
-### Color Generation
-
-The color shades were generated using the [Adobe Color Wheel](https://color.adobe.com/create/color-wheel) to ensure professional color harmony and consistent visual relationships between the base colors and their variations. This tool helps maintain color theory principles while creating accessible color combinations.
+- **Dark Blue:** Pantone 533 C
+- **Orange:** Pantone 1505 C
+- **Turquoise:** Pantone 319 C
 
 ## Neutral Colors
 
@@ -170,23 +132,23 @@ CMYK: C:0 M:0 Y:0 K:20
 
 ### Backgrounds
 
-- **Light Backgrounds**: Use primary dark colors for text and elements
-- **Dark Backgrounds**: Use white or light colors for text and elements
+- **Light Backgrounds**: Use Dark Blue or dark gray for text and primary elements
+- **Dark Backgrounds**: Use white or Turquoise/Orange for text and accents (e.g. Dark Blue #0B2649 as background)
 - Ensure WCAG AA contrast ratios (4.5:1 for normal text, 3:1 for large text)
 
 ### Text
 
-- **Headings**: Primary brand color or dark gray
+- **Headings**: Dark Blue (#0B2649) or dark gray
 - **Body Text**: Dark gray (#333333)
-- **Links**: Use Aqua Dark (#006B5F) for links on white backgrounds to ensure WCAG AA compliance
-- **Link Hover**: Use base Aqua (#00FFDC) for hover states
+- **Links**: Use Turquoise (#00BCD4) or darker shade (#00A4BA) on white backgrounds; check contrast for WCAG AA
+- **Link Hover**: Slightly lighter or darker Turquoise/Orange as appropriate
 - **Disabled Text**: Medium gray (#666666)
 
 ### Buttons and Interactive Elements
 
-- **Primary Actions**: Primary brand color
-- **Secondary Actions**: Secondary brand color or neutral colors
-- **Hover States**: Slightly darker or lighter variation
+- **Primary Actions**: Orange (#FF5722) or Turquoise (#00BCD4) on light backgrounds; white text on Dark Blue
+- **Secondary Actions**: Outlined with Dark Blue or Turquoise; neutral backgrounds
+- **Hover States**: Use shading variants (e.g. #E64C1E for Orange, #00A4BA for Turquoise)
 - **Disabled State**: Light gray with reduced opacity
 
 ## Accessibility
@@ -200,7 +162,7 @@ All color combinations must meet WCAG 2.1 Level AA standards for accessibility:
 ## Color Combinations to Avoid
 
 - Low contrast combinations that fail accessibility standards
-- Primary colors on primary colors
+- Primary colors on primary colors without sufficient contrast
 - Colors that vibrate when placed together
 
 ## Digital Color Management
@@ -213,7 +175,7 @@ All color combinations must meet WCAG 2.1 Level AA standards for accessibility:
 
 ### Print
 
-- Use CMYK values
+- Use Pantone (533 C, 1505 C, 319 C) or CMYK values where defined
 - Request color proofs before final printing
 - Be aware that colors may vary between digital and print media
 
@@ -228,4 +190,4 @@ Color palette files are available in multiple formats:
 
 ---
 
-*Last updated: 2025*
+Last updated: 2025
