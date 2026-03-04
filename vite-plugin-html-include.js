@@ -299,7 +299,7 @@ const HERO_CONTENT_MAP = {
   'impressum.html': {
     heroTitle: 'Impressum',
     heroSubtitle: 'Legal notice and company information',
-    heroExtras: heroExtrasTags('<span class="text-fuchsia">Thinkport GmbH</span> • <span class="text-aqua">Leipzig</span>'),
+    heroExtras: heroExtrasTags('<span class="text-fuchsia">Thinkport GmbH</span> • <span class="text-aqua">Frankfurt am Main</span>'),
   },
   'fundamentals/index.html': {
     heroTitle: 'Fundamentals',
