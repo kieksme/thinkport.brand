@@ -90,10 +90,10 @@
     </svg>
   </g>
   <!-- Title (below logo) -->
-  <text x="100" y="320" font-family="HankenGrotesk, 'Hanken Grotesk', sans-serif" font-size="72" font-weight="700" fill="#FFFFFF">Impressum</text>
+  <text x="100" y="320" font-family="HankenGrotesk, 'Hanken Grotesk', sans-serif" font-size="72" font-weight="700" fill="#FFFFFF">Backgrounds</text>
   <!-- Subtitle -->
-  <text x="100" y="380" font-family="SourceSans3, 'Source Sans 3', sans-serif" font-size="28" font-weight="400" fill="#E8E8E8">Legal notice and company information</text>
-  <text x="100" y="440" font-family="SourceSans3, 'Source Sans 3', sans-serif" font-size="24" font-weight="400" fill="#00BCD4">Thinkport GmbH • Frankfurt am Main</text>
+  <text x="100" y="380" font-family="SourceSans3, 'Source Sans 3', sans-serif" font-size="28" font-weight="400" fill="#E8E8E8">Background graphics for hero, 16:9, banner, and web app – preview and SVG download</text>
+  <text x="100" y="440" font-family="SourceSans3, 'Source Sans 3', sans-serif" font-size="24" font-weight="400" fill="#00BCD4">Hero • 16:9 • Banner • Web App</text>
   <!-- Accent line -->
   <rect x="100" y="460" width="200" height="4" fill="#00BCD4"/>
 </svg>

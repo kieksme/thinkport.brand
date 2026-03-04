@@ -13,6 +13,7 @@
     "generate:avatar:samples": "node scripts/generate-avatar-samples.mjs",
     "generate:image:linkedin": "node scripts/generate-image-linkedin.mjs",
     "generate:image:linkedin:samples": "node scripts/generate-image-linkedin-samples.mjs",
+    "generate:og-banners": "node scripts/generate-og-banners.mjs",
     "generate:social-preview": "node scripts/generate-social-preview.mjs",
     "generate:readme-header": "node scripts/generate-readme-header.mjs",
     "generate:readme-header:samples": "node scripts/generate-readme-header-samples.mjs",

@@ -105,6 +105,17 @@ After pushing, verify the preview appears:
 - GitHub automatically provides these
 - Works with our 1280x640px format
 
+## Per-page Open Graph banners
+
+The site uses page-specific OG images in `assets/banner/opengraph/` (1200×630px SVG). Each banner shares:
+
+- **Background:** Abstract background image from `assets/backgrounds/5.svg` (scaled to cover 1200×630).
+- **Logo:** Thinkport logo at the top.
+- **Typography:** Hanken Grotesk (headings) and Source Sans 3 (body), embedded via `@font-face` for consistent rendering where supported.
+- **Content:** Page title, subtitle, optional tag line, and a page-specific graphic (e.g. color swatches for Colors, “Aa” sample for Typography, avatar squares for Avatars).
+
+To regenerate all OG banners from the shared template, run `node scripts/generate-og-banners.mjs` (see script for page list and customization).
+
 ## Design Guidelines
 
 ### Content Layout
