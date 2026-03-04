@@ -5,8 +5,8 @@
  */
 
 import { fileURLToPath } from 'url';
-import { dirname, join, resolve, existsSync } from 'path';
-import { readFileSync, writeFileSync, mkdirSync } from 'fs';
+import { dirname, join, resolve } from 'path';
+import { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
 import sharp from 'sharp';
 import inquirer from 'inquirer';
 import {
