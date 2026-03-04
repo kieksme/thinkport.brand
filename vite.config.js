@@ -1,35 +1,54 @@
 import { defineConfig } from 'vite'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { copyFileSync, existsSync } from 'fs'
+import { copyFileSync, existsSync, readFileSync, writeFileSync } from 'fs'
 import tailwindcss from '@tailwindcss/vite'
 import { htmlInclude } from './vite-plugin-html-include.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
+/** Base URL for raw GitHub repo assets (og:image, sitemaps, links). Change repo/branch here. */
+const REPO_BASE_URL = 'https://raw.githubusercontent.com/kieksme/thinkport.brand/main'
+
 // Plugin to copy manifest.json, sitemap.xml, and CHANGELOG.md to dist root
-const copyRootFilesPlugin = () => {
+const copyRootFilesPlugin = ({ repoBaseUrl }) => {
   return {
     name: 'copy-root-files',
     closeBundle() {
       const appFilesToCopy = ['manifest.json', 'sitemap.xml']
+      const appFilesWithReplace = ['sitemap.xml']
       const rootFilesToCopy = ['CHANGELOG.md']
       const appDir = resolve(__dirname, 'app')
+      const assetsDir = resolve(__dirname, 'assets')
       const rootDir = __dirname
       const distDir = resolve(__dirname, 'dist')
 
-      // Copy files from app directory
+      // Copy files from app directory (sitemap.xml: read → replace {{repoBaseUrl}} → write)
       appFilesToCopy.forEach((file) => {
         const src = resolve(appDir, file)
         const dest = resolve(distDir, file)
         
         if (existsSync(src)) {
-          copyFileSync(src, dest)
+          if (appFilesWithReplace.includes(file)) {
+            const content = readFileSync(src, 'utf-8').replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl)
+            writeFileSync(dest, content)
+          } else {
+            copyFileSync(src, dest)
+          }
           console.log(`✓ Copied ${file} to dist root`)
         } else {
           console.warn(`⚠ ${file} not found in app directory`)
         }
       })
+
+      // Copy assets/sitemap.xml with {{repoBaseUrl}} replacement to dist
+      const assetsSitemapSrc = resolve(assetsDir, 'sitemap.xml')
+      const assetsSitemapDest = resolve(distDir, 'sitemap-assets.xml')
+      if (existsSync(assetsSitemapSrc)) {
+        const content = readFileSync(assetsSitemapSrc, 'utf-8').replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl)
+        writeFileSync(assetsSitemapDest, content)
+        console.log('✓ Copied assets/sitemap.xml to dist as sitemap-assets.xml')
+      }
 
       // Copy files from root directory
       rootFilesToCopy.forEach((file) => {
@@ -51,9 +70,9 @@ export default defineConfig({
   base: '/',
   root: resolve(__dirname, 'app'),
   plugins: [
-    htmlInclude(),
+    htmlInclude({ repoBaseUrl: REPO_BASE_URL }),
     tailwindcss(),
-    copyRootFilesPlugin(),
+    copyRootFilesPlugin({ repoBaseUrl: REPO_BASE_URL }),
   ],
   build: {
     outDir: resolve(__dirname, 'dist'),

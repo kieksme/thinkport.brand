@@ -35,19 +35,19 @@ for (const { src, dst, urlPath } of filesToMove) {
   const oldUrl = src.replace('app/', '').replace('.html', '');
   content = content.replace(
     new RegExp(`https://kieksme\\.github\\.io/kieks\\.me\\.cicd/${oldUrl}\\.html`, 'g'),
-    `https://brand.kieks.me/${urlPath}`
+    `https://brand.thinkport.digital/${urlPath}`
   );
   
   // Update canonical URLs
   content = content.replace(
     new RegExp(`https://kieksme\\.github\\.io/kieks\\.me\\.cicd/${oldUrl}\\.html`, 'g'),
-    `https://brand.kieks.me/${urlPath}`
+    `https://brand.thinkport.digital/${urlPath}`
   );
   
   // Update JSON-LD URLs
   content = content.replace(
     new RegExp(`"url":\\s*"https://kieksme\\.github\\.io/kieks\\.me\\.cicd/${oldUrl}\\.html"`, 'g'),
-    `"url": "https://brand.kieks.me/${urlPath}"`
+    `"url": "https://brand.thinkport.digital/${urlPath}"`
   );
   
   // Update navigation - replace old flat navigation with hierarchical

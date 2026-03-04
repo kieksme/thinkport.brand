@@ -8,9 +8,11 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  * Vite plugin to process HTML includes
  * Replaces <!-- include: navigation -->, <!-- include: footer -->, <!-- include: hero -->,
  * <!-- include: analytics -->, <!-- include: fundamentals-grid -->, and <!-- include: implementations-grid --> with components
- * and adjusts relative paths based on file depth
+ * and adjusts relative paths based on file depth.
+ * Options.repoBaseUrl is used to replace {{repoBaseUrl}} (e.g. for og:image, raw GitHub links).
  */
-export function htmlInclude() {
+export function htmlInclude(options = {}) {
+  const repoBaseUrl = options.repoBaseUrl ?? ''
   const navigationPath = resolve(__dirname, 'app/components/navigation.html');
   const footerPath = resolve(__dirname, 'app/components/footer.html');
   const heroPath = resolve(__dirname, 'app/components/hero.html');
@@ -113,7 +115,7 @@ export function htmlInclude() {
       const basePath = depth > 0 ? '../'.repeat(depth) : '';
 
       if (!hasNavigation && !hasFooter && !hasHero && !hasAnalytics && !hasFundamentalsGrid && !hasImplementationsGrid) {
-        return html.replace(/\{\{basePath\}\}/g, basePath);
+        return html.replace(/\{\{basePath\}\}/g, basePath).replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl);
       }
 
       // Determine active page based on file path
@@ -176,8 +178,8 @@ export function htmlInclude() {
         html = html.replace('<!-- include: implementations-grid -->', implementationsGrid);
       }
 
-      // Replace {{basePath}} everywhere (head links, img src, a href, etc.)
-      html = html.replace(/\{\{basePath\}\}/g, basePath);
+      // Replace {{basePath}} and {{repoBaseUrl}} everywhere (head links, img src, a href, og:image, etc.)
+      html = html.replace(/\{\{basePath\}\}/g, basePath).replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl);
 
       return html;
     }
