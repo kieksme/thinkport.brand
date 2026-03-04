@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { copyFileSync, existsSync, readFileSync, writeFileSync } from 'fs'
+import { copyFileSync, cpSync, existsSync, createReadStream, readFileSync, statSync, writeFileSync } from 'fs'
 import tailwindcss from '@tailwindcss/vite'
 import { htmlInclude } from './vite-plugin-html-include.js'
 
@@ -9,6 +9,42 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 
 /** Base URL for raw GitHub repo assets (og:image, sitemaps, links). Change repo/branch here. */
 const REPO_BASE_URL = 'https://raw.githubusercontent.com/kieksme/thinkport.brand/main'
+
+const MIME_TYPES = {
+  '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.svg': 'image/svg+xml',
+  '.pdf': 'application/pdf',
+  '.md': 'text/markdown',
+}
+
+// Serve ./examples at /examples in dev (examples folder is outside Vite root)
+function serveExamplesPlugin() {
+  const examplesDir = resolve(__dirname, 'examples')
+  return {
+    name: 'serve-examples',
+    apply: 'serve',
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        if (!req.url?.startsWith('/examples/')) return next()
+        const pathname = req.url.replace(/\?.*$/, '')
+        const filePath = resolve(__dirname, pathname.slice(1))
+        if (!filePath.startsWith(examplesDir)) return next()
+        try {
+          const stat = statSync(filePath)
+          if (!stat.isFile()) return next()
+          const ext = pathname.slice(pathname.lastIndexOf('.'))
+          const contentType = MIME_TYPES[ext] || 'application/octet-stream'
+          res.setHeader('Content-Type', contentType)
+          createReadStream(filePath).pipe(res)
+        } catch {
+          next()
+        }
+      })
+    },
+  }
+}
 
 // Plugin to copy manifest.json, sitemap.xml, and CHANGELOG.md to dist root
 const copyRootFilesPlugin = ({ repoBaseUrl }) => {
@@ -62,6 +98,14 @@ const copyRootFilesPlugin = ({ repoBaseUrl }) => {
           console.warn(`⚠ ${file} not found in root directory`)
         }
       })
+
+      // Copy examples folder to dist so avatar/github examples are available in production
+      const examplesSrc = resolve(rootDir, 'examples')
+      const examplesDest = resolve(distDir, 'examples')
+      if (existsSync(examplesSrc)) {
+        cpSync(examplesSrc, examplesDest, { recursive: true })
+        console.log('✓ Copied examples/ to dist')
+      }
     },
   }
 }
@@ -71,6 +115,7 @@ export default defineConfig({
   root: resolve(__dirname, 'app'),
   plugins: [
     htmlInclude({ repoBaseUrl: REPO_BASE_URL }),
+    serveExamplesPlugin(),
     tailwindcss(),
     copyRootFilesPlugin({ repoBaseUrl: REPO_BASE_URL }),
   ],
