@@ -73,31 +73,25 @@ export function htmlInclude() {
       const hasFundamentalsGrid = html.includes('<!-- include: fundamentals-grid -->');
       const hasImplementationsGrid = html.includes('<!-- include: implementations-grid -->');
 
-      if (!hasNavigation && !hasFooter && !hasHero && !hasAnalytics && !hasFundamentalsGrid && !hasImplementationsGrid) {
-        return html;
-      }
-
-      // Get the file path - try different context properties
+      // Get the file path - try different context properties (needed for basePath even when no includes)
       const filePath = context.filename || context.path || '';
       const appDir = resolve(__dirname, 'app');
-      
+
       // Normalize path and get relative path
       let relativePath = '';
       if (filePath) {
         try {
           relativePath = relative(appDir, filePath);
         } catch (e) {
-          // If path is not relative to appDir, try to extract from filename
           const match = filePath.match(/app[\\/](.+)$/);
           if (match) {
             relativePath = match[1];
           }
         }
       }
-      
+
       // Fallback: try to determine from HTML content or use empty string
       if (!relativePath) {
-        // Try to infer from HTML content (e.g., manifest.json path)
         const manifestMatch = html.match(/href=["']([^"']*manifest\.json)["']/);
         if (manifestMatch) {
           const manifestPath = manifestMatch[1];
@@ -106,22 +100,22 @@ export function htmlInclude() {
           } else if (manifestPath === '../manifest.json') {
             relativePath = 'fundamentals/index.html';
           } else if (manifestPath.includes('../')) {
-            // Count ../ to determine depth
             const depth = (manifestPath.match(/\.\.\//g) || []).length;
             if (depth === 1) {
-              relativePath = 'fundamentals/index.html'; // or implementations
+              relativePath = 'fundamentals/index.html';
             }
           }
         }
       }
-      
+
       // Calculate base path (how many ../ needed)
-      // For index.html at root: depth = 0, basePath = ''
-      // For fundamentals/index.html: depth = 1, basePath = '../'
-      // For implementations/avatars.html: depth = 1, basePath = '../'
       const depth = relativePath ? relativePath.split(/[\\/]/).length - 1 : 0;
       const basePath = depth > 0 ? '../'.repeat(depth) : '';
-      
+
+      if (!hasNavigation && !hasFooter && !hasHero && !hasAnalytics && !hasFundamentalsGrid && !hasImplementationsGrid) {
+        return html.replace(/\{\{basePath\}\}/g, basePath);
+      }
+
       // Determine active page based on file path
       const activeStates = determineActiveStates(relativePath || 'index.html');
       
@@ -181,7 +175,10 @@ export function htmlInclude() {
         implementationsGrid = implementationsGrid.replace(/\{\{basePath\}\}/g, basePath);
         html = html.replace('<!-- include: implementations-grid -->', implementationsGrid);
       }
-      
+
+      // Replace {{basePath}} everywhere (head links, img src, a href, etc.)
+      html = html.replace(/\{\{basePath\}\}/g, basePath);
+
       return html;
     }
   };
