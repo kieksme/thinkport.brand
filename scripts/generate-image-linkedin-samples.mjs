@@ -31,39 +31,29 @@ async function generateSampleLinkedInImages() {
   }
   
   // Define variants to generate
-  const colors = Object.keys(CONFIG.brand.colors).filter(c => ['aqua', 'navy', 'fuchsia'].includes(c));
+  const colors = ['darkBlue', 'orange', 'turquoise'];
   const imageTypes = Object.keys(LINKEDIN_SPECS);
   
-  // Text options for different image types
-  const textOptions = {
-    logo: null, // No text for logo images
-    title: 'Thinkport GmbH',
-    'culture-main': 'Unternehmenskultur',
-    'culture-module': 'Team',
-    photo: null, // No text for photos
-    post: 'We\'re hiring!',
-  };
-  
+  // No text in banners; background graphic + logo only
   let totalImages = 0;
   const generatedImages = [];
-  
+
   for (const type of imageTypes) {
     info(`\nGeneriere ${type} Bilder...`);
     const spec = LINKEDIN_SPECS[type];
     const dimensions = spec.recommended;
-    
+
     for (const color of colors) {
-      const text = textOptions[type];
       const ext = type === 'logo' ? 'png' : 'jpg';
       const outputFileName = `linkedin-${type}-${color}-${dimensions.width}x${dimensions.height}.${ext}`;
       const outputPath = join(outputDir, outputFileName);
-      
+
       try {
         info(`  Generiere: ${outputFileName}`);
         await generateLinkedInImage(type, {
           color,
-          logoPath: null, // Use default logo
-          text,
+          logoPath: null,
+          text: null,
           outputPath,
           useRecommended: true,
         });
@@ -87,7 +77,7 @@ async function main() {
     
     info('Generiere Beispiel-LinkedIn-Bilder mit verschiedenen Varianten:');
     info('  - Bildtypen: logo, title, culture-main, culture-module, photo, post');
-    info('  - Farben: Aqua, Navy, Fuchsia');
+    info('  - Farben: Dark Blue, Orange, Turquoise (Thinkport-Palette)');
     info('  - Empfohlene Größen');
     info('');
     

@@ -26,37 +26,108 @@ const projectRoot = resolve(__dirname, '..');
 const CONFIG = loadConfig();
 const LINKEDIN_SPECS = CONFIG.linkedin.imageSpecs;
 
+const DEFAULT_LOGO_SOLO = join(projectRoot, 'assets', 'logos', 'solo', 'thinkport-solo-light.svg');
+const DEFAULT_LOGO_HORIZONTAL = join(projectRoot, 'assets', 'logos', 'horizontal', 'thinkport-horizontal-light.svg');
+const HORIZONTAL_LOGO_ASPECT = 1479 / 280;
+
+/** Default background graphic (dark variant for brand colors). Config override: linkedin.backgroundPath */
+const DEFAULT_BACKGROUND_PATH = join(projectRoot, 'assets', 'backgrounds', '5-dark.svg');
+
+/** Minimum contrast ratio for logo on background (WCAG 2.1 Level AA for large graphics). */
+const MIN_LOGO_CONTRAST = 3;
+
+/** LinkedIn background palette: Thinkport primary colors only (config.linkedin.colors). */
+function getLinkedInColors() {
+  const c = CONFIG.linkedin?.colors || CONFIG.brand.colors;
+  return {
+    darkBlue: c.darkBlue ?? c.aqua ?? '#0B2649',
+    orange: c.orange ?? '#FF5722',
+    turquoise: c.turquoise ?? '#00BCD4',
+  };
+}
+
 /**
- * Modify SVG logo colors based on background color
- * @param {string} svgContent - SVG content as string
- * @param {string} backgroundColor - Background color name (navy, aqua, fuchsia)
- * @returns {string} Modified SVG content
+ * Relative luminance (sRGB) for contrast calculation.
+ * @param {string} hex - Hex color e.g. "#0B2649"
+ * @returns {number} Luminance 0..1
  */
-function modifyLogoColors(svgContent, backgroundColor) {
-  const colors = loadBrandColors();
-  
-  // Determine circle color based on background
-  // Navy background → Fuchsia circle
-  // Fuchsia background → Navy circle
-  // Aqua background → Fuchsia circle (or keep default)
-  let circleColor;
-  if (backgroundColor === 'navy') {
-    circleColor = colors.fuchsia;
-  } else if (backgroundColor === 'fuchsia') {
-    circleColor = colors.navy;
-  } else {
-    // Aqua or default: use Fuchsia for contrast
-    circleColor = colors.fuchsia;
+function hexToLuminance(hex) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return 0;
+  const [r, g, b] = [rgb.r, rgb.g, rgb.b].map((v) => {
+    const s = v / 255;
+    return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  });
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+/**
+ * Contrast ratio (WCAG) between two colors; >= 1.
+ * @param {string} hex1 - First color
+ * @param {string} hex2 - Second color
+ * @returns {number} Contrast ratio
+ */
+function getContrastRatio(hex1, hex2) {
+  const L1 = hexToLuminance(hex1);
+  const L2 = hexToLuminance(hex2);
+  const [light, dark] = L1 >= L2 ? [L1, L2] : [L2, L1];
+  return (light + 0.05) / (dark + 0.05);
+}
+
+/**
+ * Pick logo color (white or darkBlue) that meets minimum contrast on the given background.
+ * Uses only Thinkport brand colors; ensures logo is always readable.
+ * @param {string} backgroundHex - Background color hex
+ * @returns {string} Hex for logo contrast (white or darkBlue)
+ */
+function getLogoContrastColor(backgroundHex) {
+  const brand = CONFIG.brand.colors;
+  const linkedin = getLinkedInColors();
+  const whiteRatio = getContrastRatio(backgroundHex, brand.white);
+  const darkRatio = getContrastRatio(backgroundHex, linkedin.darkBlue);
+  const useWhite = whiteRatio >= darkRatio;
+  const ratio = useWhite ? whiteRatio : darkRatio;
+  if (ratio < MIN_LOGO_CONTRAST) {
+    warn(`Logo contrast is ${ratio.toFixed(2)}:1 (target ≥${MIN_LOGO_CONTRAST}:1). Consider a different background.`);
   }
-  
-  // Replace the circle fill color (currently #1E2A45)
-  // Match: fill="#1E2A45" or fill='#1E2A45'
-  const modifiedSvg = svgContent.replace(
-    /fill="#1E2A45"/g,
-    `fill="${circleColor}"`
+  return useWhite ? brand.white : linkedin.darkBlue;
+}
+
+/**
+ * Modify SVG logo colors based on background (Thinkport brand, contrast-safe).
+ * Solo logo uses #0B2649 (dark blue) – replace with high-contrast color.
+ */
+function modifySoloLogoColors(svgContent, backgroundColor) {
+  const linkedin = getLinkedInColors();
+  const backgroundHex = linkedin[backgroundColor] || linkedin.darkBlue;
+  const contrastColor = getLogoContrastColor(backgroundHex);
+  const darkFillHex = '#0B2649';
+  return svgContent.replace(
+    new RegExp(`fill="${darkFillHex}"`, 'gi'),
+    `fill="${contrastColor}"`
   );
-  
-  return modifiedSvg;
+}
+
+/**
+ * Modify horizontal (wordmark) logo colors; ensures contrast-rich logo on background.
+ */
+function modifyHorizontalLogoColors(svgContent, backgroundColor) {
+  const linkedin = getLinkedInColors();
+  const backgroundHex = linkedin[backgroundColor] || linkedin.darkBlue;
+  const textColor = getLogoContrastColor(backgroundHex);
+  let modified = svgContent
+    .replace(/fill:#1a2846/g, `fill:${textColor}`)
+    .replace(/fill:#1eb8d1/g, `fill:${textColor}`)
+    .replace(/fill="#1a2846"/g, `fill="${textColor}"`)
+    .replace(/fill="#1eb8d1"/g, `fill="${textColor}"`)
+    .replace(/fill="#ea592d"/g, `fill="${textColor}"`);
+  return modified;
+}
+
+function modifyLogoColors(svgContent, backgroundColor, isHorizontal = false) {
+  return isHorizontal
+    ? modifyHorizontalLogoColors(svgContent, backgroundColor)
+    : modifySoloLogoColors(svgContent, backgroundColor);
 }
 
 /**
@@ -67,13 +138,12 @@ function modifyLogoColors(svgContent, backgroundColor) {
  * @param {string} backgroundColor - Background color name for color adjustment
  * @returns {Promise<Buffer>} PNG buffer
  */
-async function svgToPng(svgPath, width, height, backgroundColor = null) {
+async function svgToPng(svgPath, width, height, backgroundColor = null, isHorizontal = false) {
   try {
     let svgContent = readFileSync(svgPath, 'utf-8');
-    
-    // Modify logo colors if background color is provided
+
     if (backgroundColor) {
-      svgContent = modifyLogoColors(svgContent, backgroundColor);
+      svgContent = modifyLogoColors(svgContent, backgroundColor, isHorizontal);
     }
     
     const svgBuffer = Buffer.from(svgContent);
@@ -91,11 +161,51 @@ async function svgToPng(svgPath, width, height, backgroundColor = null) {
 }
 
 /**
- * Create SVG text overlay
+ * Render background graphic (from assets/backgrounds) with brand color as base fill.
+ * Falls back to solid color if the background file is missing.
+ * @param {number} width - Target width
+ * @param {number} height - Target height
+ * @param {string} colorHex - Brand color for the background base
+ * @returns {Promise<sharp.Sharp>} Sharp instance (background layer)
+ */
+async function getBackgroundLayer(width, height, colorHex) {
+  const backgroundPath = CONFIG.linkedin?.backgroundPath
+    ? join(projectRoot, CONFIG.linkedin.backgroundPath)
+    : DEFAULT_BACKGROUND_PATH;
+
+  if (!existsSync(backgroundPath)) {
+    warn(`Background graphic not found: ${backgroundPath}, using solid color`);
+    const rgb = hexToRgb(colorHex);
+    return sharp({
+      create: {
+        width,
+        height,
+        channels: 4,
+        background: { r: rgb.r, g: rgb.g, b: rgb.b, alpha: 1 },
+      },
+    });
+  }
+
+  let svgContent = readFileSync(backgroundPath, 'utf-8');
+  // Replace first rect fill (background base) with brand color
+  svgContent = svgContent.replace(
+    /(<rect\s[^>]*?)fill="#[0-9a-fA-F]{6}"([^>]*>)/,
+    `$1fill="${colorHex}"$2`
+  );
+  const bgBuffer = await sharp(Buffer.from(svgContent))
+    .resize(width, height, { fit: 'cover' })
+    .png()
+    .toBuffer();
+  return sharp(bgBuffer);
+}
+
+/**
+ * Create SVG text overlay with blend overlay (Thinkport colors only).
+ * Only the text area gets a semi-transparent overlay so text blends over the background; logos stay solid.
  * @param {string} text - Text to display
  * @param {number} width - Image width
  * @param {number} height - Image height
- * @param {Object} options - Text options
+ * @param {Object} options - Text options and brand colors (textFill, overlayFill, overlayOpacity)
  * @returns {string} SVG string
  */
 function createTextOverlay(text, width, height, options = {}) {
@@ -103,27 +213,46 @@ function createTextOverlay(text, width, height, options = {}) {
     fontSize = Math.floor(height * 0.1),
     x = width / 2,
     y = height / 2,
-    fill = '#FFFFFF',
+    textAnchor = 'middle',
     fontFamily = 'Hanken Grotesk, sans-serif',
     fontWeight = '700',
-    textAnchor = 'middle',
-    alignmentBaseline = 'middle',
+    // Thinkport brand colors only (from config)
+    textFill = CONFIG.brand.colors.white,
+    overlayFill = getLinkedInColors().darkBlue,
+    overlayOpacity = 0.65,
   } = options;
+
+  // Approximate text bounds for overlay rect (so only text area blends)
+  const paddingX = Math.max(fontSize * 0.8, 24);
+  const paddingY = Math.max(fontSize * 0.5, 16);
+  const rectWidth = Math.min(text.length * fontSize * 0.55 + paddingX * 2, width * 0.9);
+  const rectHeight = fontSize * 1.5 + paddingY * 2;
+  const rectX = textAnchor === 'middle' ? x - rectWidth / 2 : textAnchor === 'end' ? x - rectWidth : x;
+  const rectY = y - rectHeight / 2;
 
   return `
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
+      <rect x="${Math.max(0, rectX)}" y="${Math.max(0, rectY)}" width="${rectWidth}" height="${rectHeight}" rx="8" fill="${overlayFill}" fill-opacity="${overlayOpacity}"/>
       <text
         x="${x}"
         y="${y}"
         font-family="${fontFamily}"
         font-size="${fontSize}"
         font-weight="${fontWeight}"
-        fill="${fill}"
+        fill="${textFill}"
         text-anchor="${textAnchor}"
-        dominant-baseline="${alignmentBaseline}"
-      >${text}</text>
+        dominant-baseline="middle"
+      >${escapeXml(text)}</text>
     </svg>
   `;
+}
+
+function escapeXml(s) {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }
 
 /**
@@ -134,7 +263,7 @@ function createTextOverlay(text, width, height, options = {}) {
  */
 async function generateLinkedInImage(type, options) {
   const {
-    color = 'navy',
+    color = 'darkBlue',
     logoPath = null,
     text = null,
     outputPath,
@@ -153,11 +282,11 @@ async function generateLinkedInImage(type, options) {
     const width = dimensions.width;
     const height = dimensions.height;
 
-    // Validate color
-    const colors = loadBrandColors();
-    const colorHex = colors[color.toLowerCase()];
+    // Validate color – use config.json brand colors only (Thinkport LinkedIn palette)
+    const linkedinColors = getLinkedInColors();
+    const colorHex = linkedinColors[color.toLowerCase()];
     if (!colorHex) {
-      throw new Error(`Invalid color: ${color}. Must be one of: aqua, navy, fuchsia`);
+      throw new Error(`Invalid color: ${color}. Must be one of: darkBlue, orange, turquoise`);
     }
 
     // Determine output format
@@ -175,108 +304,65 @@ async function generateLinkedInImage(type, options) {
 
     info(`Generating ${type} image: ${width}x${height}px with ${color} background...`);
 
-    // Create background
-    const rgb = hexToRgb(colorHex);
-    if (!rgb) {
+    if (!hexToRgb(colorHex)) {
       throw new Error(`Invalid color hex: ${colorHex}`);
     }
 
-    const background = sharp({
-      create: {
-        width,
-        height,
-        channels: 4,
-        background: { r: rgb.r, g: rgb.g, b: rgb.b, alpha: 1 },
-      },
-    });
-
+    // Use background graphic from assets/backgrounds (brand color as base); no text in banners
+    const background = await getBackgroundLayer(width, height, colorHex);
     const compositeLayers = [];
 
-    // Add logo if provided or use default
-    if (logoPath || type === 'logo') {
-      const logoToUse = logoPath || join(projectRoot, 'assets', 'logos', 'thinkport-solo-light.svg');
-      
-      if (!existsSync(logoToUse)) {
+    // Add logo if provided or use default (Thinkport brand)
+    const useHorizontalForBanner = !logoPath && ['title', 'culture-main', 'culture-module'].includes(type);
+    const logoToUse = logoPath || (useHorizontalForBanner ? DEFAULT_LOGO_HORIZONTAL : DEFAULT_LOGO_SOLO);
+
+    if (!existsSync(logoToUse)) {
+      if (logoPath || type === 'logo') {
         warn(`Logo not found: ${logoToUse}, skipping logo overlay`);
-      } else {
-        // Calculate logo size based on image type
-        let logoSize;
-        if (type === 'logo') {
-          logoSize = Math.floor(Math.min(width, height) * 0.8); // 80% of image size
-        } else if (type === 'title') {
-          logoSize = Math.floor(height * 0.4); // 40% of height
-        } else {
-          logoSize = Math.floor(Math.min(width, height) * 0.3); // 30% of smaller dimension
-        }
-
-        const logoBuffer = await svgToPng(logoToUse, logoSize, logoSize, color);
-        
-        // Position logo
-        let logoX, logoY;
-        if (type === 'logo') {
-          // Center logo
-          logoX = Math.floor((width - logoSize) / 2);
-          logoY = Math.floor((height - logoSize) / 2);
-        } else if (type === 'title') {
-          // Logo on left side, vertically centered
-          logoX = Math.floor(width * 0.05);
-          logoY = Math.floor((height - logoSize) / 2);
-        } else {
-          // Logo in top-left corner with padding
-          logoX = Math.floor(width * 0.05);
-          logoY = Math.floor(height * 0.05);
-        }
-
-        compositeLayers.push({
-          input: logoBuffer,
-          blend: 'over',
-          left: logoX,
-          top: logoY,
-        });
       }
-    }
-
-    // Add text overlay if provided
-    if (text) {
-      // Calculate text position and size based on image type
-      let textOptions = {};
-      
-      if (type === 'title') {
-        // Text on right side of title image
-        textOptions = {
-          fontSize: Math.floor(height * 0.15),
-          x: width * 0.6,
-          y: height / 2,
-          fill: '#FFFFFF',
-        };
-      } else if (type === 'post') {
-        // Text centered in post image
-        textOptions = {
-          fontSize: Math.floor(height * 0.12),
-          x: width / 2,
-          y: height / 2,
-          fill: '#FFFFFF',
-        };
+    } else {
+      let logoWidth, logoHeight;
+      if (type === 'logo') {
+        logoWidth = logoHeight = Math.floor(Math.min(width, height) * 0.8);
+      } else if (useHorizontalForBanner) {
+        logoHeight = Math.floor(height * 0.35);
+        logoWidth = Math.min(
+          Math.floor(logoHeight * HORIZONTAL_LOGO_ASPECT),
+          Math.floor(width * 0.5)
+        );
       } else {
-        // Default: centered
-        textOptions = {
-          fontSize: Math.floor(Math.min(width, height) * 0.08),
-          x: width / 2,
-          y: height / 2,
-          fill: '#FFFFFF',
-        };
+        logoWidth = logoHeight = Math.floor(Math.min(width, height) * 0.3);
       }
 
-      const textSvg = createTextOverlay(text, width, height, textOptions);
-      const textBuffer = Buffer.from(textSvg);
-      
+      const logoBuffer = await svgToPng(
+        logoToUse,
+        logoWidth,
+        logoHeight,
+        color,
+        useHorizontalForBanner
+      );
+
+      let logoX, logoY;
+      if (type === 'logo') {
+        logoX = Math.floor((width - logoWidth) / 2);
+        logoY = Math.floor((height - logoHeight) / 2);
+      } else if (type === 'title' || useHorizontalForBanner) {
+        logoX = Math.floor(width * 0.05);
+        logoY = Math.floor((height - logoHeight) / 2);
+      } else {
+        logoX = Math.floor(width * 0.05);
+        logoY = Math.floor(height * 0.05);
+      }
+
       compositeLayers.push({
-        input: textBuffer,
+        input: logoBuffer,
         blend: 'over',
-        left: 0,
-        top: 0,
+        left: logoX,
+        top: logoY,
       });
     }
+
+    // No text in banners; logo only on background graphic
 
     // Composite all layers
     let image = background;
@@ -402,25 +488,16 @@ async function promptImageType() {
  * @returns {Promise<string>} Brand color name
  */
 async function promptBrandColor() {
-  const colors = loadBrandColors();
+  const colors = getLinkedInColors();
   const { color } = await inquirer.prompt([
     {
       type: 'list',
       name: 'color',
-      message: 'Welche Firmenfarbe soll als Hintergrund verwendet werden?',
+      message: 'Welche Thinkport-Farbe soll als Hintergrund verwendet werden?',
       choices: [
-        {
-          name: `Aqua (#${colors.aqua.replace('#', '')})`,
-          value: 'aqua',
-        },
-        {
-          name: `Navy (#${colors.navy.replace('#', '')})`,
-          value: 'navy',
-        },
-        {
-          name: `Fuchsia (#${colors.fuchsia.replace('#', '')})`,
-          value: 'fuchsia',
-        },
+        { name: `Dark Blue (#${colors.darkBlue.replace('#', '')})`, value: 'darkBlue' },
+        { name: `Orange (#${colors.orange.replace('#', '')})`, value: 'orange' },
+        { name: `Turquoise (#${colors.turquoise.replace('#', '')})`, value: 'turquoise' },
       ],
     },
   ]);
@@ -556,9 +633,9 @@ Usage:
 
 Options:
   --type <type>      Image type: logo, title, culture-main, culture-module, photo, post
-  --color <color>    Brand color: aqua, navy, or fuchsia
-  --logo <path>      Logo file path (optional, defaults to Thinkport solo logo)
-  --text <text>      Text to display (optional)
+  --color <color>    Thinkport color: darkBlue, orange, or turquoise
+  --logo <path>      Logo file path (optional; default: solo logo for logo/photo/post, horizontal wordmark for title/culture)
+  --text <text>      Ignored; banners have no text (logo + background graphic only)
   --output <path>    Output file path
   --format <format>  Output format: jpeg or png (default: jpeg for large images, png for logos)
   --min              Use minimum dimensions instead of recommended
@@ -578,23 +655,22 @@ Examples:
   # Interactive mode (recommended)
   node scripts/generate-image-linkedin.mjs
 
-  # Generate title image with aqua background
+  # Generate title image with Dark Blue background
   node scripts/generate-image-linkedin.mjs \\
     --type title \\
-    --color aqua \\
-    --text "Thinkport GmbH" \\
-    --output output/linkedin-title-aqua.jpg
+    --color darkBlue \\
+    --output output/linkedin-title-darkBlue.jpg
 
   # Generate logo image
   node scripts/generate-image-linkedin.mjs \\
     --type logo \\
-    --color navy \\
-    --output output/linkedin-logo-navy.png
+    --color orange \\
+    --output output/linkedin-logo-orange.png
 
 Brand Colors:
-  - aqua:    #0B2649
-  - navy:    #1E2A45
-  - fuchsia: #FF008F
+  - darkBlue:  #0B2649
+  - orange:    #FF5722
+  - turquoise: #00BCD4
 `);
 }
 
@@ -621,7 +697,7 @@ async function main() {
       }
 
       // Validate color
-      const validColors = ['aqua', 'navy', 'fuchsia'];
+      const validColors = ['darkBlue', 'orange', 'turquoise'];
       if (!validColors.includes(args.color)) {
         error(`Invalid color: ${args.color}. Must be one of: ${validColors.join(', ')}`);
         process.exit(1);
