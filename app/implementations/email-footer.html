@@ -72,6 +72,11 @@
     <script src="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
     
+    <!-- Prism.js for syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
     <!-- Custom Styles (imported via main.js) -->
     <script type="module" src="../main.js"></script>
     
@@ -91,24 +96,26 @@
         }
         
         .code-block {
-            background-color: #1E2A45;
-            color: #0B2649;
-            padding: 1.5rem;
-            border-radius: 8px;
-            overflow-x: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.875rem;
-            line-height: 1.6;
             margin: 1rem 0;
         }
         
-        .code-block code {
-            color: #0B2649;
+        .code-block pre[class*="language-"] {
+            background: #1e2a45 !important;
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin: 0;
+        }
+        
+        .code-block code[class*="language-"] {
+            font-family: "Source Code Pro", "Monaco", "Courier New", monospace;
+            font-size: 0.875rem;
+            line-height: 1.6;
         }
         
         .copy-button {
             background-color: #1E2A45;
-            color: #0B2649;
+            color: #f9fafb;
             border: 2px solid #0B2649;
             padding: 0.5rem 1rem;
             border-radius: 4px;
@@ -121,12 +128,12 @@
         
         .copy-button:hover {
             background-color: #0B2649;
-            color: #1E2A45;
+            color: #f9fafb;
         }
         
         .copy-button.copied {
             background-color: #0B2649;
-            color: #1E2A45;
+            color: #f9fafb;
         }
     </style>
 </head>
@@ -194,7 +201,7 @@
                 <div class="mt-4">
                     <h4 class="font-heading text-lg font-semibold text-navy mb-2">HTML Code:</h4>
                     <div class="code-block" id="standard-footer-code">
-                        <code id="standard-footer-code-content"></code>
+                        <pre class="language-html"><code class="language-html" id="standard-footer-code-content"></code></pre>
                     </div>
                     <button class="copy-button" onclick="copyToClipboard('standard-footer-code-content', this)">Copy Code</button>
                 </div>
@@ -214,7 +221,7 @@
                 <div class="mt-4">
                     <h4 class="font-heading text-lg font-semibold text-navy mb-2">HTML Code:</h4>
                     <div class="code-block" id="minimal-footer-code">
-                        <code id="minimal-footer-code-content"></code>
+                        <pre class="language-html"><code class="language-html" id="minimal-footer-code-content"></code></pre>
                     </div>
                     <button class="copy-button" onclick="copyToClipboard('minimal-footer-code-content', this)">Copy Code</button>
                 </div>
@@ -234,7 +241,7 @@
                 <div class="mt-4">
                     <h4 class="font-heading text-lg font-semibold text-navy mb-2">HTML Code:</h4>
                     <div class="code-block" id="extended-footer-code">
-                        <code id="extended-footer-code-content"></code>
+                        <pre class="language-html"><code class="language-html" id="extended-footer-code-content"></code></pre>
                     </div>
                     <button class="copy-button" onclick="copyToClipboard('extended-footer-code-content', this)">Copy Code</button>
                 </div>
@@ -254,7 +261,7 @@
                 <div class="mt-4">
                     <h4 class="font-heading text-lg font-semibold text-navy mb-2">Plain Text Code:</h4>
                     <div class="code-block" id="plain-text-footer-code">
-                        <code id="plain-text-footer-code-content"></code>
+                        <pre class="language-plaintext"><code class="language-plaintext" id="plain-text-footer-code-content"></code></pre>
                     </div>
                     <button class="copy-button" onclick="copyToClipboard('plain-text-footer-code-content', this)">Copy Code</button>
                 </div>
@@ -354,22 +361,29 @@
                         <table cellpadding="0" cellspacing="0" border="0">
                             <tr>
                                 <td style="font-size: 14px; line-height: 1.6; color: #1E2A45;">
-                                <strong style="color: #1E2A45; font-family: 'Hanken Grotesk', Arial, sans-serif;">Thinkport GmbH</strong><br>
-                                    <span style="color: #666666;">Hardenbergstraße 48, 04275 Leipzig, Deutschland</span><br>
-                                    <span style="color: #666666;">E-Mail: <a href="mailto:kontakt@kieks.me" style="color: #006B5F; text-decoration: none;">kontakt@kieks.me</a></span><br>
-                                    <span style="color: #666666;">Tel: <a href="tel:+491707353067" style="color: #006B5F; text-decoration: none;">+49 170 7353 067</a></span>
+                                    <strong style="color: #1E2A45; font-family: 'Hanken Grotesk', Arial, sans-serif;">André Lademann</strong><br>
+                                    <span style="color: #666666;">Team Zero</span><br>
+                                    <span style="color: #666666;">Thinkport GmbH</span><br>
+                                    <span style="color: #666666;">Arnsburger Strasse 74, 60385 Frankfurt am Main</span><br>
+                                    <span style="color: #666666;">Phone: <a href="tel:+4915126512786" style="color: #006B5F; text-decoration: none;">+49 151 26512786</a></span><br>
+                                    <span style="color: #666666;">E-mail: <a href="mailto:alademann@thinkport.digital" style="color: #006B5F; text-decoration: none;">alademann@thinkport.digital</a></span><br>
+                                    <span style="color: #666666;"><a href="https://www.thinkport.digital" style="color: #006B5F; text-decoration: none;">www.thinkport.digital</a></span><br>
+                                    <span style="color: #666666;">Get to know us via social media: <a href="https://www.linkedin.com/company/thinkport" style="color: #006B5F; text-decoration: none;">LinkedIn</a> | <a href="https://www.instagram.com/thinkport" style="color: #006B5F; text-decoration: none;">Instagram</a> | <a href="https://www.youtube.com/thinkport" style="color: #006B5F; text-decoration: none;">Youtube</a></span>
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-                <!-- Divider -->
+                <!-- Divider / Legal -->
                 <tr>
                     <td style="border-top: 1px solid #CCCCCC; padding-top: 15px; padding-bottom: 15px;">
                         <p style="margin: 0; font-size: 12px; color: #666666; line-height: 1.5;">
-                            © 2026 Thinkport GmbH. All rights reserved.<br>
-                            Vertreten durch: André Lademann, Thomas Schöne | 
-                            <a href="https://kieks.me/impressum" style="color: #006B5F; text-decoration: none;">Impressum</a>
+                            Thinkport GmbH – Arnsburger Straße 74 – 60385 Frankfurt am Main – Germany<br>
+                            Handelsregister: HRB129804 Amtsgericht Frankfurt<br>
+                            Geschäftsführung: Henning Breyer, Tobias Drechsel, Dominik Fries<br>
+                            VAT-ID/USt-IdNr: DE310746560<br>
+                            Please THINK before you PRINT.<br>
+                            Unsere Hinweise zur Verarbeitung Ihrer personenbezogenen Daten finden Sie unter <a href="https://thinkport.digital/legal-notice/" style="color: #006B5F; text-decoration: none;">https://thinkport.digital/legal-notice/</a>
                         </p>
                     </td>
                 </tr>
@@ -384,9 +398,10 @@
             <table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width: 600px;">
                 <tr>
                     <td align="left" style="font-size: 12px; color: #666666; line-height: 1.6;">
-                        <strong style="color: #1E2A45; font-family: 'Hanken Grotesk', Arial, sans-serif;">Thinkport GmbH</strong> | 
-                        <a href="mailto:kontakt@kieks.me" style="color: #006B5F; text-decoration: none;">kontakt@kieks.me</a> | 
-                        <a href="tel:+491707353067" style="color: #006B5F; text-decoration: none;">+49 170 7353 067</a>
+                        <strong style="color: #1E2A45; font-family: 'Hanken Grotesk', Arial, sans-serif;">André Lademann</strong> · Team Zero · Thinkport GmbH | 
+                        <a href="mailto:alademann@thinkport.digital" style="color: #006B5F; text-decoration: none;">alademann@thinkport.digital</a> | 
+                        <a href="tel:+4915126512786" style="color: #006B5F; text-decoration: none;">+49 151 26512786</a> | 
+                        <a href="https://www.thinkport.digital" style="color: #006B5F; text-decoration: none;">www.thinkport.digital</a>
                     </td>
                 </tr>
             </table>
@@ -411,31 +426,37 @@
                             <tr>
                                 <td width="50%" valign="top" style="padding-right: 20px;">
                                     <p style="margin: 0 0 15px 0; font-size: 14px; line-height: 1.6; color: #FFFFFF;">
-                                        <strong style="font-family: 'Hanken Grotesk', Arial, sans-serif; color: #0B2649;">Contact</strong><br>
-                                        <span style="color: #CCCCCC;">Hardenbergstraße 48</span><br>
-                                        <span style="color: #CCCCCC;">04275 Leipzig, Deutschland</span><br>
-                                        <span style="color: #CCCCCC;">E-Mail: <a href="mailto:kontakt@kieks.me" style="color: #0B2649; text-decoration: none;">kontakt@kieks.me</a></span><br>
-                                        <span style="color: #CCCCCC;">Tel: <a href="tel:+491707353067" style="color: #0B2649; text-decoration: none;">+49 170 7353 067</a></span>
+                                        <strong style="font-family: 'Hanken Grotesk', Arial, sans-serif; color: #0B2649;">André Lademann</strong><br>
+                                        <span style="color: #CCCCCC;">Team Zero</span><br>
+                                        <span style="color: #CCCCCC;">Thinkport GmbH</span><br>
+                                        <span style="color: #CCCCCC;">Arnsburger Strasse 74, 60385 Frankfurt am Main</span><br>
+                                        <span style="color: #CCCCCC;">Phone: <a href="tel:+4915126512786" style="color: #0B2649; text-decoration: none;">+49 151 26512786</a></span><br>
+                                        <span style="color: #CCCCCC;">E-mail: <a href="mailto:alademann@thinkport.digital" style="color: #0B2649; text-decoration: none;">alademann@thinkport.digital</a></span><br>
+                                        <span style="color: #CCCCCC;"><a href="https://www.thinkport.digital" style="color: #0B2649; text-decoration: none;">www.thinkport.digital</a></span>
                                     </p>
                                 </td>
                                 <td width="50%" valign="top" style="padding-left: 20px;">
                                     <p style="margin: 0 0 15px 0; font-size: 14px; line-height: 1.6; color: #FFFFFF;">
-                                        <strong style="font-family: 'Hanken Grotesk', Arial, sans-serif; color: #0B2649;">Follow Us</strong><br>
-                                        <a href="https://github.com/kieksme" style="color: #0B2649; text-decoration: none; font-size: 14px;">GitHub</a><br>
-                                        <a href="https://linkedin.com/company/kieksme" style="color: #0B2649; text-decoration: none; font-size: 14px;">LinkedIn</a>
+                                        <strong style="font-family: 'Hanken Grotesk', Arial, sans-serif; color: #0B2649;">Get to know us via social media</strong><br>
+                                        <a href="https://www.linkedin.com/company/thinkport" style="color: #0B2649; text-decoration: none; font-size: 14px;">LinkedIn</a><br>
+                                        <a href="https://www.instagram.com/thinkport" style="color: #0B2649; text-decoration: none; font-size: 14px;">Instagram</a><br>
+                                        <a href="https://www.youtube.com/thinkport" style="color: #0B2649; text-decoration: none; font-size: 14px;">Youtube</a>
                                     </p>
                                 </td>
                             </tr>
                         </table>
                     </td>
                 </tr>
-                <!-- Divider -->
+                <!-- Divider / Legal -->
                 <tr>
                     <td style="border-top: 1px solid #5A6B8C; padding-top: 20px; padding-bottom: 15px;">
                         <p style="margin: 0; font-size: 12px; color: #CCCCCC; line-height: 1.5;">
-                            © 2026 Thinkport GmbH. All rights reserved.<br>
-                            Vertreten durch: André Lademann, Thomas Schöne | 
-                            <a href="https://kieks.me/impressum" style="color: #0B2649; text-decoration: none;">Impressum</a>
+                            Thinkport GmbH – Arnsburger Straße 74 – 60385 Frankfurt am Main – Germany<br>
+                            Handelsregister: HRB129804 Amtsgericht Frankfurt<br>
+                            Geschäftsführung: Henning Breyer, Tobias Drechsel, Dominik Fries<br>
+                            VAT-ID/USt-IdNr: DE310746560<br>
+                            Please THINK before you PRINT.<br>
+                            Unsere Hinweise zur Verarbeitung Ihrer personenbezogenen Daten finden Sie unter <a href="https://thinkport.digital/legal-notice/" style="color: #0B2649; text-decoration: none;">https://thinkport.digital/legal-notice/</a>
                         </p>
                     </td>
                 </tr>
@@ -444,15 +465,23 @@
     </tr>
 </table>`,
             plainText: `--
---<br>
-Thinkport GmbH<br>
-Hardenbergstraße 48 · 04275 Leipzig · Deutschland<br>
-<br>
-E-Mail: <a href="mailto:kontakt@kieks.me">kontakt@kieks.me</a><br>
-Tel: <a href="tel:+491707353067">+49 170 7353 067</a><br>
-Vertreten durch: André Lademann, Thomas Schöne<br>
-<br>
-Impressum: <a href="https://kieks.me/impressum">https://kieks.me/impressum</a><br>
+André Lademann
+Team Zero
+Thinkport GmbH
+Arnsburger Strasse 74, 60385 Frankfurt am Main
+Phone: +49 151 26512786
+E-mail: alademann@thinkport.digital
+www.thinkport.digital
+
+Get to know us via social media:
+LinkedIn | Instagram | Youtube
+
+Thinkport GmbH - Arnsburger Straße 74 - 60385 Frankfurt am Main - Germany
+Handelsregister: HRB129804 Amtsgericht Frankfurt
+Geschäftsführung: Henning Breyer, Tobias Drechsel, Dominik Fries
+VAT-ID/USt-IdNr: DE310746560
+Please THINK before you PRINT.
+Unsere Hinweise zur Verarbeitung Ihrer personenbezogenen Daten finden Sie unter https://thinkport.digital/legal-notice/
 `
         };
 
@@ -470,8 +499,11 @@ Impressum: <a href="https://kieks.me/impressum">https://kieks.me/impressum</a><b
                 const codeElement = document.getElementById(preview.id.replace('-preview', '-code-content'));
                 
                 if (iframe && codeElement) {
-                    // Set code content
+                    // Set code content (textContent so HTML is shown as source, not rendered)
                     codeElement.textContent = preview.template;
+                    if (typeof Prism !== 'undefined') {
+                        Prism.highlightElement(codeElement);
+                    }
                     
                     // Create preview document
                     const doc = iframe.contentDocument || iframe.contentWindow.document;
@@ -501,6 +533,9 @@ Impressum: <a href="https://kieks.me/impressum">https://kieks.me/impressum</a><b
             if (plainTextPreview && plainTextCode) {
                 plainTextPreview.textContent = emailFooters.plainText;
                 plainTextCode.textContent = emailFooters.plainText;
+                if (typeof Prism !== 'undefined') {
+                    Prism.highlightElement(plainTextCode);
+                }
             }
         }
 
