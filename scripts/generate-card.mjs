@@ -874,7 +874,7 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
   cardProgress('QR-Code generiert', 'done');
   
   // Load and convert logos (solo + venitus)
-  const logoPath = join(projectRoot, 'assets', 'logos', 'thinkport-solo-light-card-solid.svg');
+  const logoPath = join(projectRoot, 'assets', 'logos', 'solo', 'thinkport-solo-light-card-solid.svg');
   const venitusPath = join(projectRoot, 'assets', 'logos', 'a-venitus-company-hoch-light.svg');
   cardProgress('Lade Logo …', 'generating');
   const logoPngBuffer = await svgToPng(logoPath, 1000, 1000);
@@ -976,22 +976,20 @@ async function main() {
       }
 
       if (action === 'generate-samples') {
-        // Import sample contacts from shared module
-        const { sampleContacts } = await import('./sample-data.mjs');
-
+        const { getSampleContacts } = await import('./sample-data.mjs');
+        const contacts = getSampleContacts(projectRoot);
         const outputDir = join(projectRoot, 'examples', 'sample-business-cards');
-        
-        info(`Generiere ${sampleContacts.length} Mustervisitenkarten...`);
 
-        for (let i = 0; i < sampleContacts.length; i++) {
-          const contact = sampleContacts[i];
-          info(`\nGeneriere Visitenkarte ${i + 1}/${sampleContacts.length}: ${contact.name}`);
-          
+        info(`Generiere ${contacts.length} Mustervisitenkarten (Daten: examples/business-cards/)...`);
+
+        for (let i = 0; i < contacts.length; i++) {
+          const contact = contacts[i];
+          info(`\nGeneriere Visitenkarte ${i + 1}/${contacts.length}: ${contact.name}`);
           const result = await generateBusinessCardWithPdfLib(contact, outputDir);
           success(`✓ ✓ ${contact.name} - Vorder- und Rückseite generiert`);
         }
 
-        success(`Alle ${sampleContacts.length} Mustervisitenkarten erfolgreich generiert!`);
+        success(`Alle ${contacts.length} Mustervisitenkarten erfolgreich generiert!`);
         info(`Ausgabe-Verzeichnis: ${outputDir}`);
         shouldContinue = false;
         break;

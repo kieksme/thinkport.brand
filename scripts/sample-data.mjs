@@ -1,11 +1,53 @@
 #!/usr/bin/env node
 /**
  * Sample contact data for business card generation
- * Shared data to keep DRY principle
+ * Shared data to keep DRY principle.
+ * Prefer data from examples/business-cards/*.json when available.
  */
 
+import { readdirSync, readFileSync } from 'fs';
+import { join } from 'path';
+
 /**
- * Sample contact data for testing and examples
+ * Load contacts from JSON files in examples/business-cards/
+ * @param {string} dir - Full path to business-cards directory
+ * @returns {Object[]} Array of contact objects (sorted by name)
+ */
+export function loadContactsFromBusinessCards(dir) {
+  try {
+    const files = readdirSync(dir, { withFileTypes: true })
+      .filter((f) => f.isFile() && f.name.endsWith('.json'))
+      .map((f) => f.name);
+    if (files.length === 0) return [];
+    const contacts = files
+      .map((file) => {
+        try {
+          const raw = readFileSync(join(dir, file), 'utf-8');
+          return JSON.parse(raw);
+        } catch {
+          return null;
+        }
+      })
+      .filter(Boolean);
+    return contacts.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Get contacts to use for samples: from examples/business-cards/*.json if present, else built-in list
+ * @param {string} projectRoot - Project root path
+ * @returns {Object[]} Contact array
+ */
+export function getSampleContacts(projectRoot) {
+  const dataDir = join(projectRoot, 'examples', 'business-cards');
+  const fromFiles = loadContactsFromBusinessCards(dataDir);
+  return fromFiles.length > 0 ? fromFiles : sampleContacts;
+}
+
+/**
+ * Sample contact data for testing and examples (fallback when no JSON files)
  */
 export const sampleContacts = [
   {
