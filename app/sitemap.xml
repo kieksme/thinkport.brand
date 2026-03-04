@@ -12,10 +12,10 @@
       <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/index.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/thinkport-logo-horizontal-dark.svg</image:loc>
+      <image:loc>https://brand.kieks.me/logos/horizontal/thinkport-horizontal-dark.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/thinkport-venitus-light.png</image:loc>
+      <image:loc>https://brand.kieks.me/logos/venitus/thinkport-venitus-light.png</image:loc>
     </image:image>
   </url>
   
@@ -41,26 +41,26 @@
     </image:image>
     <!-- Horizontal Logos -->
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/thinkport-logo-horizontal-dark.svg</image:loc>
+      <image:loc>https://brand.kieks.me/logos/horizontal/thinkport-horizontal-dark.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/thinkport-logo-horizontal-light.svg</image:loc>
+      <image:loc>https://brand.kieks.me/logos/horizontal/thinkport-horizontal-light.svg</image:loc>
     </image:image>
     <!-- Icon / Venitus / Solo -->
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/thinkport-solo-light.svg</image:loc>
+      <image:loc>https://brand.kieks.me/logos/solo/thinkport-solo-light.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/thinkport-venitus-dark.svg</image:loc>
+      <image:loc>https://brand.kieks.me/logos/venitus/thinkport-venitus-dark.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/thinkport-venitus-light.svg</image:loc>
+      <image:loc>https://brand.kieks.me/logos/venitus/thinkport-venitus-light.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/thinkport-venitus-light.png</image:loc>
+      <image:loc>https://brand.kieks.me/logos/venitus/thinkport-venitus-light.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://brand.kieks.me/logos/a-venitus-company-hoch.svg</image:loc>
+      <image:loc>https://brand.kieks.me/logos/a-venitus-company/thinkport-a-venitus-company-horizontal.svg</image:loc>
     </image:image>
   </url>
 

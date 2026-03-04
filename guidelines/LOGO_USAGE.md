@@ -15,22 +15,30 @@ Internal guidelines may refer to logos as:
 
 These correspond to the horizontal, solo, and venitus variants in this repository (see below). Additional formats (.ai, .png 300 dpi and 600 dpi) are available via the official OneDrive source; ask the brand team for access.
 
-### Horizontal Logos
+### Horizontal Logos (`horizontal/`)
 
-- **Dark** (`thinkport-logo-horizontal-dark.svg`) – Use on dark backgrounds.
-- **Light** (`thinkport-logo-horizontal-light.svg`) – Use on light backgrounds.
-- PNG versions are available for fixed sizes (e.g. `thinkport-logo-horizontal-light-200x50.png`, `thinkport-logo-horizontal-light-hr.png`).
+- **Dark** (`thinkport-horizontal-dark.svg`) – Use on dark backgrounds.
+- **Light** (`thinkport-horizontal-light.svg`) – Use on light backgrounds.
+- PNG versions: `thinkport-horizontal-light-200x50.png`, `thinkport-horizontal-light-hr.png`.
 
-### Icon & Venitus Variants
+### Solo / icon (`solo/`)
 
-- **Solo** (`thinkport-solo-light.svg`) – Icon-only, light version; suitable for app icons, avatars, and small placements.
+- **Solo** (`thinkport-solo-light.svg`) – Icon-only, light; suitable for app icons, avatars, and small placements.
+- Card-solid and 2022 variants (SVG, PNG, EPS) are in the same folder.
+
+### Venitus (`venitus/`)
+
 - **Venitus** (`thinkport-venitus-dark.svg`, `thinkport-venitus-light.svg`) – Thinkport with Venitus wordmark; use dark or light to match background.
-- **A Venitus Company** (`a-venitus-company-hoch.svg`) – “A Venitus Company” lockup (horizontal).
+- PNG and 100 px variant: `thinkport-venitus-light.png`, `thinkport-venitus-dark-100px.png`.
+
+### A Venitus Company (`a-venitus-company/`)
+
+- **A Venitus Company** (`thinkport-a-venitus-company-horizontal.svg`, `thinkport-a-venitus-company-horizontal-light.svg`) – “A Venitus Company” lockup (horizontal).
 
 ### File Locations
 
-- All logo files live in the `assets/logos/` directory in this repository.
-- In the built brand site, they are referenced as `/logos/<filename>` (e.g. `/logos/thinkport-logo-horizontal-dark.svg`).
+- All logo files live in the `assets/logos/` directory in this repository, organised in subdirectories: `horizontal/`, `solo/`, `venitus/`, `a-venitus-company/`.
+- In the built brand site, they are referenced as `/logos/<subdir>/<filename>` (e.g. `/logos/horizontal/thinkport-horizontal-dark.svg`).
 - For additional formats (e.g. .ai, high-resolution PNG) or logo-related questions, use the official OneDrive source and contact the brand team (e.g. designated logo contact such as Philipp Höllthaler) for assistance.
 
 ## File Formats

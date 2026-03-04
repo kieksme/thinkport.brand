@@ -9,13 +9,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/logos/thinkport-venitus-light.png",
+      "src": "/logos/venitus/thinkport-venitus-light.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/logos/thinkport-venitus-light.png",
+      "src": "/logos/venitus/thinkport-venitus-light.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
