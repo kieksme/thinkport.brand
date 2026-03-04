@@ -64,6 +64,7 @@ export default defineConfig({
         main: resolve(__dirname, 'app/index.html'),
         'fundamentals/index': resolve(__dirname, 'app/fundamentals/index.html'),
         'fundamentals/logos': resolve(__dirname, 'app/fundamentals/logos.html'),
+        'fundamentals/backgrounds': resolve(__dirname, 'app/fundamentals/backgrounds.html'),
         'fundamentals/colors': resolve(__dirname, 'app/fundamentals/colors.html'),
         'fundamentals/fonts': resolve(__dirname, 'app/fundamentals/fonts.html'),
         'fundamentals/icons': resolve(__dirname, 'app/fundamentals/icons.html'),

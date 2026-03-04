@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-    /* Brand Colors - Base colors are aliases for 500 */
-    --color-aqua: #00FFDC;
-    --color-aqua-500: #00FFDC;
-    --color-navy: #1E2A45;
-    --color-navy-500: #1E2A45;
-    --color-fuchsia: #FF008F;
-    --color-fuchsia-500: #FF008F;
+    /* Brand Colors - Base colors are aliases for 500 (mapped to Thinkport palette) */
+    /* Aqua → Turquoise, Navy → Dark Blue, Fuchsia → Orange */
+    --color-aqua: #00BCD4;
+    --color-aqua-500: #00BCD4;
+    --color-navy: #0B2649;
+    --color-navy-500: #0B2649;
+    --color-fuchsia: #FF5722;
+    --color-fuchsia-500: #FF5722;
     --color-white: #FFFFFF;
     --color-black: #000000;
     --color-gray-dark: #333333;
@@ -15,30 +16,30 @@
     --color-gray-light: #CCCCCC;
     
     /* Color Shades - Tailwind numbering (50=lightest, 900=darkest) */
-    /* Aqua */
-    --color-aqua-50: #E6FFFC;
-    --color-aqua-100: #B3FFF5;
-    --color-aqua-500: #00FFDC;
-    --color-aqua-600: #00BFA5;
-    --color-aqua-700: #006B5F;
+    /* Aqua (Turquoise) */
+    --color-aqua-50: #00C6E0;
+    --color-aqua-100: #00BCD4;
+    --color-aqua-500: #00B6CF;
+    --color-aqua-600: #00A4BA;
+    --color-aqua-700: #004A54;
     
-    /* Navy */
-    --color-navy-50: #F0F2F5;
-    --color-navy-100: #E1E5EB;
-    --color-navy-300: #5A6B8C;
-    --color-navy-400: #2F4169;
-    --color-navy-500: #1E2A45;
+    /* Navy (Dark Blue) */
+    --color-navy-50: #206FD6;
+    --color-navy-100: #174E96;
+    --color-navy-300: #0D2D57;
+    --color-navy-400: #081A33;
+    --color-navy-500: #0B2649;
     
-    /* Fuchsia */
-    --color-fuchsia-50: #FFE6F5;
-    --color-fuchsia-100: #FFCCEB;
-    --color-fuchsia-500: #FF008F;
-    --color-fuchsia-600: #BF006B;
-    --color-fuchsia-700: #800047;
+    /* Fuchsia (Orange) */
+    --color-fuchsia-50: #FF5722;
+    --color-fuchsia-100: #FF5722;
+    --color-fuchsia-500: #E64C1E;
+    --color-fuchsia-600: #BF4019;
+    --color-fuchsia-700: #802A11;
     
     /* Accessible colors for dark backgrounds (WCAG AA compliant - 4.5:1 contrast) */
-    --color-aqua-on-dark: #4DFFE8;
-    --color-fuchsia-on-dark: #FF4DB3;
+    --color-aqua-on-dark: #00C6E0;
+    --color-fuchsia-on-dark: #FF8A50;
     
     /* Fonts */
     --font-heading: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;

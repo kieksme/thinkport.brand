@@ -1,32 +1,32 @@
-/* kieks.me Brand Colors */
+/* Thinkport Brand Colors */
 
 :root {
-  /* Selection Colors */
-  --color-aqua: #00FFDC;
-  --color-navy: #1E2A45;
-  --color-fuchsia: #FF008F;
+  /* Primary Brand Colors */
+  --color-dark-blue: #0B2649;
+  --color-orange: #FF5722;
+  --color-turquoise: #00BCD4;
   
-  /* Selection Color Shades - Tailwind numbering (50=lightest, 900=darkest) */
-  /* Aqua */
-  --color-aqua-50: #E6FFFC;
-  --color-aqua-100: #B3FFF5;
-  --color-aqua-500: #00FFDC;
-  --color-aqua-600: #00BFA5;
-  --color-aqua-700: #006B5F;
+  /* Shaded Colors - Tailwind-like numbering (50=lightest, 900=darkest) */
+  /* Dark Blue */
+  --color-dark-blue-50: #206FD6;
+  --color-dark-blue-100: #174E96;
+  --color-dark-blue-500: #0B2649;
+  --color-dark-blue-600: #0D2D57;
+  --color-dark-blue-700: #081A33;
   
-  /* Navy */
-  --color-navy-50: #F0F2F5;
-  --color-navy-100: #E1E5EB;
-  --color-navy-300: #5A6B8C;
-  --color-navy-400: #2F4169;
-  --color-navy-500: #1E2A45;
+  /* Orange */
+  --color-orange-50: #FF5722;
+  --color-orange-100: #E64C1E;
+  --color-orange-500: #BF4019;
+  --color-orange-600: #802A11;
+  --color-orange-700: #401508;
   
-  /* Fuchsia */
-  --color-fuchsia-50: #FFE6F5;
-  --color-fuchsia-100: #FFCCEB;
-  --color-fuchsia-500: #FF008F;
-  --color-fuchsia-600: #BF006B;
-  --color-fuchsia-700: #800047;
+  /* Turquoise */
+  --color-turquoise-50: #00C6E0;
+  --color-turquoise-100: #00BCD4;
+  --color-turquoise-500: #00B6CF;
+  --color-turquoise-600: #00A4BA;
+  --color-turquoise-700: #004A54;
   
   /* Text Colors */
   --color-white: #FFFFFF;
@@ -38,79 +38,56 @@
   --color-gray-light: #CCCCCC;
   
   /* RGB Values (for use with opacity) */
-  --color-aqua-rgb: 0, 255, 220;
-  --color-navy-rgb: 30, 42, 69;
-  --color-fuchsia-rgb: 255, 0, 143;
+  --color-dark-blue-rgb: 11, 38, 73;
+  --color-orange-rgb: 255, 87, 34;
+  --color-turquoise-rgb: 0, 188, 212;
   --color-white-rgb: 255, 255, 255;
   --color-gray-dark-rgb: 51, 51, 51;
   --color-gray-medium-rgb: 102, 102, 102;
   --color-gray-light-rgb: 204, 204, 204;
   
   /* RGB Values for Color Shades */
-  --color-aqua-50-rgb: 230, 255, 252;
-  --color-aqua-100-rgb: 179, 255, 245;
-  --color-aqua-500-rgb: 0, 255, 220;
-  --color-aqua-600-rgb: 0, 191, 165;
-  --color-aqua-700-rgb: 0, 107, 95;
-  --color-navy-50-rgb: 240, 242, 245;
-  --color-navy-100-rgb: 225, 229, 235;
-  --color-navy-300-rgb: 90, 107, 140;
-  --color-navy-400-rgb: 47, 65, 105;
-  --color-navy-500-rgb: 30, 42, 69;
-  --color-fuchsia-50-rgb: 255, 230, 245;
-  --color-fuchsia-100-rgb: 255, 204, 235;
-  --color-fuchsia-500-rgb: 255, 0, 143;
-  --color-fuchsia-600-rgb: 191, 0, 107;
-  --color-fuchsia-700-rgb: 128, 0, 71;
+  --color-dark-blue-50-rgb: 32, 111, 214;
+  --color-dark-blue-100-rgb: 23, 78, 150;
+  --color-dark-blue-500-rgb: 11, 38, 73;
+  --color-dark-blue-600-rgb: 13, 45, 87;
+  --color-dark-blue-700-rgb: 8, 26, 51;
+  --color-orange-50-rgb: 255, 87, 34;
+  --color-orange-100-rgb: 230, 76, 30;
+  --color-orange-500-rgb: 191, 64, 25;
+  --color-orange-600-rgb: 128, 42, 17;
+  --color-orange-700-rgb: 64, 21, 8;
+  --color-turquoise-50-rgb: 0, 198, 224;
+  --color-turquoise-100-rgb: 0, 188, 212;
+  --color-turquoise-500-rgb: 0, 182, 207;
+  --color-turquoise-600-rgb: 0, 164, 186;
+  --color-turquoise-700-rgb: 0, 74, 84;
   
 }
 
 /* Usage Examples:
 .button-primary {
-  background-color: var(--color-aqua);
+  background-color: var(--color-dark-blue);
+  color: var(--color-secondary, var(--color-white));
+}
+
+.button-accent {
+  background-color: var(--color-orange);
   color: var(--color-white);
 }
 
-.text-body {
-  color: var(--color-gray-dark);
+.text-link {
+  color: var(--color-turquoise-600);
 }
 
-.selection-navy {
-  background-color: var(--color-navy);
-  color: var(--color-white);
-}
-
-.selection-fuchsia {
-  background-color: var(--color-fuchsia);
-  color: var(--color-white);
+.text-link:hover {
+  color: var(--color-turquoise-50);
 }
 
 .with-opacity {
-  background-color: rgba(var(--color-aqua-rgb), 0.8);
+  background-color: rgba(var(--color-turquoise-rgb), 0.8);
 }
 
-/* Color Shades Usage Examples:
-.link-aqua {
-  color: var(--color-aqua-700);
-}
-
-.link-aqua:hover {
-  color: var(--color-aqua-500);
-}
-
-.button-aqua-medium {
-  background-color: var(--color-aqua-600);
-  color: var(--color-white);
-}
-
-.text-navy-light {
-  color: var(--color-navy-300);
-}
-
-.with-opacity-shade {
-  background-color: rgba(var(--color-aqua-700-rgb), 0.8);
-}
-
-/* Tailwind classes available: bg-aqua-50, bg-aqua-100, bg-aqua-500, bg-aqua-600, bg-aqua-700 */
-/* Same pattern for navy and fuchsia */
+/* Tailwind classes available (examples): bg-dark-blue-50, bg-dark-blue-100, bg-dark-blue-500, bg-dark-blue-600, bg-dark-blue-700 */
+/* Same pattern for orange and turquoise */
 */

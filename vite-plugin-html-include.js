@@ -195,6 +195,7 @@ function determineActiveStates(filePath) {
     activeHome: false,
     activeFundamentals: false,
     activeLogos: false,
+    activeBackgrounds: false,
     activeColors: false,
     activeFonts: false,
     activeGuidelines: false,
@@ -229,6 +230,8 @@ function determineActiveStates(filePath) {
     
     if (normalizedPath.includes('logos.html')) {
       states.activeLogos = true;
+    } else if (normalizedPath.includes('backgrounds.html')) {
+      states.activeBackgrounds = true;
     } else if (normalizedPath.includes('colors.html')) {
       states.activeColors = true;
     } else if (normalizedPath.includes('fonts.html')) {
@@ -308,6 +311,11 @@ const HERO_CONTENT_MAP = {
     heroTitle: 'Logos',
     heroSubtitle: 'Offizielle Thinkport-Logovarianten – Horizontal, Icon und Venitus',
     heroExtras: heroExtrasTags('<span class="text-aqua">Horizontal</span> • <span class="text-fuchsia">Icon</span> • <span class="text-aqua">Venitus</span>'),
+  },
+  'fundamentals/backgrounds.html': {
+    heroTitle: 'Hintergrundgrafiken',
+    heroSubtitle: 'Alle Hintergrundgrafiken für Hero-Bereiche, 16:9-Visuals, Banner und Webanwendungen – mit direktem SVG-Download.',
+    heroExtras: heroExtrasTags('<span class="text-aqua">Standard</span> • <span class="text-fuchsia">16:9</span> • <span class="text-aqua">Banner</span> • <span class="text-fuchsia">Webapp</span>'),
   },
   'fundamentals/colors.html': {
     heroTitle: 'Markenfarben',

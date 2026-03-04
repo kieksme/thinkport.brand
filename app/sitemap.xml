@@ -66,6 +66,17 @@
       <image:loc>https://brand.kieks.me/logos/a-venitus-company-hoch.svg</image:loc>
     </image:image>
   </url>
+
+  <!-- Backgrounds Page -->
+  <url>
+    <loc>https://brand.kieks.me/fundamentals/backgrounds.html</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/fundamentals.svg</image:loc>
+    </image:image>
+  </url>
   
   <!-- Colors Page -->
   <url>
