@@ -348,7 +348,7 @@ const HERO_CONTENT_MAP = {
   },
   'implementations/avatars.html': {
     heroTitle: 'Avatars',
-    heroSubtitle: 'Square avatar graphics with cut-out portraits and brand colors',
+    heroSubtitle: 'Square avatar graphics with cut-out portraits and Abstract 5 background',
     heroExtras: heroExtrasTags('<span class="text-aqua">Square Format</span> • <span class="text-fuchsia">Brand Colors</span> • <span class="text-aqua">Cut-out Portraits</span>'),
   },
   'implementations/business-cards.html': {

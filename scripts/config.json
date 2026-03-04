@@ -12,35 +12,9 @@
     }
   },
   "avatarGenerator": {
-    "shadowColorMap": {
-      "aqua": ["navy", "fuchsia"],
-      "navy": ["aqua", "fuchsia"],
-      "fuchsia": ["aqua", "navy"]
-    },
-    "shadowOffset": {
-      "small": {
-        "maxSize": 256,
-        "offsetMultiplier": 0.03,
-        "minOffset": 5
-      },
-      "medium": {
-        "maxSize": 512,
-        "offsetMultiplier": 0.025,
-        "minOffset": 10
-      },
-      "large": {
-        "maxSize": 999999,
-        "offsetMultiplier": 0.02,
-        "minOffset": 15
-      }
-    },
-    "shadowSize": {
-      "multiplier": 1.244
-    },
+    "abstractBackgroundPath": "assets/images/abstracts/svg-12-animated/5.svg",
     "defaults": {
       "size": 512,
-      "grayscale": false,
-      "withShadow": true,
       "outputDir": "output/avatars"
     },
     "sizeOptions": [
