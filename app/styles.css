@@ -18,6 +18,7 @@
     /* Color Shades - Tailwind numbering (50=lightest, 900=darkest) */
     /* Aqua (Turquoise) */
     --color-aqua-50: #00C6E0;
+    --color-aqua-tint: #E0F7FA; /* Light turquoise for section backgrounds */
     --color-aqua-100: #00BCD4;
     --color-aqua-500: #00B6CF;
     --color-aqua-600: #00A4BA;
@@ -25,6 +26,7 @@
     
     /* Navy (Dark Blue) */
     --color-navy-50: #206FD6;
+    --color-navy-tint: #E8EEF7; /* Light Thinkport blue for section backgrounds */
     --color-navy-100: #174E96;
     --color-navy-300: #0D2D57;
     --color-navy-400: #081A33;
