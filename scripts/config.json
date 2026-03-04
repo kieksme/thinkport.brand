@@ -12,7 +12,7 @@
     }
   },
   "avatarGenerator": {
-    "abstractBackgroundPath": "assets/images/abstracts/svg-12-animated/5.svg",
+    "abstractBackgroundPath": "assets/backgrounds/5.svg",
     "defaults": {
       "size": 512,
       "outputDir": "output/avatars"

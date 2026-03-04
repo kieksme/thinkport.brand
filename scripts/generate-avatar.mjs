@@ -333,7 +333,7 @@ Options:
   --output <path>      Output file path
   --help, -h           Show this help message
 
-Background: Abstract 5 (assets/images/abstracts/svg-12-animated/5.svg) is used as the avatar background.
+Background: Abstract 5 (assets/backgrounds/5.svg) is used as the avatar background.
 The portrait is composited centered on top.
 
 If no arguments are provided, an interactive prompt will guide you through the process.
