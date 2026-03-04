@@ -66,10 +66,8 @@ function buildReadmeHeaderSvg(title) {
   ${bgGraphic}
   <!-- Dark overlay for contrast -->
   <rect width="1200" height="200" fill="url(#readmeOverlay)"/>
-  <!-- Thinkport logo (scale to 48px height) -->
-  <g transform="translate(40, 20) scale(${logoScale})">
-    <svg width="253" height="48" viewBox="0 0 1479 280" fill="none" xmlns="http://www.w3.org/2000/svg">${LOGO_PATHS}
-    </svg>
+  <!-- Thinkport logo (scale to 48px height, flat paths for GitHub/social renderers) -->
+  <g transform="translate(40, 20) scale(${logoScale})" fill="none">${LOGO_PATHS}
   </g>
   <!-- Title (Hanken Grotesk) -->
   <text x="40" y="130" font-family="'Hanken Grotesk', sans-serif" font-size="32" font-weight="700" fill="#FFFFFF">${title}</text>
