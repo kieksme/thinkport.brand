@@ -61,7 +61,7 @@ Use `{{#if variable}}...{{/if}}` to conditionally render content:
 The templates follow Thinkport brand guidelines:
 - Colors from `assets/colors/colors.json`
 - Typography: Hanken Grotesk (headings), Source Sans 3 (body)
-- Logo: Thinkport single (solo) logo, light variant
+- Logo: Thinkport and Venitus solid card variants (`thinkport-solo-light-card-solid.svg`, `thinkport-venitus-light-card-solid.svg`) for opaque print
 
 ## Dependencies
 

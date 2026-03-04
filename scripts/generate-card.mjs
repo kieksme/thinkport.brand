@@ -341,30 +341,33 @@ function renderFrontSide(page, data, fonts, images) {
   });
   
   // Logo positioning
-  // Logo: centered in the first quarter of the card horizontally, vertically centered; max 26×32mm
+  // Logo: centered in the first quarter of the card horizontally, vertically centered; max 26×32mm; offset 1cm up
   const logoWidth = mmToPt(26);
   const logoHeight = mmToPt(32);
+  const logoOffsetUpMm = 6;
   let soloLogoBottomY = null;
-  
+  let finalLogoWidth = logoWidth;
+  let finalLogoHeight = logoHeight;
+
   if (images.logo) {
     // Calculate logo dimensions maintaining aspect ratio
     const logoDims = images.logo.scale(1);
     const logoAspectRatio = logoDims.width / logoDims.height;
-    let finalLogoWidth = logoWidth;
-    let finalLogoHeight = logoWidth / logoAspectRatio;
-    
+    finalLogoWidth = logoWidth;
+    finalLogoHeight = logoWidth / logoAspectRatio;
+
     if (finalLogoHeight > logoHeight) {
       finalLogoHeight = logoHeight;
       finalLogoWidth = logoHeight * logoAspectRatio;
     }
-    
+
     // Center logo in the left half of the card (left half center = pageWidth/4)
     const logoXCentered = pageWidth / 4 - finalLogoWidth / 2;
-    // Vertically center the logo container without additional offset
-    const logoContainerY = (pageHeight - logoHeight) / 2;
+    // Vertically center the logo container, then shift 1cm up
+    const logoContainerY = (pageHeight - logoHeight) / 2 + mmToPt(logoOffsetUpMm);
     const logoYCentered = logoContainerY + (logoHeight - finalLogoHeight) / 2;
     soloLogoBottomY = logoYCentered;
-    
+
     page.drawImage(images.logo, {
       x: logoXCentered,
       y: logoYCentered,
@@ -372,21 +375,26 @@ function renderFrontSide(page, data, fonts, images) {
       height: finalLogoHeight,
     });
   }
-  
-  // Venitus logo below main logo (centered in left half)
+
+  // "a venitus company" line: 2/5 the size of Thinkport logo, 80% opacity, below it with gap (no overlap)
   const venitusGapMm = 2;
-  const venitusMaxWidthMm = 38;
-  const venitusAspect = 347 / 1580;
-  const venitusWidth = mmToPt(venitusMaxWidthMm);
+  const venitusAspect = 44.65 / 54.82;
+  const venitusWidth = (finalLogoWidth / 5) * 2;
   const venitusHeight = venitusWidth * venitusAspect;
-  if (images.logoVenitus && soloLogoBottomY !== null) {
+  const minBottomMarginMm = 5;
+  const minVenitusY = mmToPt(minBottomMarginMm);
+  if (images.logoVenitus) {
     const venitusX = pageWidth / 4 - venitusWidth / 2;
-    const venitusY = soloLogoBottomY - mmToPt(venitusGapMm) - venitusHeight;
+    const venitusYRaw = soloLogoBottomY !== null
+      ? soloLogoBottomY - mmToPt(venitusGapMm) - venitusHeight
+      : (pageHeight - venitusHeight) / 2;
+    const venitusY = Math.max(venitusYRaw, minVenitusY);
     page.drawImage(images.logoVenitus, {
       x: venitusX,
       y: venitusY,
       width: venitusWidth,
       height: venitusHeight,
+      opacity: 0.8,
     });
   }
   
@@ -858,11 +866,11 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
   cardProgress('QR-Code generiert', 'done');
   
   // Load and convert logos (solo + venitus)
-  const logoPath = join(projectRoot, 'assets', 'logos', 'thinkport-solo-light-card.svg');
-  const venitusPath = join(projectRoot, 'assets', 'logos', 'thinkport-venitus-light-card.svg');
+  const logoPath = join(projectRoot, 'assets', 'logos', 'thinkport-solo-light-card-solid.svg');
+  const venitusPath = join(projectRoot, 'assets', 'logos', 'a-venitus-company-hoch-light.svg');
   cardProgress('Lade Logo …', 'generating');
   const logoPngBuffer = await svgToPng(logoPath, 1000, 1000);
-  const venitusPngBuffer = await svgToPng(venitusPath, 1580, 347);
+  const venitusPngBuffer = await svgToPng(venitusPath, 548, 447);
   cardProgress('Logo geladen', 'done');
   
   // Create PDF document
