@@ -37,6 +37,8 @@ Each business card consists of two PDF files:
 - `{name}-front.pdf` - Front side with contact information and logo
 - `{name}-back.pdf` - Back side with QR code containing vCard data
 
+These PDF files are also used directly by the `app/implementations/business-cards.html` page for the live previews and download links. After regenerating the samples, deploy the updated `examples/sample-business-cards` directory so the previews always reflect the latest design (including logo updates).
+
 ## QR Code
 
 The QR code on the back of each card contains vCard (VCF) formatted contact data that can be scanned and imported directly into contact management applications.

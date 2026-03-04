@@ -410,8 +410,7 @@
                 }
             }
 
-            // Load all PDFs
-            // Use jsDelivr CDN for better CORS support
+            // Load all PDFs from GitHub-hosted sample-business-cards directory
             const baseUrl = 'https://cdn.jsdelivr.net/gh/kieksme/kieks.me.cicd@main/examples/sample-business-cards/';
             const pdfs = [
                 { url: baseUrl + 'Max-Mustermann-front.pdf', id: 'max-mustermann-front' },
@@ -432,11 +431,11 @@
                 }, 100);
             } else {
                 window.addEventListener('load', () => {
-                    setTimeout(() => {
-                        pdfs.forEach(pdf => {
-                            renderPDF(pdf.url, pdf.id);
-                        });
-                    }, 100);
+                        setTimeout(() => {
+                            pdfs.forEach(pdf => {
+                                renderPDF(pdf.url, pdf.id);
+                            });
+                        }, 100);
                 });
             }
         }

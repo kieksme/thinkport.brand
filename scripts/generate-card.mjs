@@ -142,6 +142,8 @@ const COLORS = {
   darkGray: createColor(CONFIG.brand.colors.darkGray),
   mediumGray: createColor(CONFIG.brand.colors.mediumGray),
   black: createColor(CONFIG.brand.colors.black),
+  // Accent orange for back side background (see assets/colors/colors.json)
+  orange: createColor('#FF5722'),
 };
 
 /**
@@ -339,11 +341,10 @@ function renderFrontSide(page, data, fonts, images) {
   });
   
   // Logo positioning
-  // Logo container: left 3.5mm, top 3.5mm, width 40mm, height 52mm
-  const logoX = safeOffset;
-  const logoY = pageHeight - safeOffset - mmToPt(47); // Max height 47mm, with padding
-  const logoWidth = mmToPt(40);
-  const logoHeight = mmToPt(47);
+  // Logo: centered in the first quarter of the card horizontally, vertically centered; max 26×32mm
+  const logoWidth = mmToPt(26);
+  const logoHeight = mmToPt(32);
+  let soloLogoBottomY = null;
   
   if (images.logo) {
     // Calculate logo dimensions maintaining aspect ratio
@@ -357,17 +358,35 @@ function renderFrontSide(page, data, fonts, images) {
       finalLogoWidth = logoHeight * logoAspectRatio;
     }
     
-    // Center logo horizontally and vertically
-    const logoXCentered = logoX + (logoWidth - finalLogoWidth) / 2;
-    // Vertically center the logo container, then shift 5mm down, then center logo within container
-    const logoContainerY = (pageHeight - logoHeight) / 2 - mmToPt(5);
+    // Center logo in the left half of the card (left half center = pageWidth/4)
+    const logoXCentered = pageWidth / 4 - finalLogoWidth / 2;
+    // Vertically center the logo container without additional offset
+    const logoContainerY = (pageHeight - logoHeight) / 2;
     const logoYCentered = logoContainerY + (logoHeight - finalLogoHeight) / 2;
+    soloLogoBottomY = logoYCentered;
     
     page.drawImage(images.logo, {
       x: logoXCentered,
       y: logoYCentered,
       width: finalLogoWidth,
       height: finalLogoHeight,
+    });
+  }
+  
+  // Venitus logo below main logo (centered in left half)
+  const venitusGapMm = 2;
+  const venitusMaxWidthMm = 38;
+  const venitusAspect = 347 / 1580;
+  const venitusWidth = mmToPt(venitusMaxWidthMm);
+  const venitusHeight = venitusWidth * venitusAspect;
+  if (images.logoVenitus && soloLogoBottomY !== null) {
+    const venitusX = pageWidth / 4 - venitusWidth / 2;
+    const venitusY = soloLogoBottomY - mmToPt(venitusGapMm) - venitusHeight;
+    page.drawImage(images.logoVenitus, {
+      x: venitusX,
+      y: venitusY,
+      width: venitusWidth,
+      height: venitusHeight,
     });
   }
   
@@ -479,13 +498,13 @@ function renderBackSide(page, data, fonts, images) {
   const safeOffset = mmToPt(SAFE_AREA_OFFSET_MM);
   const padding = mmToPt(5); // 5mm padding inside safe area
   
-  // Background (white)
+  // Background (orange brand accent)
   page.drawRectangle({
     x: 0,
     y: 0,
     width: pageWidth,
     height: pageHeight,
-    color: COLORS.white,
+  color: COLORS.orange,
   });
   
   // QR Code container: left 8.5mm (3.5mm offset + 5mm padding), 50mm x 50mm
@@ -510,7 +529,7 @@ function renderBackSide(page, data, fonts, images) {
   const qrCenterY = qrY + qrSize / 2;
   const textY = qrCenterY; // Start from QR center, will adjust for text
   
-  // Title (Hanken Grotesk Bold, 9pt, black) - two lines
+  // Title (Hanken Grotesk Bold, 9pt, white) - two lines
   // Position title so it's above center, accounting for text height
   const titleLine1 = 'Kontaktdaten';
   const titleLine2 = 'scannen';
@@ -522,7 +541,7 @@ function renderBackSide(page, data, fonts, images) {
     x: textX,
     y: textY + mmToPt(5), // 5mm above center
     size: titleSize,
-    color: COLORS.black,
+    color: COLORS.white,
     font: fonts.heading,
   });
   
@@ -531,11 +550,11 @@ function renderBackSide(page, data, fonts, images) {
     x: textX,
     y: textY + mmToPt(5) - titleLineHeight, // Below first line
     size: titleSize,
-    color: COLORS.black,
+    color: COLORS.white,
     font: fonts.heading,
   });
   
-  // Description (Source Sans 3, 7pt, medium gray)
+  // Description (Source Sans 3, 7pt, white)
   const description = 'Scannen Sie den QR-Code mit Ihrer Kamera-App, um die Kontaktdaten automatisch zu speichern.';
   // Calculate max width: card width - text start position - right margin (safe offset + padding)
   // Minimal safety margin to maximize text box width
@@ -573,7 +592,7 @@ function renderBackSide(page, data, fonts, images) {
       x: textX,
       y: yPos,
       size: fontSize,
-      color: COLORS.mediumGray,
+      color: COLORS.white,
       font: fonts.body,
     });
     yPos -= lineHeight;
@@ -838,10 +857,12 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
   const qrCodeBuffer = await generateQRCodeBuffer(vCardData);
   cardProgress('QR-Code generiert', 'done');
   
-  // Load and convert logo
-  const logoPath = join(projectRoot, 'assets', 'logos', 'thinkport-solo-light.svg');
+  // Load and convert logos (solo + venitus)
+  const logoPath = join(projectRoot, 'assets', 'logos', 'thinkport-solo-light-card.svg');
+  const venitusPath = join(projectRoot, 'assets', 'logos', 'thinkport-venitus-light-card.svg');
   cardProgress('Lade Logo …', 'generating');
   const logoPngBuffer = await svgToPng(logoPath, 1000, 1000);
+  const venitusPngBuffer = await svgToPng(venitusPath, 1580, 347);
   cardProgress('Logo geladen', 'done');
   
   // Create PDF document
@@ -853,10 +874,12 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
   
   // Embed images
   const logoImage = await pdfDoc.embedPng(logoPngBuffer);
+  const venitusImage = await pdfDoc.embedPng(venitusPngBuffer);
   const qrCodeImage = await pdfDoc.embedPng(qrCodeBuffer);
   
   const images = {
     logo: logoImage,
+    logoVenitus: venitusImage,
     qrCode: qrCodeImage,
   };
   

@@ -30,7 +30,6 @@ Use **dark** on dark backgrounds and **light** on light backgrounds.
 | `thinkport-venitus-dark.png` | PNG | Venitus dark, raster |
 | `thinkport-venitus-light.png` | PNG | Venitus light, raster (e.g. favicon) |
 | `thinkport-venitus-dark-big-100.png` | PNG | Venitus dark, 100px |
-| `tp.svg` | SVG | Minimal “tp” icon |
 | `a-venitus-company-hoch.svg` | SVG | “A Venitus Company” lockup (horizontal) |
 
 ## Logo Variants Summary
@@ -38,7 +37,6 @@ Use **dark** on dark backgrounds and **light** on light backgrounds.
 - **Horizontal** – Full wordmark: dark and light for different backgrounds.
 - **Solo** – Icon only (`thinkport-solo-light.svg`).
 - **Venitus** – Thinkport with “A Venitus Company” / Venitus branding (`thinkport-venitus-*`, `a-venitus-company-hoch.svg`).
-- **Icon** – Minimal mark (`tp.svg`).
 
 ## Usage Guidelines
 
@@ -58,7 +56,6 @@ Assets are served from the `assets` folder (e.g. Vite `publicDir: 'assets'`). In
 - `/logos/thinkport-venitus-dark.svg`
 - `/logos/thinkport-venitus-light.svg`
 - `/logos/thinkport-venitus-light.png`
-- `/logos/tp.svg`
 - `/logos/a-venitus-company-hoch.svg`
 
 (and similarly for other files in this directory.)

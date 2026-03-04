@@ -14,7 +14,6 @@ Thinkport logos are provided in several variants for different contexts:
 
 - **Solo** (`thinkport-solo-light.svg`) – Icon-only, light version; suitable for app icons, avatars, and small placements.
 - **Venitus** (`thinkport-venitus-dark.svg`, `thinkport-venitus-light.svg`) – Thinkport with Venitus wordmark; use dark or light to match background.
-- **Icon** (`tp.svg`) – Minimal “tp” mark for very small or icon-only use.
 - **A Venitus Company** (`a-venitus-company-hoch.svg`) – “A Venitus Company” lockup (horizontal).
 
 ### File Locations
