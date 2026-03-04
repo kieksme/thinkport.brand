@@ -2,7 +2,18 @@
 
 ## Logo Variations
 
-Thinkport logos are provided in several variants for different contexts:
+Thinkport logos are provided in several variants for different contexts.
+
+### Official naming (internal guideline)
+
+Internal guidelines may refer to logos as:
+
+- **Logo with Thinkport text below lighthouse** – light and dark background versions.
+- **Logo with adjacent Thinkport text** – light and dark background versions.
+- **Logo without Thinkport text** (icon-only) – light and dark background versions; 100 px recommended for email signature (icon on dark).
+- **Logo in white** – for transparent or dark-background usage.
+
+These correspond to the horizontal, solo, and venitus variants in this repository (see below). Additional formats (.ai, .png 300 dpi and 600 dpi) are available via the official OneDrive source; ask the brand team for access.
 
 ### Horizontal Logos
 
@@ -20,6 +31,7 @@ Thinkport logos are provided in several variants for different contexts:
 
 - All logo files live in the `assets/logos/` directory in this repository.
 - In the built brand site, they are referenced as `/logos/<filename>` (e.g. `/logos/thinkport-logo-horizontal-dark.svg`).
+- For additional formats (e.g. .ai, high-resolution PNG) or logo-related questions, use the official OneDrive source and contact the brand team (e.g. designated logo contact such as Philipp Höllthaler) for assistance.
 
 ## File Formats
 
@@ -68,6 +80,14 @@ Thinkport logos are provided in several variants for different contexts:
 ## Color Specifications
 
 See [COLOR_PALETTE.md](COLOR_PALETTE.md) for color specifications relevant to logo usage.
+
+## Logo history
+
+- **End of 2021:** The bottom left part of the logo was updated to remove the sharp peak of the lighthouse base. Use only current logo files from this repository or the official OneDrive source.
+
+## Old logos
+
+Older logo versions (e.g. pre-2021 lighthouse shape, or “Logo white” in legacy contexts) are **deprecated**. Do not use them for new materials. For archival or comparison only, refer to the official brand team or OneDrive if needed.
 
 ## Questions
 

@@ -4,6 +4,10 @@
 
 Typography is a key component of our visual identity. Consistent use of typefaces helps maintain brand recognition and readability.
 
+### Note on official guideline
+
+Some internal Thinkport guidelines reference **Montserrat** (Google Fonts, weight 400/600, line height 1.4) as the brand typeface. This repository uses **Hanken Grotesk** (headings) and **Source Sans 3** (body) as the current implementation. If you need to align with a specific channel (e.g. legacy templates or partner material), confirm with the brand owner whether Montserrat or Hanken Grotesk + Source Sans 3 is the current standard before changing fonts.
+
 ## Primary Typeface
 
 ### Heading Font

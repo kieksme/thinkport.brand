@@ -61,10 +61,12 @@ Products and applications built from our brand fundamentals:
 
 Detailed documentation for each aspect of the brand identity:
 
-- [Brand Guidelines](assets/guidelines/BRAND_GUIDELINES.md) - Overall brand usage rules and principles
-- [Logo Usage](assets/guidelines/LOGO_USAGE.md) - How to properly use logos
-- [Color Palette](assets/guidelines/COLOR_PALETTE.md) - Official color definitions
-- [Typography](assets/guidelines/TYPOGRAPHY.md) - Font usage and hierarchy
+- [Logo Usage](guidelines/LOGO_USAGE.md) - How to properly use logos
+- [Color Palette](guidelines/COLOR_PALETTE.md) - Official color definitions
+- [Typography](guidelines/TYPOGRAPHY.md) - Font usage and hierarchy
+- [Design Elements & Webdesign](guidelines/DESIGN_ELEMENTS.md) - Buttons, overlays, borders, Photoshop
+- [Templates and Resources](guidelines/TEMPLATES_AND_RESOURCES.md) - Slide Master, Geschäftsbrief DIN 5008, company intro
+- [Brand History](guidelines/BRAND_HISTORY.md) - Policy changes (e.g. 2020 colour, 2021 logo)
 
 ## Usage
 

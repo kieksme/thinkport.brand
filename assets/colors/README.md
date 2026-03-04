@@ -17,7 +17,7 @@ This directory contains the official Thinkport GmbH brand color palette, includi
 | File Name                   | Format | Color                  | Download                                                                                              |
 |-----------------------------|--------|------------------------|--------------------------------------------------------------------------------------------------------|
 | `swatches/dark-blue.svg`    | SVG    | Dark Blue (#0B2649)    | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/dark-blue.svg)       |
-| `swatches/orange.svg`       | SVG    | Orange (#0B2649)       | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/orange.svg)          |
+| `swatches/orange.svg`       | SVG    | Orange (#FF5722)       | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/orange.svg)          |
 | `swatches/turquoise.svg`    | SVG    | Turquoise (#00BCD4)    | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/turquoise.svg)        |
 | `swatches/white.svg`        | SVG    | White (#FFFFFF)        | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/white.svg)            |
 | `swatches/dark-gray.svg`    | SVG    | Dark Gray (#333333)    | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/dark-gray.svg)        |
@@ -31,10 +31,10 @@ The Thinkport brand uses three primary colors for a consistent visual identity: 
 | Color    | Hex       | RGB                | Description                          |
 |----------|-----------|--------------------|--------------------------------------|
 | Dark Blue | `#0B2649` | `rgb(11, 38, 73)`  | Primary dark; trust, professionalism |
-| Orange   | `#0B2649` | `rgb(255, 87, 34)` | Accent; energy, call-to-action       |
+| Orange   | `#FF5722` | `rgb(255, 87, 34)` | Accent; energy, call-to-action       |
 | Turquoise | `#00BCD4` | `rgb(0, 188, 212)` | Accent; clarity, innovation         |
 
-**JSON keys** (in `colors.json`): `selection.darkBlue`, `selection.orange`, `selection.turquoise` (each with `hex`, `rgb`, `pantone`, `usage`, `shades`). The `primary` object is set to Dark Blue (#0B2649). Legacy keys `selection.aqua`, `selection.navy`, `selection.fuchsia` remain for backwards compatibility. For Tailwind, extend your theme with e.g. `darkBlue: '#0B2649'`, `orange: '#0B2649'`, `turquoise: '#00BCD4'` when consuming this palette.
+**JSON keys** (in `colors.json`): `selection.darkBlue`, `selection.orange`, `selection.turquoise` (each with `hex`, `rgb`, `pantone`, `usage`, `shades`). The `primary` object is set to Dark Blue (#0B2649). Legacy keys `selection.aqua`, `selection.navy`, `selection.fuchsia` remain for backwards compatibility. For Tailwind, extend your theme with e.g. `darkBlue: '#0B2649'`, `orange: '#FF5722'`, `turquoise: '#00BCD4'` when consuming this palette.
 
 ### Text Colors
 
@@ -100,7 +100,7 @@ module.exports = {
 
 <!-- Inline HEX when custom utilities are not yet configured -->
 <div style="background-color: #0B2649; color: white;">Dark Blue background</div>
-<div style="background-color: #0B2649; color: white;">Orange accent</div>
+<div style="background-color: #FF5722; color: white;">Orange accent</div>
 <div style="background-color: #00BCD4; color: white;">Turquoise accent</div>
 
 <!-- Neutral colors -->
@@ -119,7 +119,7 @@ module.exports = {
 
 Brand colors are documented with:
 
-- **Hex values** – For digital/web use (#0B2649, #0B2649, #00BCD4)
+- **Hex values** – For digital/web use (#0B2649, #FF5722, #00BCD4)
 - **RGB values** – For digital displays
 - **Pantone codes** – For print/screen printing (533 C, 1505 C, 319 C)
 - **CMYK** – Use Pantone solid coated or convert as needed for print
