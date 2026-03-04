@@ -53,9 +53,10 @@ async function generateSampleAvatars() {
 
     for (const size of sizes) {
       const fileNameSlug = portraitName.replace(/kieksme/gi, 'thinkport');
+
+      // Full color
       const outputFileName = `avatar-${fileNameSlug}-${size}.png`;
       const outputPath = join(outputDir, outputFileName);
-
       try {
         info(`  Generiere: ${outputFileName}`);
         await generateAvatar(portraitPath, size, outputPath);
@@ -63,6 +64,18 @@ async function generateSampleAvatars() {
         totalAvatars++;
       } catch (err) {
         error(`  Fehler bei ${outputFileName}: ${err.message}`);
+      }
+
+      // Grayscale portrait, color background
+      const grayscaleFileName = `avatar-${fileNameSlug}-${size}-grayscale.png`;
+      const grayscalePath = join(outputDir, grayscaleFileName);
+      try {
+        info(`  Generiere: ${grayscaleFileName}`);
+        await generateAvatar(portraitPath, size, grayscalePath, { grayscalePortrait: true });
+        generatedAvatars.push(grayscaleFileName);
+        totalAvatars++;
+      } catch (err) {
+        error(`  Fehler bei ${grayscaleFileName}: ${err.message}`);
       }
     }
   }
@@ -78,7 +91,8 @@ async function main() {
     header('Sample Avatars Generator', 'Generiere Beispiel-Avatare mit Abstract-5-Hintergrund', 'bgCyan');
 
     info('Generiere Beispiel-Avatare:');
-    info('  - Hintergrund: Abstract 5');
+    info('  - Hintergrund: Abstract 5 (immer in Farbe)');
+    info('  - Varianten: Farbe + Graustufen-Portrait (Person Grau, Hintergrund Farbe)');
     info('  - Größen: 256px, 512px');
     info('');
 

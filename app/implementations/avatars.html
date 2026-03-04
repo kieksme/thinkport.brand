@@ -265,7 +265,7 @@
             <div class="flex flex-wrap justify-center items-start">
               <div class="avatar-example">
                 <img
-                  src="{{basePath}}examples/avatars/avatar-kieksme-avatar-alademann-512.png"
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512.png"
                   alt="Avatar mit Abstract-5-Hintergrund (512x512px)"
                   class="w-64 h-64 rounded-lg object-cover"
                 />
@@ -282,11 +282,39 @@
             <div class="flex flex-wrap justify-center items-start">
               <div class="avatar-example">
                 <img
-                  src="{{basePath}}examples/avatars/avatar-kieksme-avatar-alademann-256.png"
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
                   alt="Avatar mit Abstract-5-Hintergrund (256x256px)"
                   class="w-32 h-32 rounded-lg object-cover"
                 />
                 <p class="avatar-example-label">256px</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Grayscale Variants (portrait in grayscale, background in color) -->
+          <div class="mb-12">
+            <h3 class="font-heading text-2xl font-bold text-navy mb-6">
+              Graustufen-Avatare
+            </h3>
+            <p class="font-body text-gray-700 mb-6 text-center max-w-3xl mx-auto">
+              Variante mit Portrait in Graustufen und farbigem Abstract-5-Hintergrund.
+            </p>
+            <div class="flex flex-wrap justify-center items-start gap-8">
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512-grayscale.png"
+                  alt="Avatar Graustufen-Portrait mit Abstract-5-Hintergrund (512x512px)"
+                  class="w-64 h-64 rounded-lg object-cover"
+                />
+                <p class="avatar-example-label">512px Graustufen</p>
+              </div>
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256-grayscale.png"
+                  alt="Avatar Graustufen-Portrait mit Abstract-5-Hintergrund (256x256px)"
+                  class="w-32 h-32 rounded-lg object-cover"
+                />
+                <p class="avatar-example-label">256px Graustufen</p>
               </div>
             </div>
           </div>
@@ -310,7 +338,7 @@
               <div class="flex flex-wrap justify-center items-start">
                 <div class="avatar-example">
                   <img
-                    src="{{basePath}}examples/avatars/avatar-kieksme-avatar-alademann-256.png"
+                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
                     alt="Avatar mit Abstract-5-Hintergrund, abgerundet"
                     class="w-32 h-32 rounded-lg object-cover"
                   />
@@ -318,7 +346,7 @@
                 </div>
                 <div class="avatar-example">
                   <img
-                    src="{{basePath}}examples/avatars/avatar-kieksme-avatar-alademann-512.png"
+                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512.png"
                     alt="Avatar mit Abstract-5-Hintergrund, abgerundet"
                     class="w-32 h-32 rounded-lg object-cover"
                   />
@@ -335,7 +363,7 @@
               <div class="flex flex-wrap justify-center items-start">
                 <div class="avatar-example">
                   <img
-                    src="{{basePath}}examples/avatars/avatar-kieksme-avatar-alademann-256.png"
+                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
                     alt="Avatar mit Abstract-5-Hintergrund, kreisförmig"
                     class="w-32 h-32 rounded-full object-cover"
                   />
@@ -343,11 +371,19 @@
                 </div>
                 <div class="avatar-example">
                   <img
-                    src="{{basePath}}examples/avatars/avatar-kieksme-avatar-alademann-512.png"
+                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512.png"
                     alt="Avatar mit Abstract-5-Hintergrund, kreisförmig"
                     class="w-32 h-32 rounded-full object-cover"
                   />
                   <p class="avatar-example-label">512px (kreisförmig)</p>
+                </div>
+                <div class="avatar-example">
+                  <img
+                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256-grayscale.png"
+                    alt="Avatar Graustufen mit Abstract-5-Hintergrund, kreisförmig"
+                    class="w-32 h-32 rounded-full object-cover"
+                  />
+                  <p class="avatar-example-label">256px Graustufen (kreisförmig)</p>
                 </div>
               </div>
             </div>
@@ -518,6 +554,7 @@ pnpm run generate:avatar:samples</code></pre>
             <ul class="font-body text-sm text-gray-700 space-y-1 list-disc list-inside mb-4">
               <li>Hintergrund: Abstract 5</li>
               <li>Zwei Standard-Größen (256px, 512px)</li>
+              <li>Farbige Avatare + Graustufen-Varianten (Portrait Grau, Hintergrund Farbe)</li>
             </ul>
             <p class="font-body text-sm text-gray-600">
               Die generierten Avatare werden im Verzeichnis <code class="bg-gray-200 px-2 py-1 rounded">examples/avatars</code> gespeichert.
