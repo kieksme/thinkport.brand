@@ -138,6 +138,8 @@ const COLORS = {
   navy: createColor(CONFIG.brand.colors.navy),
   white: createColor(CONFIG.brand.colors.white),
   aqua: createColor(CONFIG.brand.colors.aqua),
+  /** Turquoise accent for job title on navy card (visible; config aqua may be dark) */
+  positionAccent: createColor('#00BCD4'),
   lightGray: createColor(CONFIG.brand.colors.lightGray),
   darkGray: createColor(CONFIG.brand.colors.darkGray),
   mediumGray: createColor(CONFIG.brand.colors.mediumGray),
@@ -234,9 +236,10 @@ async function loadFonts(pdfDoc) {
     const hankenGroteskRegularPath = resolveFontPath('hanken-grotesk', 500, 'regular');
     const hankenGroteskItalicPath = resolveFontPath('hanken-grotesk', 500, 'italic');
 
-    // Load Source Sans 3 (body font) with weight 400 (Regular) for smaller text
+    // Load Source Sans 3 (body font) with weight 400 (Regular) and 700 (Bold)
     const sourceSans3RegularPath = resolveFontPath('source-sans-3', 400, 'regular');
     const sourceSans3ItalicPath = resolveFontPath('source-sans-3', 400, 'italic');
+    const sourceSans3BoldPath = resolveFontPath('source-sans-3', 700, 'regular');
 
     // Check if font files exist (TTF/OTF required; WOFF2 is for web only)
     if (!hankenGroteskRegularPath || !sourceSans3RegularPath) {
@@ -262,19 +265,23 @@ async function loadFonts(pdfDoc) {
     const sourceSans3ItalicBytes = sourceSans3ItalicPath
       ? readFileSync(sourceSans3ItalicPath)
       : sourceSans3RegularBytes;
+    const sourceSans3BoldBytes = sourceSans3BoldPath
+      ? readFileSync(sourceSans3BoldPath)
+      : sourceSans3RegularBytes;
     
     // Embed fonts in PDF
     const hankenGroteskRegular = await pdfDoc.embedFont(hankenGroteskRegularBytes);
     const hankenGroteskItalic = await pdfDoc.embedFont(hankenGroteskItalicBytes);
     
-    // Embed Source Sans 3 with weight 400 (Regular) for smaller text
+    // Embed Source Sans 3 with weight 400 (Regular) and 700 (Bold) for body text
     const sourceSans3Regular = await pdfDoc.embedFont(sourceSans3RegularBytes);
     const sourceSans3Italic = await pdfDoc.embedFont(sourceSans3ItalicBytes);
+    const sourceSans3Bold = await pdfDoc.embedFont(sourceSans3BoldBytes);
     
     return {
-      // Body fonts (Source Sans 3) - using weight 400 (Regular) for smaller text
+      // Body fonts (Source Sans 3) - weight 400 (Regular) and 700 (Bold)
       body: sourceSans3Regular,
-      bodyBold: sourceSans3Regular,
+      bodyBold: sourceSans3Bold,
       bodyItalic: sourceSans3Italic,
       
       // Heading fonts (Hanken Grotesk) - using weight 500 (Medium) for larger text
@@ -419,29 +426,30 @@ function renderFrontSide(page, data, fonts, images) {
       color: COLORS.white,
       font: fonts.heading,
     });
-    currentY -= 15; // 1.5mm spacing + line height
+    currentY -= 10; // position very close under name
   }
   
-  // Position (Hanken Grotesk Medium/500, 7.5pt, aqua)
-  if (data.position) {
-    page.drawText(data.position, {
+  // Job title / position (Source Sans 3 Italic, 7.5pt, turquoise) – close under name
+  const positionText = String(data.position ?? data.jobTitle ?? '').trim();
+  if (positionText) {
+    page.drawText(positionText, {
       x: contactX,
       y: currentY,
       size: 7.5,
-      color: COLORS.aqua,
-      font: fonts.heading,
+      color: COLORS.positionAccent,
+      font: fonts.bodyItalic,
     });
-    currentY -= 10;
   }
-  
-  // Company name (Source Sans 3 Regular/400, 7pt, light gray)
+  currentY -= 14; // more space before company name
+
+  // Company name only in bold (Source Sans 3 Bold/700, 7pt, light gray)
   const companyName = data.companyName || 'Thinkport GmbH';
   page.drawText(companyName, {
     x: contactX,
     y: currentY,
     size: 7,
     color: COLORS.lightGray,
-    font: fonts.body,
+    font: fonts.bodyBold,
   });
   currentY -= 12; // 3mm spacing
   
@@ -470,13 +478,13 @@ function renderFrontSide(page, data, fonts, images) {
   const fontSize = 7;
   
   contactDetails.forEach((detail) => {
-    // Label (semi-bold, light gray)
+    // Label (regular, light gray) – only company name is bold
     page.drawText(detail.label, {
       x: contactX,
       y: currentY,
       size: fontSize,
       color: COLORS.lightGray,
-      font: fonts.bodyBold,
+      font: fonts.body,
     });
     
     // Draw value - with more width available, should fit without wrapping
@@ -891,10 +899,11 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
     qrCode: qrCodeImage,
   };
   
-  // Prepare template data
+  // Prepare template data (ensure position/jobTitle is passed for front-side job title line)
   const templateData = {
     ...contactData,
     companyName: 'Thinkport GmbH',
+    position: contactData.position ?? contactData.jobTitle ?? '',
   };
   
   // Normalize website URL
