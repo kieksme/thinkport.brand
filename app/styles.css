@@ -43,18 +43,21 @@
     --color-aqua-on-dark: #00C6E0;
     --color-fuchsia-on-dark: #FF8A50;
     
-    /* Fonts */
-    --font-heading: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-    --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    /* Fonts – Thinkport typography: Montserrat, line-height 1.4, weights 400/600 */
+    --font-heading: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    --font-body: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    --line-height-body: 1.4;
 }
 
 @layer base {
     body {
         @apply font-body text-gray-dark bg-navy;
+        line-height: var(--line-height-body);
     }
 
     h1, h2, h3, h4, h5, h6 {
         @apply font-heading;
+        line-height: var(--line-height-body);
     }
 }
 
