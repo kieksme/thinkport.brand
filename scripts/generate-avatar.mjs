@@ -203,8 +203,9 @@ async function promptAvatarSize() {
  */
 async function promptOutputPath(portraitPath, size) {
   const portraitName = basename(portraitPath, extname(portraitPath));
+  const fileNameSlug = portraitName.replace(/kieksme/gi, 'thinkport');
   const defaultOutputDir = join(projectRoot, AVATAR_CONFIG.defaults.outputDir);
-  const defaultOutput = join(defaultOutputDir, `avatar-${portraitName}-${size}.png`);
+  const defaultOutput = join(defaultOutputDir, `avatar-${fileNameSlug}-${size}.png`);
 
   const { outputPath } = await inquirer.prompt([
     {
@@ -304,13 +305,14 @@ async function promptMultipleAvatars(portraitPath) {
   ]);
 
   const portraitName = basename(portraitPath, extname(portraitPath));
+  const fileNameSlug = portraitName.replace(/kieksme/gi, 'thinkport');
   const configs = [];
 
   for (const size of selectedSizes) {
     configs.push({
       portraitPath,
       size,
-      outputPath: join(resolve(outputDir.trim()), `avatar-${portraitName}-${size}.png`),
+      outputPath: join(resolve(outputDir.trim()), `avatar-${fileNameSlug}-${size}.png`),
     });
   }
 
