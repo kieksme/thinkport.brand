@@ -77,7 +77,7 @@ You may propose changes in the following situations:
 When contributing, please follow the established directory structure:
 
 ```plaintext
-kieks.me.cicd/
+thinkport.brand/
 ├── assets/                    # ALL assets (included in release ZIP)
 │   ├── logos/                 # Logo files in various formats
 │   ├── colors/                # Color palette definitions

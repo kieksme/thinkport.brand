@@ -9,7 +9,7 @@
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/index.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/index.svg</image:loc>
     </image:image>
     <image:image>
       <image:loc>https://brand.kieks.me/logos/horizontal/thinkport-horizontal-dark.svg</image:loc>
@@ -26,7 +26,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/fundamentals.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/fundamentals.svg</image:loc>
     </image:image>
   </url>
   
@@ -37,7 +37,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/logos.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/logos.svg</image:loc>
     </image:image>
     <!-- Horizontal Logos -->
     <image:image>
@@ -71,7 +71,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/fundamentals.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/fundamentals.svg</image:loc>
     </image:image>
   </url>
   
@@ -82,41 +82,41 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/colors.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/colors.svg</image:loc>
     </image:image>
     <!-- Color Swatches -->
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/aqua.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/aqua.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/aqua-medium.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/aqua-medium.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/aqua-dark.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/aqua-dark.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/fuchsia.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/fuchsia.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/fuchsia-medium.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/fuchsia-medium.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/fuchsia-light.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/fuchsia-light.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/navy.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/navy.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/navy-medium.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/navy-medium.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/navy-light.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/navy-light.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/dark-gray.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/dark-gray.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/colors/swatches/white.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/colors/swatches/white.svg</image:loc>
     </image:image>
   </url>
   
@@ -127,7 +127,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/fonts.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/fonts.svg</image:loc>
     </image:image>
   </url>
   
@@ -138,7 +138,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/fundamentals.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/fundamentals.svg</image:loc>
     </image:image>
   </url>
   
@@ -149,7 +149,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/implementations.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/implementations.svg</image:loc>
     </image:image>
   </url>
   
@@ -160,7 +160,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/business-cards.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/business-cards.svg</image:loc>
     </image:image>
   </url>
   
@@ -171,7 +171,7 @@
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/implementations.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/implementations.svg</image:loc>
     </image:image>
   </url>
   
@@ -182,7 +182,7 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
     <image:image>
-      <image:loc>https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/impressum.svg</image:loc>
+      <image:loc>https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/impressum.svg</image:loc>
     </image:image>
   </url>
   

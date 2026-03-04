@@ -25,7 +25,7 @@
     <meta property="og:url" content="https://brand.kieks.me/fundamentals/colors.html">
     <meta property="og:title" content="Brand Colors - Thinkport GmbH">
     <meta property="og:description" content="Official Thinkport GmbH color palette and specifications including hex, RGB, and CMYK values">
-    <meta property="og:image" content="https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/colors.svg">
+    <meta property="og:image" content="https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/colors.svg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:type" content="image/svg+xml">
@@ -37,7 +37,7 @@
     <meta name="twitter:url" content="https://brand.kieks.me/fundamentals/colors.html">
     <meta name="twitter:title" content="Brand Colors - Thinkport GmbH">
     <meta name="twitter:description" content="Official Thinkport GmbH color palette and specifications">
-    <meta name="twitter:image" content="https://raw.githubusercontent.com/kieksme/kieks.me.cicd/main/assets/og-banners/colors.svg">
+    <meta name="twitter:image" content="https://raw.githubusercontent.com/kieksme/thinkport.brand/main/assets/og-banners/colors.svg">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="https://brand.kieks.me/fundamentals/colors.html">
@@ -384,7 +384,7 @@ const rgbValues = colors.selection.darkBlue.rgb;</code></pre>
                     Laden Sie die vollständige Farbpalette inkl. CSS-Variablen, JSON-Definitionen und Swatches herunter.
                 </p>
                 <div id="colors-download-section">
-                    <a href="https://github.com/kieksme/kieks.me.cicd/releases/latest" 
+                    <a href="https://github.com/kieksme/thinkport.brand/releases/latest" 
                        id="download-colors-btn"
                        class="px-6 py-3 rounded-lg font-heading font-bold transition-colors inline-flex items-center justify-center gap-2 text-white hover:opacity-90"
                        style="background-color: #00BCD4;">
@@ -417,7 +417,7 @@ const rgbValues = colors.selection.darkBlue.rgb;</code></pre>
         // Load latest release and update download link
         async function loadColorsDownload() {
             try {
-                const response = await fetch('https://api.github.com/repos/kieksme/kieks.me.cicd/releases/latest');
+                const response = await fetch('https://api.github.com/repos/kieksme/thinkport.brand/releases/latest');
                 if (!response.ok) {
                     throw new Error('Failed to fetch release');
                 }

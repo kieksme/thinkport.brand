@@ -18,7 +18,7 @@ The template uses the following placeholders that must be replaced:
 
 ### Required Variables
 
-- `{{REPO_NAME}}` - Repository name (e.g., "kieks.me.cicd")
+- `{{REPO_NAME}}` - Repository name (e.g., "thinkport.brand")
 - `{{DESCRIPTION}}` - Short description of the repository
 - `{{ORG}}` - GitHub organization or username (e.g., "kieksme")
 - `{{PURPOSE}}` - Detailed purpose/overview of the repository
@@ -39,7 +39,7 @@ The template uses the following placeholders that must be replaced:
 
 **After:**
 ```markdown
-# kieks.me.cicd
+# thinkport.brand
 
 Repository to hold and share Corporate Identity and Corporate Design of Thinkport GmbH.
 ```
@@ -186,7 +186,7 @@ This repository is licensed under the GPL-3.0 - see the [LICENSE](LICENSE) file 
 
 **Part of the [kieks.me](https://kieks.me) ecosystem**
 
-[![kieks.me](https://img.shields.io/badge/kieks.me-Corporate%20Identity-0B2649?style=for-the-badge)](https://github.com/kieksme/kieks.me.cicd)
+[![kieks.me](https://img.shields.io/badge/kieks.me-Corporate%20Identity-0B2649?style=for-the-badge)](https://github.com/kieksme/thinkport.brand)
 
 Made with ❤️ by [Thinkport GmbH](https://kieks.me)
 
@@ -203,4 +203,4 @@ Made with ❤️ by [Thinkport GmbH](https://kieks.me)
 
 ## Questions?
 
-If you have questions about using the template or need help customizing it, please contact the designated maintainers or refer to the main [kieks.me.cicd](https://github.com/kieksme/kieks.me.cicd) repository.
+If you have questions about using the template or need help customizing it, please contact the designated maintainers or refer to the main [thinkport.brand](https://github.com/kieksme/thinkport.brand) repository.

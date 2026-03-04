@@ -2,7 +2,7 @@
 
 This directory contains the official Thinkport GmbH brand fonts and typography assets.
 
-**Note**: Assets are distributed as ZIP archives only. Individual font files are not available for download. Download the complete font assets as part of the [latest release ZIP](https://github.com/kieksme/kieks.me.cicd/releases).
+**Note**: Assets are distributed as ZIP archives only. Individual font files are not available for download. Download the complete font assets as part of the [latest release ZIP](https://github.com/kieksme/thinkport.brand/releases).
 
 ## Directory Structure
 

@@ -2,25 +2,25 @@
 
 This directory contains the official Thinkport GmbH brand color palette, including developer files and visual swatches.
 
-**Note**: Assets are distributed as ZIP archives only. Individual files are not available for download. Download the complete color assets as part of the [latest release ZIP](https://github.com/kieksme/kieks.me.cicd/releases).
+**Note**: Assets are distributed as ZIP archives only. Individual files are not available for download. Download the complete color assets as part of the [latest release ZIP](https://github.com/kieksme/thinkport.brand/releases).
 
 ## Available Files
 
 | File Name              | Format | Description                                                  | Download                                                                                        |
 |------------------------|--------|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------|
-| `colors.css`           | CSS    | CSS variables for web projects                               | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/colors.css)             |
-| `colors.json`          | JSON   | HEX, RGB, and CMYK values for JavaScript/TypeScript projects | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/colors.json)            |
-| `tailwind.config.js`   | JS     | Tailwind CSS theme configuration for colors                 | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/tailwind.config.js)     |
+| `colors.css`           | CSS    | CSS variables for web projects                               | [View](https://github.com/kieksme/thinkport.brand/blob/main/assets/colors/colors.css)             |
+| `colors.json`          | JSON   | HEX, RGB, and CMYK values for JavaScript/TypeScript projects | [View](https://github.com/kieksme/thinkport.brand/blob/main/assets/colors/colors.json)            |
+| `tailwind.config.js`   | JS     | Tailwind CSS theme configuration for colors                 | [View](https://github.com/kieksme/thinkport.brand/blob/main/assets/colors/tailwind.config.js)     |
 
 ### Color Swatches
 
 | File Name                   | Format | Color                  | Download                                                                                              |
 |-----------------------------|--------|------------------------|--------------------------------------------------------------------------------------------------------|
-| `swatches/dark-blue.svg`    | SVG    | Dark Blue (#0B2649)    | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/dark-blue.svg)       |
-| `swatches/orange.svg`       | SVG    | Orange (#FF5722)       | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/orange.svg)          |
-| `swatches/turquoise.svg`    | SVG    | Turquoise (#00BCD4)    | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/turquoise.svg)        |
-| `swatches/white.svg`        | SVG    | White (#FFFFFF)        | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/white.svg)            |
-| `swatches/dark-gray.svg`    | SVG    | Dark Gray (#333333)    | [View](https://github.com/kieksme/kieks.me.cicd/blob/main/assets/colors/swatches/dark-gray.svg)        |
+| `swatches/dark-blue.svg`    | SVG    | Dark Blue (#0B2649)    | [View](https://github.com/kieksme/thinkport.brand/blob/main/assets/colors/swatches/dark-blue.svg)       |
+| `swatches/orange.svg`       | SVG    | Orange (#FF5722)       | [View](https://github.com/kieksme/thinkport.brand/blob/main/assets/colors/swatches/orange.svg)          |
+| `swatches/turquoise.svg`    | SVG    | Turquoise (#00BCD4)    | [View](https://github.com/kieksme/thinkport.brand/blob/main/assets/colors/swatches/turquoise.svg)        |
+| `swatches/white.svg`        | SVG    | White (#FFFFFF)        | [View](https://github.com/kieksme/thinkport.brand/blob/main/assets/colors/swatches/white.svg)            |
+| `swatches/dark-gray.svg`    | SVG    | Dark Gray (#333333)    | [View](https://github.com/kieksme/thinkport.brand/blob/main/assets/colors/swatches/dark-gray.svg)        |
 
 ## Primary Brand Colors
 
