@@ -217,17 +217,28 @@ async function loadFonts(pdfDoc) {
       };
     }
     
+    // pdf-lib only supports TTF/OTF; WOFF2 is not supported (see assets/fonts/README.md)
+    const fontExts = ['.ttf', '.otf'];
+    const resolveFontPath = (family, weight, style) => {
+      const base = join(projectRoot, 'assets', 'fonts', family, String(weight), style);
+      for (const ext of fontExts) {
+        const p = base + ext;
+        if (existsSync(p)) return p;
+      }
+      return null;
+    };
+
     // Load Hanken Grotesk (heading font) with weight 500 (Medium) for larger text
-    const hankenGroteskRegularPath = join(projectRoot, 'assets', 'fonts', 'hanken-grotesk', '500', 'regular.ttf');
-    const hankenGroteskItalicPath = join(projectRoot, 'assets', 'fonts', 'hanken-grotesk', '500', 'italic.ttf');
-    
+    const hankenGroteskRegularPath = resolveFontPath('hanken-grotesk', 500, 'regular');
+    const hankenGroteskItalicPath = resolveFontPath('hanken-grotesk', 500, 'italic');
+
     // Load Source Sans 3 (body font) with weight 400 (Regular) for smaller text
-    const sourceSans3RegularPath = join(projectRoot, 'assets', 'fonts', 'source-sans-3', '400', 'regular.ttf');
-    const sourceSans3ItalicPath = join(projectRoot, 'assets', 'fonts', 'source-sans-3', '400', 'italic.ttf');
-    
-    // Check if font files exist
-    if (!existsSync(hankenGroteskRegularPath) || !existsSync(sourceSans3RegularPath)) {
-      console.warn('⚠️  Custom fonts not found, falling back to standard fonts');
+    const sourceSans3RegularPath = resolveFontPath('source-sans-3', 400, 'regular');
+    const sourceSans3ItalicPath = resolveFontPath('source-sans-3', 400, 'italic');
+
+    // Check if font files exist (TTF/OTF required; WOFF2 is for web only)
+    if (!hankenGroteskRegularPath || !sourceSans3RegularPath) {
+      console.warn('⚠️  Custom fonts not found (need TTF/OTF in assets/fonts/…), falling back to standard fonts');
       const helvetica = await pdfDoc.embedFont('Helvetica');
       const helveticaBold = await pdfDoc.embedFont('Helvetica-Bold');
       return {
@@ -241,12 +252,12 @@ async function loadFonts(pdfDoc) {
     
     // Load font files as ArrayBuffer
     const hankenGroteskRegularBytes = readFileSync(hankenGroteskRegularPath);
-    const hankenGroteskItalicBytes = existsSync(hankenGroteskItalicPath) 
-      ? readFileSync(hankenGroteskItalicPath) 
+    const hankenGroteskItalicBytes = hankenGroteskItalicPath
+      ? readFileSync(hankenGroteskItalicPath)
       : hankenGroteskRegularBytes;
-    
+
     const sourceSans3RegularBytes = readFileSync(sourceSans3RegularPath);
-    const sourceSans3ItalicBytes = existsSync(sourceSans3ItalicPath)
+    const sourceSans3ItalicBytes = sourceSans3ItalicPath
       ? readFileSync(sourceSans3ItalicPath)
       : sourceSans3RegularBytes;
     
@@ -269,7 +280,10 @@ async function loadFonts(pdfDoc) {
       headingItalic: hankenGroteskItalic,
     };
   } catch (error) {
-    console.warn(`⚠️  Error loading custom fonts: ${error.message}, falling back to standard fonts`);
+    const hint = /unknown font format|invalid|unsupported/i.test(error.message)
+      ? ' (PDF needs TTF/OTF in assets/fonts/…; see assets/fonts/README.md)'
+      : '';
+    console.warn(`⚠️  Error loading custom fonts: ${error.message}${hint}, falling back to standard fonts`);
     // Fallback to standard fonts
     const helvetica = await pdfDoc.embedFont('Helvetica');
     const helveticaBold = await pdfDoc.embedFont('Helvetica-Bold');

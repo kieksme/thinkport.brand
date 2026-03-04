@@ -124,7 +124,7 @@ try {
 
 // Test logo file
 try {
-  const logoPath = join(projectRoot, 'assets', 'logos', 'thinkport-logo-horizontal-dark.svg');
+  const logoPath = join(projectRoot, 'assets', 'logos', 'thinkport-solo-light.svg');
   const logo = readFileSync(logoPath, 'utf-8');
   console.log('\n✓ Logo file found');
   console.log(`  Logo length: ${logo.length} chars`);

@@ -74,7 +74,22 @@ For optimal browser support, fonts should be provided in the following formats (
 
 1. **WOFF2** - Modern, compressed format with best compression (recommended)
 2. **WOFF** - Fallback for older browsers
-3. **TTF/OTF** - Source formats (can be converted to web formats)
+3. **TTF/OTF** - Source formats (required for **PDF generation**, e.g. business card generator; can be converted to web formats)
+
+## PDF Generation (Business Cards)
+
+The business card generator (`scripts/generate-card.mjs`) embeds custom fonts only if **TTF or OTF** files are present. It looks for:
+
+- `hanken-grotesk/500/regular.ttf` (or `.otf`), optionally `italic`
+- `source-sans-3/400/regular.ttf` (or `.otf`), optionally `italic`
+
+WOFF2 is not supported by pdf-lib. If these files are missing, the generator falls back to Helvetica.
+
+**Getting the fonts:** You can download TTF from the [Google Fonts GitHub](https://github.com/google/fonts) repo (OFL license) and place them in the structure above. For example:
+- Hanken Grotesk: `ofl/hankengrotesk/HankenGrotesk[wght].ttf` → `hanken-grotesk/500/regular.ttf`, `HankenGrotesk-Italic[wght].ttf` → `italic.ttf`
+- Source Sans 3: `ofl/sourcesans3/SourceSans3[wght].ttf` → `source-sans-3/400/regular.ttf`, `SourceSans3-Italic[wght].ttf` → `italic.ttf`
+
+These are variable fonts; if the generator reports "Unknown font format", try static TTF builds from [Google Fonts](https://fonts.google.com) (download and extract the TTF files into the same folder structure).
 
 ## Usage
 
