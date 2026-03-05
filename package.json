@@ -35,14 +35,14 @@
     "@tailwindcss/vite": "^4.2.1",
     "inquirer": "^9.3.8",
     "pdf-lib": "^1.17.1",
-    "puppeteer": "^23.11.1",
+    "puppeteer": "^24.15.0",
     "qrcode": "^1.5.4",
     "sharp": "^0.33.5",
     "tailwindcss": "^4.2.1",
     "vite": "^6.4.1"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "packageManager": "pnpm@10.30.3"
 }
