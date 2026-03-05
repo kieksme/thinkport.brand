@@ -875,7 +875,7 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
   
   // Load and convert logos (solo + venitus)
   const logoPath = join(projectRoot, 'assets', 'logos', 'solo', 'thinkport-solo-light-card-solid.svg');
-  const venitusPath = join(projectRoot, 'assets', 'logos', 'a-venitus-company-hoch-light.svg');
+  const venitusPath = join(projectRoot, 'assets', 'logos', 'a-venitus-company', 'thinkport-a-venitus-company-horizontal-light.svg');
   cardProgress('Lade Logo …', 'generating');
   const logoPngBuffer = await svgToPng(logoPath, 1000, 1000);
   const venitusPngBuffer = await svgToPng(venitusPath, 548, 447);

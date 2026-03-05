@@ -1,0 +1,22 @@
+{
+  "name": "Anna Schmidt",
+  "position": "Lead Developer",
+  "email": "anna@thinkport.digital",
+  "phone": "+49 123 456788",
+  "mobile": "+49 123 4567880",
+  "address": "Beispielweg 45",
+  "postalCode": "54321",
+  "city": "München",
+  "country": "Deutschland",
+  "website": "thinkport.digital",
+  "socialMedia": [
+    {
+      "name": "GitHub",
+      "url": "https://github.com/annaschmidt"
+    },
+    {
+      "name": "LinkedIn",
+      "url": "https://linkedin.com/in/anna-schmidt"
+    }
+  ]
+}
