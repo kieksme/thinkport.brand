@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{basePath}}favicon.svg" />
+    <link
+      rel="alternate icon"
+      href="{{basePath}}logos/venitus/thinkport-venitus-light.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="{{basePath}}logos/venitus/thinkport-venitus-light.png"
+    />
+
+    <!-- Web App Manifest -->
+    <link rel="manifest" href="{{basePath}}manifest.json" />
+    <meta name="theme-color" content="#1E2A45" />
+
+    <meta
+      name="description"
+      content="Thinkport GmbH Teams - Microsoft Teams Hintergrundbilder im Thinkport Look mit Setup-Anleitung (Fokus macOS)."
+    />
+    <meta
+      name="keywords"
+      content="kieks.me, teams, backgrounds, hintergrundbilder, microsoft teams, video calls, remote work"
+    />
+    <meta name="author" content="Thinkport GmbH" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="German" />
+    <title>Teams - Thinkport GmbH</title>
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:url"
+      content="https://brand.thinkport.digital/implementations/teams-backgrounds.html"
+    />
+    <meta property="og:title" content="Teams - Thinkport GmbH" />
+    <meta
+      property="og:description"
+      content="Microsoft Teams Hintergrundbilder mit Thinkport Brand-Look – inklusive Setup-Anleitung für macOS und Microsoft Teams."
+    />
+    <meta
+      property="og:image"
+      content="{{repoBaseUrl}}/assets/banner/opengraph/implementations.svg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/svg+xml" />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:site_name" content="Thinkport GmbH" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:url"
+      content="https://brand.thinkport.digital/implementations/teams-backgrounds.html"
+    />
+    <meta name="twitter:title" content="Teams - Thinkport GmbH" />
+    <meta
+      name="twitter:description"
+      content="Microsoft Teams Hintergrundbilder mit Thinkport Brand-Look – inklusive Setup-Anleitung für macOS und Microsoft Teams."
+    />
+    <meta
+      name="twitter:image"
+      content="{{repoBaseUrl}}/assets/banner/opengraph/implementations.svg"
+    />
+
+    <!-- Canonical URL -->
+    <link
+      rel="canonical"
+      href="https://brand.thinkport.digital/implementations/teams-backgrounds.html"
+    />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Teams - Thinkport GmbH",
+        "description": "Microsoft Teams Hintergrundbilder mit Thinkport Brand-Look – inklusive Setup-Anleitung für macOS und Microsoft Teams.",
+        "url": "https://brand.thinkport.digital/implementations/teams-backgrounds.html",
+        "isPartOf": {
+          "@type": "WebSite",
+          "name": "Thinkport Corporate Identity",
+          "url": "https://brand.thinkport.digital/"
+        },
+        "about": {
+          "@type": "Thing",
+          "name": "Teams",
+          "description": "Hintergrundbilder für Microsoft Teams im Thinkport Branding mit Setup-Anleitung."
+        }
+      }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tabler Icons -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+
+    <!-- Custom Styles (imported via main.js) -->
+    <script type="module" src="../main.js"></script>
+
+    <style>
+      .background-grid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 1.5rem;
+      }
+
+      @media (min-width: 768px) {
+        .background-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .background-grid {
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+      }
+
+      .background-card img {
+        border-radius: 0.75rem;
+        border: 2px solid #e5e7eb;
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- include: navigation -->
+
+    <!-- include: hero -->
+
+    <main role="main">
+      <!-- Intro Section -->
+      <section class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8"
+          >
+            Teams
+          </h2>
+          <p class="font-body text-lg text-gray-700 mb-6">
+            Microsoft Teams Hintergrundbilder helfen deinem Team, in jedem Call
+            direkt als Thinkport Crew wahrgenommen zu werden – egal ob im Home
+            Office, im Büro oder unterwegs. Die Hintergründe sind so gebaut,
+            dass sie gut mit Webcams funktionieren und gleichzeitig klar als
+            Thinkport Branding lesbar bleiben.
+          </p>
+          <p class="font-body text-lg text-gray-700">
+            Alle hier gezeigten Backgrounds liegen im Repository unter
+            <code class="bg-gray-200 px-2 py-1 rounded"
+              >examples/teams/backgounds/</code
+            >
+            als PNG-Dateien vor und können direkt für Videocalls verwendet
+            werden.
+          </p>
+        </div>
+      </section>
+
+      <!-- Gallery & Downloads -->
+      <section class="py-16 px-4 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8 text-center"
+          >
+            Hintergrund-Galerie & Downloads
+          </h2>
+          <p class="font-body text-lg text-gray-700 mb-12 text-center max-w-3xl mx-auto">
+            Wähle dir passende Hintergründe für unterschiedliche Vibes – von
+            City Lights bis Owl Mode. Alle Bilder sind für typische
+            Teams-Auflösungen optimiert und funktionieren sowohl mit weich
+            freigestelltem Hintergrund als auch mit statischem Bild.
+          </p>
+
+          <div class="background-grid">
+            <div class="card-aqua background-card">
+              <img
+                src="{{basePath}}examples/teams/backgounds/thinkport-teams-city.png"
+                alt="Thinkport Teams Hintergrund – City"
+              />
+              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+                City
+              </h3>
+              <p class="font-body text-sm text-gray-600 mb-3">
+                Urbaner Look für Calls mit leicht futuristischem Vibe.
+              </p>
+              <a
+                href="{{basePath}}examples/teams/backgounds/thinkport-teams-city.png"
+                download
+                class="inline-flex items-center gap-2 text-aqua hover:underline font-body text-sm"
+              >
+                <i class="ti ti-download"></i>
+                <span>PNG herunterladen</span>
+              </a>
+            </div>
+
+            <div class="card-aqua background-card">
+              <img
+                src="{{basePath}}examples/teams/backgounds/thinkport-teams-norway.png"
+                alt="Thinkport Teams Hintergrund – Norway"
+              />
+              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+                Norway
+              </h3>
+              <p class="font-body text-sm text-gray-600 mb-3">
+                Cooles, ruhiges Setting mit Nordlicht-Vibes für entspannte
+                Sessions.
+              </p>
+              <a
+                href="{{basePath}}examples/teams/backgounds/thinkport-teams-norway.png"
+                download
+                class="inline-flex items-center gap-2 text-aqua hover:underline font-body text-sm"
+              >
+                <i class="ti ti-download"></i>
+                <span>PNG herunterladen</span>
+              </a>
+            </div>
+
+            <div class="card-aqua background-card">
+              <img
+                src="{{basePath}}examples/teams/backgounds/thinkport-teams-planat.png"
+                alt="Thinkport Teams Hintergrund – Planat"
+              />
+              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+                Planat
+              </h3>
+              <p class="font-body text-sm text-gray-600 mb-3">
+                Abstrakte Shapes mit klarem Tech-Look – ideal für Projekt- und
+                Architektur-Calls.
+              </p>
+              <a
+                href="{{basePath}}examples/teams/backgounds/thinkport-teams-planat.png"
+                download
+                class="inline-flex items-center gap-2 text-aqua hover:underline font-body text-sm"
+              >
+                <i class="ti ti-download"></i>
+                <span>PNG herunterladen</span>
+              </a>
+            </div>
+
+            <div class="card-aqua background-card">
+              <img
+                src="{{basePath}}examples/teams/backgounds/thinkport-teams-desert.png"
+                alt="Thinkport Teams Hintergrund – Desert"
+              />
+              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+                Desert
+              </h3>
+              <p class="font-body text-sm text-gray-600 mb-3">
+                Warme, weite Landschaft mit Fokus auf Ruhe und Klarheit.
+              </p>
+              <a
+                href="{{basePath}}examples/teams/backgounds/thinkport-teams-desert.png"
+                download
+                class="inline-flex items-center gap-2 text-aqua hover:underline font-body text-sm"
+              >
+                <i class="ti ti-download"></i>
+                <span>PNG herunterladen</span>
+              </a>
+            </div>
+
+            <div class="card-aqua background-card">
+              <img
+                src="{{basePath}}examples/teams/backgounds/thinkport-teams-moonlight.png"
+                alt="Thinkport Teams Hintergrund – Moonlight"
+              />
+              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+                Moonlight
+              </h3>
+              <p class="font-body text-sm text-gray-600 mb-3">
+                Dunkler, fokussierter Look mit viel Kontrast – perfekt für
+                spätere Sessions.
+              </p>
+              <a
+                href="{{basePath}}examples/teams/backgounds/thinkport-teams-moonlight.png"
+                download
+                class="inline-flex items-center gap-2 text-aqua hover:underline font-body text-sm"
+              >
+                <i class="ti ti-download"></i>
+                <span>PNG herunterladen</span>
+              </a>
+            </div>
+
+            <div class="card-aqua background-card">
+              <img
+                src="{{basePath}}examples/teams/backgounds/thinkport-teams-stormyweather.png"
+                alt="Thinkport Teams Hintergrund – Stormy Weather"
+              />
+              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+                Stormy Weather
+              </h3>
+              <p class="font-body text-sm text-gray-600 mb-3">
+                Dramatischer Himmel, trotzdem ruhig im Bild – für mehr Tiefe im
+                Call-Hintergrund.
+              </p>
+              <a
+                href="{{basePath}}examples/teams/backgounds/thinkport-teams-stormyweather.png"
+                download
+                class="inline-flex items-center gap-2 text-aqua hover:underline font-body text-sm"
+              >
+                <i class="ti ti-download"></i>
+                <span>PNG herunterladen</span>
+              </a>
+            </div>
+
+            <div class="card-aqua background-card">
+              <img
+                src="{{basePath}}examples/teams/backgounds/thinkport-teams-cluster.png"
+                alt="Thinkport Teams Hintergrund – Cluster"
+              />
+              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+                Cluster
+              </h3>
+              <p class="font-body text-sm text-gray-600 mb-3">
+                Strukturierter, techiger Hintergrund mit vielen Details, die
+                trotzdem nicht vom Gesicht ablenken.
+              </p>
+              <a
+                href="{{basePath}}examples/teams/backgounds/thinkport-teams-cluster.png"
+                download
+                class="inline-flex items-center gap-2 text-aqua hover:underline font-body text-sm"
+              >
+                <i class="ti ti-download"></i>
+                <span>PNG herunterladen</span>
+              </a>
+            </div>
+
+            <div class="card-aqua background-card">
+              <img
+                src="{{basePath}}examples/teams/backgounds/thinkport-teams-owl.png"
+                alt="Thinkport Teams Hintergrund – Owl"
+              />
+              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+                Owl
+              </h3>
+              <p class="font-body text-sm text-gray-600 mb-3">
+                Eule im Fokus – playful, aber trotzdem professionell genug für
+                Team- und Kund*innen-Calls.
+              </p>
+              <a
+                href="{{basePath}}examples/teams/backgounds/thinkport-teams-owl.png"
+                download
+                class="inline-flex items-center gap-2 text-aqua hover:underline font-body text-sm"
+              >
+                <i class="ti ti-download"></i>
+                <span>PNG herunterladen</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- macOS Usage Section -->
+      <section class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8"
+          >
+            Verwendung auf macOS (empfohlen)
+          </h2>
+
+          <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="card">
+              <h3 class="font-heading text-xl font-bold text-navy mb-4">
+                Schritt-für-Schritt in Microsoft Teams (macOS)
+              </h3>
+              <ol
+                class="font-body text-gray-700 space-y-2 list-decimal list-inside mb-4"
+              >
+                <li>
+                  Lade ein oder mehrere Hintergrundbilder oben aus der Galerie
+                  herunter und speichere sie in einem Ordner wie
+                  <code class="bg-gray-200 px-2 py-1 rounded"
+                    >~/Bilder/Thinkport-Teams-Backgrounds</code
+                  >.
+                </li>
+                <li>
+                  Öffne Microsoft Teams auf deinem Mac und joint einem Call
+                  (oder starte einen Test-Call).
+                </li>
+                <li>
+                  Klicke in der Call-Leiste auf
+                  <strong>Hintergrundeffekte</strong> (Icon mit Person und
+                  Sternchen).
+                </li>
+                <li>
+                  Wähle in der rechten Sidebar
+                  <strong>Neues hinzufügen</strong> oder
+                  <strong>+ Hinzufügen</strong>.
+                </li>
+                <li>
+                  Navigiere zu deinem lokalen Ordner mit den Thinkport
+                  Backgrounds und wähle das gewünschte PNG aus.
+                </li>
+                <li>
+                  Klicke auf <strong>Anwenden</strong> (optional mit Blur), um
+                  den Hintergrund direkt im aktuellen Call zu nutzen.
+                </li>
+              </ol>
+            </div>
+
+            <div class="card">
+              <h3 class="font-heading text-xl font-bold text-navy mb-4">
+                Warum macOS hier first-class ist
+              </h3>
+              <ul
+                class="font-body text-gray-700 space-y-2 list-disc list-inside mb-4"
+              >
+                <li>
+                  <strong>Retina-Displays:</strong> macOS rendert die PNGs
+                  gestochen scharf auf hochauflösenden Displays – das Branding
+                  bleibt sauber lesbar.
+                </li>
+                <li>
+                  <strong>Stabile Farbprofile:</strong> Die Farbverwaltung von
+                  macOS sorgt für konsistente Darstellung der Brand-Farben im
+                  Vergleich zu vielen Windows-Setups.
+                </li>
+                <li>
+                  <strong>Einfaches File-Handling:</strong> Drag &amp; Drop aus
+                  Finder in Teams funktioniert sehr zuverlässig und schnell.
+                </li>
+                <li>
+                  <strong>Weniger Artefakte:</strong> Die Kombination aus Kamera,
+                  macOS Video-Pipeline und Teams produziert in der Regel weniger
+                  Kompressionsartefakte im Hintergrund.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card-aqua">
+            <h3 class="font-heading text-xl font-bold text-navy mb-4">
+              Best Practices für macOS-Setups
+            </h3>
+            <ul
+              class="font-body text-gray-700 space-y-2 list-disc list-inside mb-4"
+            >
+              <li>
+                Nutze wenn möglich externe Kameras oder gute MacBook-Webcams bei
+                ausreichend Licht.
+              </li>
+              <li>
+                Vermeide stark gemusterte Kleidung, damit der virtuelle
+                Hintergrund sauber bleibt.
+              </li>
+              <li>
+                Teste vor Kund*innen-Calls kurz in einem eigenen Meeting, ob
+                Gesicht, Schultern und Branding gut im Frame sitzen.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Generic Teams Usage Section -->
+      <section class="py-16 px-4 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8"
+          >
+            Verwendung in Microsoft Teams (allgemein)
+          </h2>
+
+          <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="card-aqua">
+              <h3 class="font-heading text-xl font-bold text-navy mb-4">
+                Grundprinzipien für gute Backgrounds
+              </h3>
+              <ul
+                class="font-body text-gray-700 space-y-2 list-disc list-inside mb-4"
+              >
+                <li>
+                  <strong>16:9 Seitenverhältnis:</strong> Die Hintergründe sind
+                  auf typische Teams-Videoformate optimiert.
+                </li>
+                <li>
+                  <strong>Gesicht im Fokus:</strong> Stelle sicher, dass dein
+                  Kopf nicht in starke Kontraste oder zentrale Bildelemente
+                  hineinragt.
+                </li>
+                <li>
+                  <strong>Kein Text im Randbereich:</strong> Wichtige Elemente
+                  sollten nicht an den äußersten Bildrändern liegen.
+                </li>
+                <li>
+                  <strong>Kontrast zum Outfit:</strong> Wähle einen Hintergrund,
+                  der sich farblich deutlich von deiner Kleidung absetzt.
+                </li>
+              </ul>
+            </div>
+
+            <div class="card-aqua">
+              <h3 class="font-heading text-xl font-bold text-navy mb-4">
+                Technische Empfehlungen
+              </h3>
+              <ul
+                class="font-body text-gray-700 space-y-2 list-disc list-inside mb-4"
+              >
+                <li>
+                  <strong>Format:</strong> PNG wird empfohlen (saubere Kanten,
+                  gutes Handling in Teams).
+                </li>
+                <li>
+                  <strong>Auflösung:</strong> Mindestens 1920×1080&nbsp;px,
+                  ideal 2560×1440&nbsp;px für scharfe Darstellung.
+                </li>
+                <li>
+                  <strong>Dateigröße:</strong> Möglichst unter 5&nbsp;MB halten
+                  für schnelle Ladezeiten.
+                </li>
+                <li>
+                  <strong>Dateinamen-Konvention:</strong>
+                  <code class="bg-gray-200 px-2 py-1 rounded"
+                    >thinkport-teams-&lt;motiv&gt;.png</code
+                  >
+                  (z.&nbsp;B.
+                  <code class="bg-gray-200 px-2 py-1 rounded"
+                    >thinkport-teams-desert.png</code
+                  >).
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="card-aqua">
+            <h3 class="font-heading text-xl font-bold text-navy mb-4">
+              Wann welcher Hintergrund passt
+            </h3>
+            <ul
+              class="font-body text-gray-700 space-y-2 list-disc list-inside mb-4"
+            >
+              <li>
+                <strong>Externe Kund*innen-Meetings:</strong> Ruhigere Motive
+                wie <em>Norway</em> oder <em>Desert</em>.
+              </li>
+              <li>
+                <strong>Interne Stand-ups:</strong> Experimenti gerne mit
+                <em>Cluster</em> oder <em>Planat</em>.
+              </li>
+              <li>
+                <strong>After-Work &amp; Social Calls:</strong> Eule
+                (<em>Owl</em>) oder <em>Moonlight</em> funktionieren nice.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- include: implementations-grid -->
+
+    <!-- include: footer -->
+
+    <script>
+      // Mobile menu toggle
+      const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+      const mobileMenu = document.getElementById("mobile-menu");
+
+      if (mobileMenuToggle && mobileMenu) {
+        mobileMenuToggle.addEventListener("click", () => {
+          mobileMenu.classList.toggle("open");
+        });
+      }
+    </script>
+    <!-- include: analytics -->
+  </body>
+</html>
+
