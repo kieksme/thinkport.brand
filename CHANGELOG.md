@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/kieksme/thinkport.brand/compare/v0.2.0...v0.2.1) (2026-03-05)
+
+
+### Bug Fixes
+
+* update venitus logo path in business card generation script ([a298364](https://github.com/kieksme/thinkport.brand/commit/a2983642318f465300f80c66c38939aaba3ad410))
+
 ## 0.2.0 (2026-03-04)
 
 
