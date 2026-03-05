@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/kieksme/thinkport.brand/compare/v0.2.2...v0.2.3) (2026-03-05)
+
+
+### Bug Fixes
+
+* **workflows:** add step to clean pnpm artifacts before installing dependencies for consistent builds ([292f899](https://github.com/kieksme/thinkport.brand/commit/292f89949af0c7f4f40efd96077cc58f3bfe07d5))
+
 ## [0.2.2](https://github.com/kieksme/thinkport.brand/compare/v0.2.1...v0.2.2) (2026-03-05)
 
 
