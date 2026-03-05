@@ -37,6 +37,10 @@ jobs:
           node-version: '18'
           cache: 'pnpm'
 
+      - name: Clean pnpm artifacts
+        run: rm -rf node_modules
+        # Ensures a clean install so @tailwindcss/oxide native bindings are installed for this runner (Linux)
+
       - name: Install dependencies
         run: pnpm install
         # No --frozen-lockfile: @tailwindcss/oxide needs platform-specific optional deps (Linux in CI)
