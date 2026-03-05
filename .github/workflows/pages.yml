@@ -57,8 +57,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install
-        # No --frozen-lockfile: @tailwindcss/oxide needs platform-specific optional deps (Linux in CI)
-
       - name: Build
         run: pnpm build
 
