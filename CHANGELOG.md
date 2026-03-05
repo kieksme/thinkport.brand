@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/kieksme/thinkport.brand/compare/v0.2.4...v0.3.0) (2026-03-05)
+
+
+### Features
+
+* add "Teams Backgrounds" section to navigation and implementations ([9bce160](https://github.com/kieksme/thinkport.brand/commit/9bce1606c62fbd9ce16cf289ef47954ae912b361))
+
 ## [0.2.4](https://github.com/kieksme/thinkport.brand/compare/v0.2.3...v0.2.4) (2026-03-05)
 
 
