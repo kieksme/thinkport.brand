@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/kieksme/thinkport.brand/compare/v0.2.3...v0.2.4) (2026-03-05)
+
+
+### Bug Fixes
+
+* update Node.js engine requirement to &gt;=20.0.0 and upgrade tar-fs to version 3.1.2 in package.json and pnpm-lock.yaml ([f22be2a](https://github.com/kieksme/thinkport.brand/commit/f22be2aefb910b7050d1f39662a8e409ea29c3b7))
+
 ## [0.2.3](https://github.com/kieksme/thinkport.brand/compare/v0.2.2...v0.2.3) (2026-03-05)
 
 
