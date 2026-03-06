@@ -1,6 +1,7 @@
 name: Release Please
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -23,4 +24,5 @@ jobs:
         id: release
         with:
           release-type: simple
-          token: ${{ secrets.RELEASE_PLEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          target-branch: main
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN != '' && secrets.RELEASE_PLEASE_TOKEN || github.token }}
