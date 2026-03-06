@@ -1,0 +1,47 @@
+name: Wiki Guidelines Sync
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'guidelines/**'
+
+permissions:
+  contents: write
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Prepare wiki content
+        run: node scripts/sync-wiki.mjs
+
+      - name: Checkout wiki
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.repository }}.wiki
+          path: wiki-repo
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync to wiki
+        run: |
+          cp -r wiki-output/* wiki-repo/
+          cd wiki-repo
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to push"
+          else
+            git commit -m "chore(wiki): sync guidelines from main repository"
+            git push
+          fi

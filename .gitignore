@@ -88,6 +88,7 @@ _build/
 node_modules/
 dist/
 build/
+wiki-output/
 
 # IDE and Editor Files
 .vscode/
