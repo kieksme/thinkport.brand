@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages (on PR merge)
+name: Deploy to GitHub Pages
 
 on:
   pull_request:
@@ -6,6 +6,10 @@ on:
       - closed
     branches:
       - main
+  workflow_run:
+    workflows: ["Create Release Assets"]
+    types:
+      - completed
   workflow_dispatch:
 
 permissions:
@@ -20,10 +24,20 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Only run if PR was merged (not just closed)
-    if: github.event.pull_request.merged == true
+    # Run on merged PRs, successful release workflow runs, and manual dispatches
+    if: >
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true) ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
+      github.event_name == 'workflow_dispatch'
     steps:
+      - name: Checkout (release workflow run)
+        if: github.event_name == 'workflow_run'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
       - name: Checkout
+        if: github.event_name != 'workflow_run'
         uses: actions/checkout@v4
 
       - name: Setup pnpm
