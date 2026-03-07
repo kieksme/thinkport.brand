@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.2](https://github.com/kieksme/thinkport.brand/compare/v0.4.1...v0.4.2) (2026-03-07)
+
+
+### Bug Fixes
+
+* **config:** introduce APP_BASE_PATH for dynamic asset routing in Vite configuration ([d17cc06](https://github.com/kieksme/thinkport.brand/commit/d17cc06cdd65d2b1b4bb2c5a1e0dd9aff67f4120))
+
 ## [0.4.1](https://github.com/kieksme/thinkport.brand/compare/v0.4.0...v0.4.1) (2026-03-07)
 
 
