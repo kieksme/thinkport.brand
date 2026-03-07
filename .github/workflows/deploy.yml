@@ -34,11 +34,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20.19.0'
           cache: 'pnpm'
 
       - name: Clean pnpm artifacts
-        run: rm -rf node_modules
+        run: rm -rf node_modules package-lock.json
         # Ensures a clean install so @tailwindcss/oxide native bindings are installed for this runner (Linux)
 
       - name: Install dependencies

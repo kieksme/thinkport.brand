@@ -25,4 +25,4 @@ jobs:
         with:
           release-type: simple
           target-branch: main
-          token: ${{ github.token }}
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN != '' && secrets.RELEASE_PLEASE_TOKEN || github.token }}
