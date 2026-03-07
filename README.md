@@ -1,6 +1,6 @@
-# kieks.me Corporate Identity & Corporate Design
+# Thinkport Corporate Identity & Corporate Design
 
-![kieks.me Corporate Identity & Corporate Design](assets/readme-header.svg)
+![Thinkport Corporate Identity & Corporate Design](assets/readme-header.svg)
 
 Repository to hold and share Corporate Identity and Corporate Design of Thinkport GmbH.
 

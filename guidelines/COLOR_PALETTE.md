@@ -183,7 +183,7 @@ All color combinations must meet WCAG 2.1 Level AA standards for accessibility:
 
 Color palette files are available in multiple formats:
 
-- **ASE** (Adobe Swatch Exchange): `assets/colors/kieksme-palette.ase` (if available)
+- **ASE** (Adobe Swatch Exchange): `assets/colors/thinkport-palette.ase` (if available)
 - **CSS Variables**: `assets/colors/colors.css` for web projects
 - **JSON**: `assets/colors/colors.json` for developers and applications
 - **Color Swatches**: SVG files in the `colors/` directory

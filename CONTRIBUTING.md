@@ -1,6 +1,6 @@
-# Contributing to kieks.me Corporate Identity
+# Contributing to Thinkport Corporate Identity
 
-Thank you for your interest in contributing to the kieks.me Corporate Identity and Corporate Design repository!
+Thank you for your interest in contributing to the Thinkport Corporate Identity and Corporate Design repository!
 
 ## 🚨 Important Notice
 
@@ -98,10 +98,10 @@ thinkport.brand/
 
 Use consistent, descriptive names:
 
-- Use lowercase with hyphens: `kieksme-logo-primary.svg`
-- Include variation/type: `kieksme-logo-white.svg`
-- Add resolution for rasters: `kieksme-logo@2x.png`
-- Use descriptive suffixes: `kieksme-template-invoice.docx`
+- Use lowercase with hyphens: `thinkport-logo-primary.svg`
+- Include variation/type: `thinkport-logo-white.svg`
+- Add resolution for rasters: `thinkport-logo@2x.png`
+- Use descriptive suffixes: `thinkport-template-invoice.docx`
 
 ## Asset Requirements
 

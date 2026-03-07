@@ -1,4 +1,4 @@
-# kieks.me Corporate Identity Assets - v${VERSION}
+# Thinkport Corporate Identity Assets - v${VERSION}
 
 ## 📦 What's Included
 
@@ -32,21 +32,21 @@ This release contains all official Corporate Identity and Corporate Design mater
 
 ## 📥 Download
 
-[![Version](https://img.shields.io/badge/version-v${VERSION}-blue.svg)](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/kieks-me-assets-v${VERSION}.zip)
+[![Version](https://img.shields.io/badge/version-v${VERSION}-blue.svg)](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/thinkport-assets-v${VERSION}.zip)
 
 ### Complete Package
 
 Download all assets in one convenient ZIP file:
 
-- **[kieks-me-assets-v${VERSION}.zip](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/kieks-me-assets-v${VERSION}.zip)** - Complete asset package (includes logos, colors, fonts, templates, and guidelines)
+- **[thinkport-assets-v${VERSION}.zip](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/thinkport-assets-v${VERSION}.zip)** - Complete asset package (includes logos, colors, fonts, templates, and guidelines)
 
 ### Individual Asset Packages
 
 Need only specific assets? Download individual packages:
 
-- **[kieks-me-logos-v${VERSION}.zip](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/kieks-me-logos-v${VERSION}.zip)** - Logos only (all logo variants in SVG and PNG formats, including favicon)
-- **[kieks-me-colors-v${VERSION}.zip](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/kieks-me-colors-v${VERSION}.zip)** - Colors only (CSS variables, JSON definitions, and color swatches)
-- **[kieks-me-fonts-v${VERSION}.zip](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/kieks-me-fonts-v${VERSION}.zip)** - Fonts only (Hanken Grotesk and Source Sans 3 font files)
+- **[thinkport-logos-v${VERSION}.zip](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/thinkport-logos-v${VERSION}.zip)** - Logos only (all logo variants in SVG and PNG formats, including favicon)
+- **[thinkport-colors-v${VERSION}.zip](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/thinkport-colors-v${VERSION}.zip)** - Colors only (CSS variables, JSON definitions, and color swatches)
+- **[thinkport-fonts-v${VERSION}.zip](https://github.com/kieksme/thinkport.brand/releases/download/v${VERSION}/thinkport-fonts-v${VERSION}.zip)** - Fonts only (Hanken Grotesk and Source Sans 3 font files)
 
 ${CHANGELOG_SECTION}
 
@@ -63,7 +63,7 @@ ${CHANGELOG_SECTION}
 
 ```bash
 # Extract the assets
-unzip kieks-me-assets-v${VERSION}.zip
+unzip thinkport-assets-v${VERSION}.zip
 
 # Use CSS variables for colors
 @import './assets/colors/colors.css';
@@ -115,7 +115,7 @@ All company members are allowed to use these materials for:
 
 ## 🔗 Repository
 
-Source repository: [kieks.me Corporate Identity](https://github.com/kieksme/thinkport.brand)
+Source repository: [Thinkport Corporate Identity](https://github.com/kieksme/thinkport.brand)
 
 ## 📄 License
 

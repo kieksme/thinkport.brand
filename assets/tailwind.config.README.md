@@ -32,13 +32,13 @@ If you already have a `tailwind.config.js`, you can merge the theme extensions:
 
 ```javascript
 // tailwind.config.js
-const kieksmeConfig = require('./assets/tailwind.config.js');
+const thinkportConfig = require('./assets/tailwind.config.js');
 
 module.exports = {
   content: ['./src/**/*.{js,jsx,ts,tsx,html}'],
   theme: {
     extend: {
-      ...kieksmeConfig.theme.extend,
+      ...thinkportConfig.theme.extend,
       // Your custom extensions
     },
   },
@@ -233,4 +233,4 @@ For more detailed information:
 
 ---
 
-*Part of the [kieks.me Corporate Identity](https://github.com/kieksme/thinkport.brand) assets*
+*Part of the [Thinkport Corporate Identity](https://github.com/kieksme/thinkport.brand) assets*

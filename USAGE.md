@@ -1,4 +1,4 @@
-# Usage Guidelines for kieks.me Corporate Identity Materials
+# Usage Guidelines for Thinkport Corporate Identity Materials
 
 This document provides guidance on how to properly use the corporate identity materials in this repository.
 

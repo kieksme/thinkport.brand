@@ -14,7 +14,7 @@
     <meta name="theme-color" content="#1E2A45">
     
     <meta name="description" content="Thinkport GmbH Corporate Identity & Corporate Design - Brand assets, logos, colors, fonts, and guidelines">
-    <meta name="keywords" content="kieks.me, corporate identity, brand assets, logos, typography, corporate design, brand guidelines">
+    <meta name="keywords" content="Thinkport, corporate identity, brand assets, logos, typography, corporate design, brand guidelines">
     <meta name="author" content="Thinkport GmbH">
     <meta name="robots" content="index, follow">
     <meta name="language" content="German">
@@ -360,15 +360,15 @@
                 // Find individual asset ZIPs (search for specific naming patterns)
                 const logosZip = allZipAssets.find(asset => 
                     asset.name.toLowerCase().includes('logo') || 
-                    asset.name.toLowerCase().match(/kieks-me-logos/)
+                    asset.name.toLowerCase().match(/thinkport-logos/)
                 );
                 const colorsZip = allZipAssets.find(asset => 
                     asset.name.toLowerCase().includes('color') || 
-                    asset.name.toLowerCase().match(/kieks-me-colors/)
+                    asset.name.toLowerCase().match(/thinkport-colors/)
                 );
                 const fontsZip = allZipAssets.find(asset => 
                     asset.name.toLowerCase().includes('font') || 
-                    asset.name.toLowerCase().match(/kieks-me-fonts/)
+                    asset.name.toLowerCase().match(/thinkport-fonts/)
                 );
                 
                 const releaseVersion = release.tag_name || release.name || 'v0.23.0';

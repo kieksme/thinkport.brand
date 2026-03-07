@@ -52,7 +52,7 @@ async function generateSampleAvatars() {
     info(`\nVerarbeite Portrait: ${portraitName}`);
 
     for (const size of sizes) {
-      const fileNameSlug = portraitName.replace(/kieksme/gi, 'thinkport');
+      const fileNameSlug = portraitName;
 
       // Full color
       const outputFileName = `avatar-${fileNameSlug}-${size}.png`;

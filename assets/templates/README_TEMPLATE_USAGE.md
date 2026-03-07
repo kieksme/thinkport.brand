@@ -1,10 +1,10 @@
 # README Template Usage Guide
 
-This guide explains how to use the README template for kieks.me repositories.
+This guide explains how to use the README template for Thinkport repositories.
 
 ## Overview
 
-The README template (`README_TEMPLATE.md`) provides a standardized structure for all kieks.me repositories, ensuring consistent branding and documentation across projects.
+The README template (`README_TEMPLATE.md`) provides a standardized structure for all Thinkport repositories, ensuring consistent branding and documentation across projects.
 
 ## Quick Start
 
@@ -141,7 +141,7 @@ Example repository demonstrating Thinkport branding and structure.
 
 **Download the latest release:**
 
-[![Download Latest Release](https://img.shields.io/github/v/release/kieksme/kieks.me.example?label=Download%20Latest%20Release&style=for-the-badge&logo=github&logoColor=white&color=0B2649)](https://github.com/kieksme/kieks.me.example/releases/latest)
+[![Download Latest Release](https://img.shields.io/github/v/release/kieksme/thinkport.example?label=Download%20Latest%20Release&style=for-the-badge&logo=github&logoColor=white&color=0B2649)](https://github.com/kieksme/thinkport.example/releases/latest)
 
 ## Purpose
 
@@ -150,8 +150,8 @@ This repository serves as an example of how to structure and document Thinkport 
 ## Installation
 
 ```bash
-git clone https://github.com/kieksme/kieks.me.example.git
-cd kieks.me.example
+git clone https://github.com/kieksme/thinkport.example.git
+cd thinkport.example
 pnpm install
 ```
 
@@ -184,9 +184,9 @@ This repository is licensed under the GPL-3.0 - see the [LICENSE](LICENSE) file 
 
 <div align="center">
 
-**Part of the [kieks.me](https://kieks.me) ecosystem**
+**Part of the [Thinkport](https://kieks.me) ecosystem**
 
-[![kieks.me](https://img.shields.io/badge/kieks.me-Corporate%20Identity-0B2649?style=for-the-badge)](https://github.com/kieksme/thinkport.brand)
+[![Thinkport](https://img.shields.io/badge/Thinkport-Corporate%20Identity-0B2649?style=for-the-badge)](https://github.com/kieksme/thinkport.brand)
 
 Made with ❤️ by [Thinkport GmbH](https://kieks.me)
 
@@ -199,7 +199,7 @@ Made with ❤️ by [Thinkport GmbH](https://kieks.me)
 2. **Be concise**: Keep descriptions clear and to the point
 3. **Use examples**: Include code examples and use cases
 4. **Link appropriately**: Link to detailed documentation rather than duplicating content
-5. **Maintain consistency**: Follow the same structure and style across all kieks.me repositories
+5. **Maintain consistency**: Follow the same structure and style across all Thinkport repositories
 
 ## Questions?
 

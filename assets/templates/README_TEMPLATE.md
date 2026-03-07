@@ -54,9 +54,9 @@ This repository is licensed under the {{LICENSE}} - see the [LICENSE](LICENSE) f
 
 <div align="center">
 
-**Part of the [kieks.me](https://kieks.me) ecosystem**
+**Part of the [Thinkport](https://kieks.me) ecosystem**
 
-[![kieks.me](https://img.shields.io/badge/kieks.me-Corporate%20Identity-0B2649?style=for-the-badge)](https://github.com/kieksme/thinkport.brand)
+[![Thinkport](https://img.shields.io/badge/Thinkport-Corporate%20Identity-0B2649?style=for-the-badge)](https://github.com/kieksme/thinkport.brand)
 
 Made with ❤️ by [Thinkport GmbH](https://kieks.me)
 

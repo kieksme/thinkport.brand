@@ -241,8 +241,8 @@ pnpm generate:social-preview
 
 The social preview SVG includes:
 - Navy background (#1E2A45)
-- kieks.me horizontal logo (centered, top area)
-- Repository name: "kieks.me Corporate Identity & Corporate Design"
+- Thinkport horizontal logo (centered, top area)
+- Repository name: "Thinkport Corporate Identity & Corporate Design"
 - Description: "Brand assets, logos, colors, fonts, and guidelines"
 - Decorative circles (aqua and fuchsia with opacity)
 

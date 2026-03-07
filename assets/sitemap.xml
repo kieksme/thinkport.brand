@@ -12,10 +12,10 @@
       <image:loc>{{repoBaseUrl}}/assets/banner/opengraph/index.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-aqua-dark.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-aqua-dark.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-circle.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-circle.svg</image:loc>
     </image:image>
   </url>
   
@@ -41,89 +41,89 @@
     </image:image>
     <!-- Horizontal Logos - Aqua -->
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-aqua-dark.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-aqua-dark.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-aqua-dark@2x.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-aqua-dark@2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-aqua-light.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-aqua-light.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-aqua-light@2x.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-aqua-light@2x.png</image:loc>
     </image:image>
     <!-- Horizontal Logos - Purple -->
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-purple-dark.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-purple-dark.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-purple-dark@2x.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-purple-dark@2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-purple-light.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-purple-light.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-purple-light@2x.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-purple-light@2x.png</image:loc>
     </image:image>
     <!-- Horizontal Logos - Red -->
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-red-dark.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-red-dark.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-red-dark@2x.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-red-dark@2x.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-red-light.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-red-light.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-horizontal-red-light@2x.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-horizontal-red-light@2x.png</image:loc>
     </image:image>
     <!-- Animated Logos -->
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/animated/kieks.me-horizontal-aqua-dark-animated.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/animated/thinkport-horizontal-aqua-dark-animated.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/animated/kieks.me-horizontal-aqua-light-animated.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/animated/thinkport-horizontal-aqua-light-animated.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/animated/kieks.me-horizontal-purple-dark-animated.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/animated/thinkport-horizontal-purple-dark-animated.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/animated/kieks.me-horizontal-purple-light-animated.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/animated/thinkport-horizontal-purple-light-animated.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/animated/kieks.me-horizontal-red-dark-animated.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/animated/thinkport-horizontal-red-dark-animated.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/animated/kieks.me-horizontal-red-light-animated.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/animated/thinkport-horizontal-red-light-animated.svg</image:loc>
     </image:image>
     <!-- Single/Icon Logos -->
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-background.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-background.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-background.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-background.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-background-webapp.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-background-webapp.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-background-webapp-192.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-background-webapp-192.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-background-webapp-512.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-background-webapp-512.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-circle.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-circle.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-circle.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-circle.png</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-transparent.svg</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-transparent.svg</image:loc>
     </image:image>
     <image:image>
-      <image:loc>{{repoBaseUrl}}/assets/logos/kieks.me-single-transparent.png</image:loc>
+      <image:loc>{{repoBaseUrl}}/assets/logos/thinkport-single-transparent.png</image:loc>
     </image:image>
   </url>
   

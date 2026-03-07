@@ -362,7 +362,7 @@ const HERO_CONTENT_MAP = {
   },
   'implementations/github.html': {
     heroTitle: 'GitHub Assets',
-    heroSubtitle: 'README Header, Template und Social Preview für kieks.me Repositories',
+    heroSubtitle: 'README Header, Template und Social Preview für Thinkport Repositories',
     heroExtras: heroExtrasTags('<span class="text-aqua">README Header</span> • <span class="text-fuchsia">Template</span> • <span class="text-aqua">Social Preview</span>'),
   },
   'implementations/linkedin.html': {

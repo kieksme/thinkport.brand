@@ -34,19 +34,19 @@ for (const { src, dst, urlPath } of filesToMove) {
   // Update OpenGraph URLs
   const oldUrl = src.replace('app/', '').replace('.html', '');
   content = content.replace(
-    new RegExp(`https://kieksme\\.github\\.io/kieks\\.me\\.cicd/${oldUrl}\\.html`, 'g'),
+    new RegExp(`https://thinkport\\.github\\.io/thinkport\\.cicd/${oldUrl}\\.html`, 'g'),
     `https://brand.thinkport.digital/${urlPath}`
   );
   
   // Update canonical URLs
   content = content.replace(
-    new RegExp(`https://kieksme\\.github\\.io/kieks\\.me\\.cicd/${oldUrl}\\.html`, 'g'),
+    new RegExp(`https://thinkport\\.github\\.io/thinkport\\.cicd/${oldUrl}\\.html`, 'g'),
     `https://brand.thinkport.digital/${urlPath}`
   );
   
   // Update JSON-LD URLs
   content = content.replace(
-    new RegExp(`"url":\\s*"https://kieksme\\.github\\.io/kieks\\.me\\.cicd/${oldUrl}\\.html"`, 'g'),
+    new RegExp(`"url":\\s*"https://thinkport\\.github\\.io/thinkport\\.cicd/${oldUrl}\\.html"`, 'g'),
     `"url": "https://brand.thinkport.digital/${urlPath}"`
   );
   

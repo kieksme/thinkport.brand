@@ -4,7 +4,7 @@ This guide explains how to use the README header graphic in your repository's RE
 
 ## Overview
 
-The README header graphic is a banner image designed to be placed at the top of README.md files in kieks.me repositories. It provides consistent branding and visual identity.
+The README header graphic is a banner image designed to be placed at the top of README.md files in Thinkport repositories. It provides consistent branding and visual identity.
 
 ## File Formats
 
@@ -28,7 +28,7 @@ These dimensions are optimized for GitHub README display width.
 SVG format provides the best quality and scalability:
 
 ```markdown
-![kieks.me Corporate Identity & Corporate Design](assets/readme-header.svg)
+![Thinkport Corporate Identity & Corporate Design](assets/readme-header.svg)
 ```
 
 ### Method 2: Using PNG
@@ -36,7 +36,7 @@ SVG format provides the best quality and scalability:
 If you prefer PNG format or need it for compatibility:
 
 ```markdown
-![kieks.me Corporate Identity & Corporate Design](assets/readme-header.png)
+![Thinkport Corporate Identity & Corporate Design](assets/readme-header.png)
 ```
 
 ### Method 3: Using Relative Path
@@ -44,7 +44,7 @@ If you prefer PNG format or need it for compatibility:
 If the header is in the repository root:
 
 ```markdown
-![kieks.me Corporate Identity & Corporate Design](./readme-header.svg)
+![Thinkport Corporate Identity & Corporate Design](./readme-header.svg)
 ```
 
 ### Method 4: Centered Display
@@ -54,7 +54,7 @@ To center the header image:
 ```markdown
 <div align="center">
 
-![kieks.me Corporate Identity & Corporate Design](assets/readme-header.svg)
+![Thinkport Corporate Identity & Corporate Design](assets/readme-header.svg)
 
 </div>
 ```
@@ -66,7 +66,7 @@ Here's a complete example of a README with the header:
 ```markdown
 <div align="center">
 
-![kieks.me Corporate Identity & Corporate Design](assets/readme-header.svg)
+![Thinkport Corporate Identity & Corporate Design](assets/readme-header.svg)
 
 </div>
 
@@ -161,7 +161,7 @@ When customizing:
 
 The SVG includes:
 - Navy background (#1E2A45)
-- kieks.me horizontal logo (aqua variant)
+- Thinkport horizontal logo (aqua variant)
 - Title text: "Corporate Identity & Corporate Design"
 - Decorative circles (aqua and fuchsia with opacity)
 
