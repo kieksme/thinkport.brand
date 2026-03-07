@@ -60,6 +60,8 @@ jobs:
         # No --frozen-lockfile: @tailwindcss/oxide needs platform-specific optional deps (Linux in CI)
 
       - name: Build
+        env:
+          VITE_BASE_PATH: ${{ format('/{0}/', github.event.repository.name) }}
         run: pnpm build
 
       - name: Setup Pages
