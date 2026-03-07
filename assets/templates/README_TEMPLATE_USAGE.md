@@ -20,7 +20,7 @@ The template uses the following placeholders that must be replaced:
 
 - `{{REPO_NAME}}` - Repository name (e.g., "thinkport.brand")
 - `{{DESCRIPTION}}` - Short description of the repository
-- `{{ORG}}` - GitHub organization or username (e.g., "kieksme")
+- `{{ORG}}` - GitHub organization or username (e.g., "thinkport")
 - `{{PURPOSE}}` - Detailed purpose/overview of the repository
 - `{{INSTALLATION}}` - Installation instructions
 - `{{USAGE}}` - Usage instructions and examples
