@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.4.3](https://github.com/kieksme/thinkport.brand/compare/v0.4.2...v0.4.3) (2026-03-07)
+
+
+### Bug Fixes
+
+* **README:** update GitHub organization placeholder from kieksme to thinkport ([b5b095a](https://github.com/kieksme/thinkport.brand/commit/b5b095a19f85919ca995f3bb3bf223b0a921126a))
+
 ## [0.4.2](https://github.com/kieksme/thinkport.brand/compare/v0.4.1...v0.4.2) (2026-03-07)
 
 
