@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.4.0](https://github.com/kieksme/thinkport.brand/compare/v0.3.0...v0.4.0) (2026-03-07)
+
+
+### Features
+
+* add 'wiki-output/' to .gitignore ([1855388](https://github.com/kieksme/thinkport.brand/commit/1855388711a2bb0b42dd68fe0c3bddace1cc83c0))
+* **teams:** add new "Abstract" background option with download link ([f9638ab](https://github.com/kieksme/thinkport.brand/commit/f9638aba194e65fca1c030920d99ae9f7b1953fd))
+* **workflows:** update deployment names for GitHub Pages workflows to specify triggers ([51aef0e](https://github.com/kieksme/thinkport.brand/commit/51aef0ebf4833759a80b02a7112cf74632c4ac54))
+
+
+### Bug Fixes
+
+* update package version to 0.3.0 and upgrade dependencies including inquirer, sharp, and vite ([1e40e07](https://github.com/kieksme/thinkport.brand/commit/1e40e07653b9a3a3e5c8183e4b4ac6f986e7a6b0))
+* **workflows:** add workflow_dispatch trigger to CI configuration ([59e2340](https://github.com/kieksme/thinkport.brand/commit/59e2340f9fcaa0c4a9d83836a27b73f9877f9aae))
+* **workflows:** enhance release-please configuration with workflow_dispatch trigger and update token handling ([f79bbef](https://github.com/kieksme/thinkport.brand/commit/f79bbef40ba577c727e870c8fccff24e687454ac))
+* **workflows:** simplify token handling in release-please configuration ([015bbdf](https://github.com/kieksme/thinkport.brand/commit/015bbdfa3fc5b2cedc5bbe9f44f0c72b5e8dea2b))
+
 ## [0.3.0](https://github.com/kieksme/thinkport.brand/compare/v0.2.4...v0.3.0) (2026-03-05)
 
 
