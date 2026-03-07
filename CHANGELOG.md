@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.1](https://github.com/kieksme/thinkport.brand/compare/v0.4.0...v0.4.1) (2026-03-07)
+
+
+### Bug Fixes
+
+* **workflows:** consolidate GitHub Pages deployment workflows and enhance triggers ([3208f6b](https://github.com/kieksme/thinkport.brand/commit/3208f6b6147f87229ce88a82ee2ab7002a5aba1e))
+* **workflows:** remove CI configuration file ([3116bfc](https://github.com/kieksme/thinkport.brand/commit/3116bfc948ceaa0f35729ad64524e106a24a2327))
+
 ## [0.4.0](https://github.com/kieksme/thinkport.brand/compare/v0.3.0...v0.4.0) (2026-03-07)
 
 
