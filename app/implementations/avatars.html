@@ -145,14 +145,14 @@
 
       .avatar-example {
         display: inline-block;
-        margin: 1rem;
+        margin: 0.25rem 0.5rem;
         text-align: center;
       }
 
       .avatar-example img {
         border: 2px solid #e5e7eb;
         display: block;
-        margin: 0 auto 0.5rem;
+        margin: 0 auto 0.25rem;
       }
 
       /* Standard border-radius nur wenn nicht rounded-full oder rounded-lg */
@@ -170,7 +170,7 @@
       }
 
       .avatar-example-label {
-        font-size: 0.875rem;
+        font-size: 0.75rem;
         color: #666;
         font-family: var(--font-body);
       }
@@ -245,66 +245,57 @@
       </section>
 
       <!-- Examples Section -->
-      <section class="py-16 px-4 bg-gray-50">
+      <section class="py-8 px-4 bg-gray-50">
         <div class="max-w-6xl mx-auto">
           <h2
-            class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8 text-center"
+            class="font-heading text-3xl md:text-4xl font-bold text-navy mb-4 text-center"
           >
             Beispiele
           </h2>
-          <p class="font-body text-lg text-gray-700 mb-12 text-center max-w-3xl mx-auto">
+          <p class="font-body text-lg text-gray-700 mb-6 text-center max-w-3xl mx-auto">
             Avatare in verschiedenen Größen mit Abstract-5-Hintergrund.
             Die Portraits werden zentriert platziert und füllen das Quadrat.
           </p>
 
-          <!-- 512px Examples -->
-          <div class="mb-12">
-            <h3 class="font-heading text-2xl font-bold text-navy mb-6">
-              512x512px Avatare
+          <!-- 512px & 256px in one row -->
+          <div class="mb-6">
+            <h3 class="font-heading text-xl font-bold text-navy mb-3">
+              Standard (512px · 256px)
             </h3>
-            <div class="flex flex-wrap justify-center items-start">
+            <div class="flex flex-wrap justify-center items-end gap-6">
               <div class="avatar-example">
                 <img
                   src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512.png"
                   alt="Avatar mit Abstract-5-Hintergrund (512x512px)"
-                  class="w-64 h-64 rounded-lg object-cover"
+                  class="w-40 h-40 rounded-lg object-cover"
                 />
                 <p class="avatar-example-label">512px</p>
               </div>
-            </div>
-          </div>
-
-          <!-- 256px Examples -->
-          <div class="mb-12">
-            <h3 class="font-heading text-2xl font-bold text-navy mb-6">
-              256x256px Avatare
-            </h3>
-            <div class="flex flex-wrap justify-center items-start">
               <div class="avatar-example">
                 <img
                   src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
                   alt="Avatar mit Abstract-5-Hintergrund (256x256px)"
-                  class="w-32 h-32 rounded-lg object-cover"
+                  class="w-24 h-24 rounded-lg object-cover"
                 />
                 <p class="avatar-example-label">256px</p>
               </div>
             </div>
           </div>
 
-          <!-- Grayscale Variants (portrait in grayscale, background in color) -->
-          <div class="mb-12">
-            <h3 class="font-heading text-2xl font-bold text-navy mb-6">
+          <!-- Grayscale Variants -->
+          <div class="mb-6">
+            <h3 class="font-heading text-xl font-bold text-navy mb-3">
               Graustufen-Avatare
             </h3>
-            <p class="font-body text-gray-700 mb-6 text-center max-w-3xl mx-auto">
-              Variante mit Portrait in Graustufen und farbigem Abstract-5-Hintergrund.
+            <p class="font-body text-sm text-gray-700 mb-3 text-center max-w-3xl mx-auto">
+              Portrait in Graustufen, farbiger Abstract-5-Hintergrund.
             </p>
-            <div class="flex flex-wrap justify-center items-start gap-8">
+            <div class="flex flex-wrap justify-center items-end gap-6">
               <div class="avatar-example">
                 <img
                   src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512-grayscale.png"
                   alt="Avatar Graustufen-Portrait mit Abstract-5-Hintergrund (512x512px)"
-                  class="w-64 h-64 rounded-lg object-cover"
+                  class="w-40 h-40 rounded-lg object-cover"
                 />
                 <p class="avatar-example-label">512px Graustufen</p>
               </div>
@@ -312,7 +303,7 @@
                 <img
                   src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256-grayscale.png"
                   alt="Avatar Graustufen-Portrait mit Abstract-5-Hintergrund (256x256px)"
-                  class="w-32 h-32 rounded-lg object-cover"
+                  class="w-24 h-24 rounded-lg object-cover"
                 />
                 <p class="avatar-example-label">256px Graustufen</p>
               </div>
@@ -320,71 +311,54 @@
           </div>
 
           <!-- Rounded and Circular Examples -->
-          <div class="mb-12">
-            <h3 class="font-heading text-2xl font-bold text-navy mb-6">
-              Abgerundete und kreisförmige Avatare
+          <div class="mb-6">
+            <h3 class="font-heading text-xl font-bold text-navy mb-3">
+              Abgerundet & kreisförmig (CSS)
             </h3>
-            <p class="font-body text-gray-700 mb-6 text-center max-w-3xl mx-auto">
-              Avatare können mit CSS abgerundet oder kreisförmig dargestellt werden. 
-              Die quadratischen Avatare werden dabei visuell angepasst, während die 
-              Originaldatei quadratisch bleibt.
+            <p class="font-body text-sm text-gray-700 mb-4 text-center max-w-3xl mx-auto">
+              Mit <code class="bg-gray-200 px-1 rounded">rounded-lg</code> oder <code class="bg-gray-200 px-1 rounded">rounded-full</code>; Originaldatei bleibt quadratisch.
             </p>
 
-            <!-- Rounded Examples -->
-            <div class="mb-8">
-              <h4 class="font-heading text-xl font-bold text-navy mb-4 text-center">
-                Abgerundete Ecken (rounded-lg)
-              </h4>
-              <div class="flex flex-wrap justify-center items-start">
-                <div class="avatar-example">
-                  <img
-                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
-                    alt="Avatar mit Abstract-5-Hintergrund, abgerundet"
-                    class="w-32 h-32 rounded-lg object-cover"
-                  />
-                  <p class="avatar-example-label">256px (abgerundet)</p>
-                </div>
-                <div class="avatar-example">
-                  <img
-                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512.png"
-                    alt="Avatar mit Abstract-5-Hintergrund, abgerundet"
-                    class="w-32 h-32 rounded-lg object-cover"
-                  />
-                  <p class="avatar-example-label">512px (abgerundet)</p>
-                </div>
+            <div class="flex flex-wrap justify-center items-end gap-6 mb-4">
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
+                  alt="Avatar mit Abstract-5-Hintergrund, abgerundet"
+                  class="w-24 h-24 rounded-lg object-cover"
+                />
+                <p class="avatar-example-label">256px · rounded-lg</p>
               </div>
-            </div>
-
-            <!-- Circular Examples -->
-            <div class="mb-8">
-              <h4 class="font-heading text-xl font-bold text-navy mb-4 text-center">
-                Kreisrund (rounded-full)
-              </h4>
-              <div class="flex flex-wrap justify-center items-start">
-                <div class="avatar-example">
-                  <img
-                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
-                    alt="Avatar mit Abstract-5-Hintergrund, kreisförmig"
-                    class="w-32 h-32 rounded-full object-cover"
-                  />
-                  <p class="avatar-example-label">256px (kreisförmig)</p>
-                </div>
-                <div class="avatar-example">
-                  <img
-                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512.png"
-                    alt="Avatar mit Abstract-5-Hintergrund, kreisförmig"
-                    class="w-32 h-32 rounded-full object-cover"
-                  />
-                  <p class="avatar-example-label">512px (kreisförmig)</p>
-                </div>
-                <div class="avatar-example">
-                  <img
-                    src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256-grayscale.png"
-                    alt="Avatar Graustufen mit Abstract-5-Hintergrund, kreisförmig"
-                    class="w-32 h-32 rounded-full object-cover"
-                  />
-                  <p class="avatar-example-label">256px Graustufen (kreisförmig)</p>
-                </div>
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512.png"
+                  alt="Avatar mit Abstract-5-Hintergrund, abgerundet"
+                  class="w-24 h-24 rounded-lg object-cover"
+                />
+                <p class="avatar-example-label">512px · rounded-lg</p>
+              </div>
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
+                  alt="Avatar mit Abstract-5-Hintergrund, kreisförmig"
+                  class="w-24 h-24 rounded-full object-cover"
+                />
+                <p class="avatar-example-label">256px · rounded-full</p>
+              </div>
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-512.png"
+                  alt="Avatar mit Abstract-5-Hintergrund, kreisförmig"
+                  class="w-24 h-24 rounded-full object-cover"
+                />
+                <p class="avatar-example-label">512px · rounded-full</p>
+              </div>
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256-grayscale.png"
+                  alt="Avatar Graustufen mit Abstract-5-Hintergrund, kreisförmig"
+                  class="w-24 h-24 rounded-full object-cover"
+                />
+                <p class="avatar-example-label">256px Grau · rounded-full</p>
               </div>
             </div>
 
