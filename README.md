@@ -68,6 +68,8 @@ Detailed documentation for each aspect of the brand identity:
 - [Templates and Resources](guidelines/TEMPLATES_AND_RESOURCES.md) - Slide Master, Geschäftsbrief DIN 5008, company intro
 - [Brand History](guidelines/BRAND_HISTORY.md) - Policy changes (e.g. 2020 colour, 2021 logo)
 
+The same guidelines are also available in the [Wiki](https://github.com/kieksme/thinkport.brand/wiki) (synced automatically from this repository).
+
 ## Usage
 
 ### For Developers
