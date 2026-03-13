@@ -276,6 +276,7 @@ jobs:
           asset_content_type: application/zip
 
       - name: Upload icons ZIP to release
+        if: hashFiles('thinkport-icons-v*.zip') != ''
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -284,7 +285,6 @@ jobs:
           asset_path: ./thinkport-icons-v${{ steps.version.outputs.version }}.zip
           asset_name: thinkport-icons-v${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
-        continue-on-error: true
 
       - name: Upload staff assets ZIP to release
         if: ${{ hashFiles('thinkport-staff-assets-v*.zip') != '' }}
