@@ -286,6 +286,21 @@ jobs:
           asset_name: thinkport-staff-assets-v${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
 
+      - name: Upload per-person staff ZIPs to release
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          TAG="${{ github.event.release.tag_name }}"
+
+          for file in thinkport-staff-*-v${VERSION}.zip; do
+            if [ ! -f "$file" ]; then
+              continue
+            fi
+            echo "Uploading $file to release $TAG"
+            gh release upload "$TAG" "$file" --repo "${{ github.repository }}" --clobber
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Update Release Notes
         run: |
           gh release edit ${{ github.event.release.tag_name }} \
