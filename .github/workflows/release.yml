@@ -64,7 +64,7 @@ jobs:
           
           # Create complete package ZIP
           cd release-assets
-          zip -r ../kieks-me-assets-v${VERSION}.zip .
+          zip -r ../thinkport-assets-v${VERSION}.zip .
           cd ..
           
           # Create logos-only ZIP
@@ -72,21 +72,21 @@ jobs:
           cp -r assets/logos release-assets-logos/logos
           cp assets/favicon.svg release-assets-logos/ 2>/dev/null || true
           cd release-assets-logos
-          zip -r ../kieks-me-logos-v${VERSION}.zip .
+          zip -r ../thinkport-logos-v${VERSION}.zip .
           cd ..
           
           # Create colors-only ZIP
           mkdir -p release-assets-colors
           cp -r assets/colors release-assets-colors/colors
           cd release-assets-colors
-          zip -r ../kieks-me-colors-v${VERSION}.zip .
+          zip -r ../thinkport-colors-v${VERSION}.zip .
           cd ..
           
           # Create fonts-only ZIP
           mkdir -p release-assets-fonts
           cp -r assets/fonts release-assets-fonts/fonts
           cd release-assets-fonts
-          zip -r ../kieks-me-fonts-v${VERSION}.zip .
+          zip -r ../thinkport-fonts-v${VERSION}.zip .
           cd ..
           
           # Create icons-only ZIP
@@ -94,7 +94,7 @@ jobs:
           cp -r assets/icons release-assets-icons/icons 2>/dev/null || true
           cd release-assets-icons
           if [ -d icons ] && [ "$(ls -A icons)" ]; then
-            zip -r ../kieks-me-icons-v${VERSION}.zip .
+            zip -r ../thinkport-icons-v${VERSION}.zip .
           fi
           cd ..
 
@@ -102,6 +102,50 @@ jobs:
           if [ -d release-assets/staff ]; then
             cd release-assets
             zip -r ../thinkport-staff-assets-v${VERSION}.zip staff
+
+            # Per-person staff ZIPs
+            if [ -d staff/email-footers ]; then
+              cd staff
+              for footer in email-footers/email-footer-*.html; do
+                if [ ! -f "$footer" ]; then
+                  continue
+                fi
+                slug="${footer##*/}"
+                slug="${slug#email-footer-}"
+                slug="${slug%.html}"
+
+                tmpdir="person-${slug}"
+                rm -rf "$tmpdir"
+                mkdir -p "$tmpdir"
+
+                # Avatars for this person
+                if ls "avatars/avatar-${slug}-"*.png >/dev/null 2>&1; then
+                  mkdir -p "$tmpdir/avatars"
+                  cp "avatars/avatar-${slug}-"*.png "$tmpdir/avatars"/
+                fi
+
+                # Business cards for this person (stored in per-slug directory)
+                if [ -d "business-cards/${slug}" ]; then
+                  mkdir -p "$tmpdir/business-cards"
+                  cp -r "business-cards/${slug}/." "$tmpdir/business-cards"/
+                fi
+
+                # Email footers (HTML + text)
+                if [ -f "email-footers/email-footer-${slug}.html" ]; then
+                  mkdir -p "$tmpdir/email-footers"
+                  cp "email-footers/email-footer-${slug}.html" "$tmpdir/email-footers"/
+                fi
+                if [ -f "email-footers-text/email-footer-${slug}.txt" ]; then
+                  mkdir -p "$tmpdir/email-footers-text"
+                  cp "email-footers-text/email-footer-${slug}.txt" "$tmpdir/email-footers-text"/
+                fi
+
+                zip -r "../../thinkport-staff-${slug}-v${VERSION}.zip" "$tmpdir"
+                rm -rf "$tmpdir"
+              done
+              cd ..
+            fi
+
             cd ..
           fi
 
@@ -186,8 +230,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./kieks-me-assets-v${{ steps.version.outputs.version }}.zip
-          asset_name: kieks-me-assets-v${{ steps.version.outputs.version }}.zip
+          asset_path: ./thinkport-assets-v${{ steps.version.outputs.version }}.zip
+          asset_name: thinkport-assets-v${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
 
       - name: Upload logos ZIP to release
@@ -196,8 +240,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./kieks-me-logos-v${{ steps.version.outputs.version }}.zip
-          asset_name: kieks-me-logos-v${{ steps.version.outputs.version }}.zip
+          asset_path: ./thinkport-logos-v${{ steps.version.outputs.version }}.zip
+          asset_name: thinkport-logos-v${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
 
       - name: Upload colors ZIP to release
@@ -206,8 +250,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./kieks-me-colors-v${{ steps.version.outputs.version }}.zip
-          asset_name: kieks-me-colors-v${{ steps.version.outputs.version }}.zip
+          asset_path: ./thinkport-colors-v${{ steps.version.outputs.version }}.zip
+          asset_name: thinkport-colors-v${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
 
       - name: Upload fonts ZIP to release
@@ -216,8 +260,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./kieks-me-fonts-v${{ steps.version.outputs.version }}.zip
-          asset_name: kieks-me-fonts-v${{ steps.version.outputs.version }}.zip
+          asset_path: ./thinkport-fonts-v${{ steps.version.outputs.version }}.zip
+          asset_name: thinkport-fonts-v${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
 
       - name: Upload icons ZIP to release
@@ -226,8 +270,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./kieks-me-icons-v${{ steps.version.outputs.version }}.zip
-          asset_name: kieks-me-icons-v${{ steps.version.outputs.version }}.zip
+          asset_path: ./thinkport-icons-v${{ steps.version.outputs.version }}.zip
+          asset_name: thinkport-icons-v${{ steps.version.outputs.version }}.zip
           asset_content_type: application/zip
         continue-on-error: true
 

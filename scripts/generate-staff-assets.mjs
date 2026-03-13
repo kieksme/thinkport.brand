@@ -186,8 +186,13 @@ async function generateBusinessCardsForPeople(people) {
     const contact = toBusinessCardContact(person);
     info(`Generating business card PDFs`, slug);
 
+    // Write staff business cards into a per-person directory so we can package
+    // one ZIP per person easily in the release workflow.
+    const personCardDir = join(CARD_DIR, slug);
+    ensureDir(personCardDir);
+
     try {
-      await generateBusinessCardWithPdfLib(contact, CARD_DIR);
+      await generateBusinessCardWithPdfLib(contact, personCardDir);
     } catch (err) {
       error(`Failed to generate business card: ${err.message}`, slug);
     }

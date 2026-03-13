@@ -15,7 +15,7 @@ const projectRoot = resolve(__dirname, '..');
 const testData = {
   name: 'Anna Schmidt',
   position: 'Lead Developer',
-  email: 'anna@kieks.me',
+  email: 'anna@thinkport.digital',
   phone: '+49 123 456788',
   mobile: '+49 123 4567880',
   website: 'www.kieks.me',
