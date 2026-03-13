@@ -39,6 +39,17 @@ function escapeXml(s) {
     .replace(/"/g, '&quot;');
 }
 
+/** Keep only the job title (strip company suffix like " | Thinkport" or " bei Thinkport GmbH"). */
+function jobTitleOnly(raw) {
+  if (!raw || typeof raw !== 'string') return '';
+  let t = raw.trim();
+  const strip = [/\s*[|]\s*.*$/i, /\s+bei\s+.*$/i];
+  for (const r of strip) {
+    t = t.replace(r, '').trim();
+  }
+  return t;
+}
+
 /**
  * Create SVG buffer for job title text (centered, white, sans-serif).
  * @param {string} text - Job title
@@ -53,7 +64,7 @@ function createJobTitleSvg(text, width, height, options = {}) {
   const y = Math.round(height * IOS_POSTER_CONFIG.jobTitleYRatio);
   const safeText = text ? escapeXml(String(text).trim()) : '';
   const svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
-  <text x="${width / 2}" y="${y}" font-family="Hanken Grotesk, sans-serif" font-size="${fontSize}" font-weight="600" fill="${fill}" text-anchor="middle" dominant-baseline="middle">${safeText}</text>
+  <text x="${width / 2}" y="${y}" font-family="Hanken Grotesk, sans-serif" font-size="${fontSize}" font-weight="200" fill="${fill}" text-anchor="middle" dominant-baseline="middle">${safeText}</text>
 </svg>`;
   return Buffer.from(svg);
 }
@@ -115,7 +126,7 @@ async function generateIosPoster(portraitPath, jobTitle, outputPath, options = {
     },
   ];
 
-  const jobTitleText = (jobTitle && String(jobTitle).trim()) || '';
+  const jobTitleText = jobTitleOnly(jobTitle);
   if (jobTitleText) {
     const titleSvg = createJobTitleSvg(jobTitleText, width, height);
     const titleBuffer = await sharp(titleSvg)
