@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.4](https://github.com/kieksme/thinkport.brand/compare/v0.5.3...v0.5.4) (2026-03-13)
+
+
+### Bug Fixes
+
+* **release:** add checks for missing GitHub Action secrets before generating staff assets ([b9beddf](https://github.com/kieksme/thinkport.brand/commit/b9beddfe9503b2e8a4e6660b4d99671fbe84fc62))
+
 ## [0.5.3](https://github.com/kieksme/thinkport.brand/compare/v0.5.2...v0.5.3) (2026-03-13)
 
 
