@@ -4,6 +4,7 @@
  *
  * - Fetches people from Thinkport GraphQL API (Basic Auth via THINKPORT_API_USERNAME/PASSWORD)
  * - Generates avatars (multiple sizes, incl. grayscale variant) from remote image URLs
+ * - Generates iOS posters (template + portrait + job title) into release-assets/staff/ios-posters
  * - Generates business card PDFs (front/back) using existing pdf-lib generator
  * - Generates HTML + plain text email footers from templates
  * - Writes everything into release-assets/staff/* for later packaging in CI
@@ -19,6 +20,7 @@ import os from 'os';
 
 import { getActiveThinkportPeople } from './thinkport-api-client.mjs';
 import { generateAvatar } from './generate-avatar.mjs';
+import { generateIosPoster } from './generate-ios-poster.mjs';
 import { generateBusinessCardWithPdfLib } from './generate-card.mjs';
 import { renderTemplate } from './template-engine.mjs';
 import { header, info, success, warn, error, endGroup, table } from './misc-cli-utils.mjs';
@@ -30,6 +32,7 @@ const projectRoot = resolve(__dirname, '..');
 
 const STAFF_BASE_DIR = join(projectRoot, 'release-assets', 'staff');
 const AVATAR_DIR = join(STAFF_BASE_DIR, 'avatars');
+const IOS_POSTER_DIR = join(STAFF_BASE_DIR, 'ios-posters');
 const CARD_DIR = join(STAFF_BASE_DIR, 'business-cards');
 const FOOTER_HTML_DIR = join(STAFF_BASE_DIR, 'email-footers');
 const FOOTER_TEXT_DIR = join(STAFF_BASE_DIR, 'email-footers-text');
@@ -142,6 +145,49 @@ async function generateAvatarsForPeople(people) {
 
   success(`Avatar generation finished – ${generatedCount} files created`);
   info(`Avatar skip report: ${reportPath}`);
+}
+
+async function generatePostersForPeople(people) {
+  ensureDir(IOS_POSTER_DIR);
+
+  let generatedCount = 0;
+
+  for (const person of people) {
+    const slug = person.slug;
+    const companyName = (person.companyName || '').toLowerCase();
+    if (!companyName.includes('thinkport')) {
+      warn(`Skipping iOS poster – external (not Thinkport)`, slug);
+      continue;
+    }
+
+    const imageUrl = person.imageUrl;
+    const jobTitle = person.position || '';
+
+    if (!imageUrl) {
+      warn(`Skipping iOS poster – no image URL`, slug);
+      continue;
+    }
+
+    info(`Generating iOS poster`, slug);
+
+    let portraitPath;
+    try {
+      portraitPath = await downloadImageToTempFile(imageUrl, slug);
+    } catch (err) {
+      error(`Skipping poster – image download failed: ${err.message}`, slug);
+      continue;
+    }
+
+    const outputPath = join(IOS_POSTER_DIR, `poster-${slug}.png`);
+    try {
+      await generateIosPoster(portraitPath, jobTitle, outputPath);
+      generatedCount++;
+    } catch (err) {
+      error(`Failed to generate iOS poster: ${err.message}`, slug);
+    }
+  }
+
+  success(`iOS poster generation finished – ${generatedCount} files created`);
 }
 
 function formatWebsiteForDisplay(person) {
@@ -305,6 +351,7 @@ async function main() {
     );
 
     await generateAvatarsForPeople(people);
+    await generatePostersForPeople(people);
     await generateBusinessCardsForPeople(people);
     await generateEmailFootersForPeople(people);
 

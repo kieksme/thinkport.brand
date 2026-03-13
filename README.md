@@ -124,7 +124,7 @@ Generate sample business cards:
 pnpm generate:card:samples
 ```
 
-Generate staff assets (avatars, business cards, email footers) for active Thinkport employees:
+Generate staff assets (avatars, iOS posters, business cards, email footers) for active Thinkport employees:
 
 ```bash
 pnpm generate:staff:assets
@@ -134,6 +134,13 @@ You can limit the generation to a subset by slug substring:
 
 ```bash
 pnpm generate:staff:assets -- --slug alex
+```
+
+Generate a single iOS poster (template + portrait + job title) or run the sample generator:
+
+```bash
+pnpm run generate:ios:poster -- --portrait path/to/portrait.png --job-title "Operations" --output output/ios-posters/poster.png
+pnpm run generate:ios:poster:samples
 ```
 
 #### Dependencies

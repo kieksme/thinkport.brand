@@ -78,10 +78,21 @@
     },
     "outputDir": "output/business-cards"
   },
+  "iosPoster": {
+    "templatePath": "assets/ios/poster.png",
+    "portraitHeightRatio": 0.4,
+    "jobTitleYRatio": 0.44,
+    "jobTitleFontSizeRatio": 0.045,
+    "jobTitleFill": "#FFFFFF",
+    "defaults": {
+      "outputDir": "output/ios-posters"
+    }
+  },
   "output": {
     "baseDir": "output",
     "avatars": "output/avatars",
     "businessCards": "output/business-cards",
-    "linkedin": "output/linkedin"
+    "linkedin": "output/linkedin",
+    "iosPosters": "output/ios-posters"
   }
 }

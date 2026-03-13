@@ -14,6 +14,7 @@ const testsDir = __dirname;
 const testFiles = [
   'sample-data.test.mjs',
   'generate-card.test.mjs',
+  'generate-ios-poster.test.mjs',
   'template-engine.test.mjs',
   'thinkport-api-client.test.mjs',
 ];
