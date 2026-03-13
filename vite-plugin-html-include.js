@@ -205,6 +205,7 @@ function determineActiveStates(filePath) {
     activeAvatars: false,
     activeGithub: false,
     activeLinkedin: false,
+    activePortfolioPdf: false,
     activeImpressum: false
   };
 
@@ -258,8 +259,10 @@ function determineActiveStates(filePath) {
       states.activeGithub = true;
     } else if (normalizedPath.includes('linkedin.html')) {
       states.activeLinkedin = true;
+    } else if (normalizedPath.includes('portfolio-pdf.html')) {
+      states.activePortfolioPdf = true;
     }
-    
+
     return states;
   }
   

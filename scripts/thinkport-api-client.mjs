@@ -51,6 +51,9 @@ const PEOPLE_QUERY = `
       familyName
       name
       slug
+      description
+      education
+      bookingLink
       image
       email
       jobTitle
@@ -99,6 +102,9 @@ const PEOPLE_WITH_SKILLS_QUERY = `
       familyName
       name
       slug
+      description
+      education
+      bookingLink
       image
       email
       jobTitle
@@ -230,7 +236,27 @@ async function executeGraphQL({ url = DEFAULT_API_URL, query, operationName, var
  * @property {string|null} postalCode
  * @property {string|null} addressLine
  * @property {string|null} position
+ * @property {string|null} description
+ * @property {string|null} education
+ * @property {string|null} bookingLink
  * @property {NormalizedSkill[]} [skills]
+ * @property {NormalizedCertificate[]} [certificates]
+ */
+
+/**
+ * Normalized certificate (from PersonCertificate) for portfolio etc.
+ * @typedef {Object} NormalizedCertificate
+ * @property {string} id
+ * @property {string|null} name
+ * @property {string|null} description
+ * @property {string|null} issuer
+ * @property {string|null} category
+ * @property {string|null} level
+ * @property {string|null} badgeUrl
+ * @property {string|null} issueDate
+ * @property {string|null} expiryDate
+ * @property {string|null} verificationUrl
+ * @property {string[]} [skills]
  */
 
 /**
@@ -277,6 +303,7 @@ function normalizePerson(person) {
     person.jobTitle || person.position || person.department || person.circle || null;
 
   const skills = normalizePersonSkills(person.skills);
+  const certificates = normalizePersonCertificates(person.certificates);
 
   const result = {
     name: displayName,
@@ -296,11 +323,43 @@ function normalizePerson(person) {
     postalCode: address && address.postalCode ? address.postalCode : null,
     addressLine,
     position,
+    description: person.description ?? null,
+    education: person.education ?? null,
+    bookingLink: person.bookingLink ?? null,
   };
   if (skills.length > 0) {
     result.skills = skills;
   }
+  if (certificates.length > 0) {
+    result.certificates = certificates;
+  }
   return result;
+}
+
+/**
+ * Normalize API PersonCertificate[] into a stable shape for generators.
+ * @param {any} rawCertificates
+ * @returns {NormalizedCertificate[]}
+ */
+function normalizePersonCertificates(rawCertificates) {
+  if (!Array.isArray(rawCertificates) || rawCertificates.length === 0) {
+    return [];
+  }
+  return rawCertificates
+    .filter((c) => c && c.id)
+    .map((c) => ({
+      id: c.id,
+      name: c.name ?? null,
+      description: c.description ?? null,
+      issuer: c.issuer ?? null,
+      category: c.category ?? null,
+      level: c.level ?? null,
+      badgeUrl: c.badgeUrl ?? null,
+      issueDate: c.issueDate ?? null,
+      expiryDate: c.expiryDate ?? null,
+      verificationUrl: c.verificationUrl ?? null,
+      skills: Array.isArray(c.skills) ? c.skills.map((s) => (typeof s === 'string' ? s : s?.name ?? '')).filter(Boolean) : [],
+    }));
 }
 
 /**
@@ -348,6 +407,23 @@ export async function getActiveThinkportPeople() {
     .map((p) => p);
 
   return normalized;
+}
+
+/**
+ * Fetch all active Thinkport people including skills and certificates (for portfolio PDFs).
+ * @returns {Promise<NormalizedPerson[]>}
+ */
+export async function getActiveThinkportPeopleWithSkills() {
+  const data = await executeGraphQL({
+    query: PEOPLE_WITH_SKILLS_QUERY,
+    operationName: 'GetPeopleWithSkills',
+    variables: { isThinkport: true, isActive: true },
+  });
+
+  const rawPeople = Array.isArray(data?.people) ? data.people : [];
+  return rawPeople
+    .map((p) => normalizePerson(p))
+    .filter((p) => p && p.name);
 }
 
 /**

@@ -97,6 +97,31 @@ test('buildPortfolioHtml escapes HTML in name', () => {
   assert(html.includes('&lt;script&gt;'), 'Should contain escaped angle brackets');
 });
 
+test('buildPortfolioHtml uses new design: portfolio header with background and logo or fallback', () => {
+  const person = { name: 'Test', slug: 'test', position: 'Role' };
+  const html = buildPortfolioHtml(person);
+  assert(html.includes('portfolio-header'), 'Should have portfolio header section');
+  assert(
+    html.includes('assets/backgrounds/5.svg') || html.includes('background:'),
+    'Should reference header background (5.svg) or fallback background',
+  );
+});
+
+test('buildPortfolioHtml includes certificates section when person has certificates', () => {
+  const person = {
+    name: 'Cert Person',
+    slug: 'cert-person',
+    position: 'Architect',
+    certificates: [
+      { id: 'az-900', name: 'Azure Fundamentals', badgeUrl: 'https://example.com/badge.png' },
+    ],
+  };
+  const html = buildPortfolioHtml(person);
+  assert(html.includes('Zertifikate'), 'Should have Zertifikate section');
+  assert(html.includes('cert-badge'), 'Should have certificate badge class');
+  assert(html.includes('example.com/badge'), 'Should include badge URL');
+});
+
 test('generatePortfolioPdf creates PDF file at output path', async () => {
   if (!existsSync(testOutputDir)) {
     mkdirSync(testOutputDir, { recursive: true });

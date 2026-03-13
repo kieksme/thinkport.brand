@@ -8,11 +8,11 @@
 
 import { fileURLToPath } from 'url';
 import { dirname, join, resolve } from 'path';
-import { writeFileSync, existsSync, mkdirSync } from 'fs';
+import { writeFileSync, existsSync, mkdirSync, readFileSync } from 'fs';
 import { platform } from 'os';
 import puppeteer from 'puppeteer';
 import { loadConfig } from './config-loader.mjs';
-import { info, error } from './misc-cli-utils.mjs';
+import { info, error, warn } from './misc-cli-utils.mjs';
 
 /**
  * Resolve Chrome/Chromium executable for Puppeteer.
@@ -35,6 +35,16 @@ function getChromeExecutablePath() {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = resolve(__dirname, '..');
+
+/**
+ * Header background: SVG from assets/backgrounds. Visual target: assets/portfolio/portfoilo-header.png.
+ * We build the header from this background SVG + SVG logos (no PNG).
+ */
+const PORTFOLIO_HEADER_BACKGROUND = 'assets/backgrounds/5.svg';
+/** @deprecated Use PORTFOLIO_HEADER_BACKGROUND. Kept for compatibility. */
+const PORTFOLIO_HEADER_PATH = PORTFOLIO_HEADER_BACKGROUND;
+/** Single logo (SVG) in header – Thinkport + A Venitus Company combined. */
+const PORTFOLIO_HEADER_LOGO = 'assets/logos/venitus/thinkport-venitus-dark.svg';
 
 const CONFIG = loadConfig();
 const NAVY = CONFIG.brand?.colors?.navy ?? '#1E2A45';
@@ -59,9 +69,36 @@ function escapeHtml(s) {
 }
 
 /**
- * Build single-page portfolio HTML for a person.
- * Skills are shown as horizontal bars (years of experience); already sorted by years desc in normalized data.
- * @param {Object} person - Normalized person with optional skills[]
+ * Format ISO date string for display (e.g. "2024-03-15" → "15.03.2024").
+ * @param {string|null} isoDate
+ * @returns {string}
+ */
+function formatIssueDate(isoDate) {
+  if (!isoDate || typeof isoDate !== 'string') return '—';
+  const match = isoDate.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return escapeHtml(isoDate);
+  return `${match[3]}.${match[2]}.${match[1]}`;
+}
+
+/**
+ * Read a file and return as data URI (for SVG so it loads in PDF regardless of baseURL).
+ * @param {string} absolutePath
+ * @returns {string} data URI or empty string on error
+ */
+function fileToDataUri(absolutePath) {
+  try {
+    const raw = readFileSync(absolutePath, 'utf8');
+    const base64 = Buffer.from(raw, 'utf8').toString('base64');
+    return `data:image/svg+xml;base64,${base64}`;
+  } catch {
+    return '';
+  }
+}
+
+/**
+ * Build single-page portfolio HTML for a person (new design with header image).
+ * Header looks like assets/portfolio/portfoilo-header.png: background from background SVG (assets/backgrounds), branding from SVG logos (Thinkport + A Venitus Company). Then personal info, skill bars, certificates.
+ * @param {Object} person - Normalized person with optional skills[], certificates[]
  * @returns {string} Full HTML document
  */
 export function buildPortfolioHtml(person) {
@@ -69,11 +106,19 @@ export function buildPortfolioHtml(person) {
   const position = escapeHtml(person.position ?? '');
   const email = escapeHtml(person.email ?? '');
   const companyName = escapeHtml(person.companyName ?? 'Thinkport GmbH');
+  const description = person.description ? escapeHtml(person.description) : '';
+  const givenName = person.givenName ? escapeHtml(person.givenName) : (person.name ? escapeHtml(String(person.name).trim().split(/\s+/)[0] || '') : '');
+  const aboutHeading = givenName ? `Über ${givenName}` : 'Über mich';
+  const education = person.education ? escapeHtml(person.education) : '';
+  const bookingLinkUrl = person.bookingLink ? escapeHtml(person.bookingLink) : '';
   const skills = Array.isArray(person.skills) ? person.skills : [];
-  const maxYears = Math.max(
-    1,
-    ...skills.map((s) => (s.yearsOfExperience != null ? s.yearsOfExperience : 0)),
-  );
+  const certificates = Array.isArray(person.certificates) ? person.certificates : [];
+  const maxSkillYears = skills.length
+    ? Math.max(0, ...skills.map((s) => (s.yearsOfExperience != null ? s.yearsOfExperience : 0)))
+    : 0;
+  const experienceText =
+    maxSkillYears >= 10 ? '10+ Jahre' : maxSkillYears > 0 ? `${maxSkillYears} ${maxSkillYears === 1 ? 'Jahr' : 'Jahre'}` : '–';
+  const maxYears = Math.max(1, maxSkillYears);
 
   const skillRows = skills
     .map((s) => {
@@ -89,51 +134,120 @@ export function buildPortfolioHtml(person) {
     })
     .join('');
 
+  const headerBgPath = join(projectRoot, PORTFOLIO_HEADER_BACKGROUND);
+  const headerLogoPath = join(projectRoot, PORTFOLIO_HEADER_LOGO);
+  const hasHeaderBg = existsSync(headerBgPath);
+  const hasHeaderLogo = existsSync(headerLogoPath);
+  /* Embed background and logo as data URIs so they render in PDF (file:// often blocked). */
+  const headerBgDataUri = hasHeaderBg ? fileToDataUri(headerBgPath) : '';
+  const headerLogoDataUri = hasHeaderLogo ? fileToDataUri(headerLogoPath) : '';
+  const headerStyle =
+    headerBgDataUri
+      ? `background-image: url(${escapeHtml(headerBgDataUri)}); background-size: cover; background-position: center; background-repeat: no-repeat;`
+      : `background: ${NAVY};`;
+
+  const certCards = certificates.map((c) => {
+    const title = escapeHtml(c.name || 'Zertifikat');
+    const description = c.description ? escapeHtml(c.description) : '';
+    const issueDate = formatIssueDate(c.issueDate);
+    const issuer = c.issuer ? escapeHtml(c.issuer) : '—';
+    const category = c.category ? escapeHtml(c.category) : '—';
+    const level = c.level ? escapeHtml(c.level) : '—';
+    const skillsList = Array.isArray(c.skills) && c.skills.length > 0 ? c.skills.map((s) => escapeHtml(String(s))).join(', ') : '—';
+    const badgeImg = c.badgeUrl
+      ? `<img class="cert-card-badge" src="${escapeHtml(c.badgeUrl)}" alt="" loading="lazy">`
+      : '';
+    return `
+    <div class="cert-card">
+      <div class="cert-card-head">
+        ${badgeImg}
+        <div class="cert-card-title">${title}</div>
+      </div>
+      ${description ? `<p class="cert-card-desc">${description}</p>` : ''}
+      <dl class="cert-meta">
+        <dt class="cert-meta-label">Ausstellungsdatum</dt><dd class="cert-meta-value">${issueDate}</dd>
+        <dt class="cert-meta-label">Issuer</dt><dd class="cert-meta-value">${issuer}</dd>
+        <dt class="cert-meta-label">Kategorie</dt><dd class="cert-meta-value">${category}</dd>
+        <dt class="cert-meta-label">Level</dt><dd class="cert-meta-value">${level}</dd>
+        <dt class="cert-meta-label">Skills</dt><dd class="cert-meta-value">${skillsList}</dd>
+      </dl>
+    </div>`;
+  }).join('');
+
   return `<!DOCTYPE html>
 <html lang="de">
 <head>
   <meta charset="utf-8">
   <title>${name} – Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; }
-    body { margin: 0; font-family: 'Segoe UI', system-ui, sans-serif; font-size: 11pt; color: ${DARK_GRAY}; }
-    .page { width: 210mm; min-height: 297mm; padding: 0; }
-    .header { background: ${NAVY}; color: ${WHITE}; padding: 20px 24px; display: flex; align-items: center; justify-content: space-between; }
-    .header-left { flex: 1; }
-    .header h1 { margin: 0 0 4px 0; font-size: 22pt; font-weight: 600; }
-    .header .position { color: ${ORANGE}; font-size: 12pt; margin: 0 0 8px 0; }
-    .header .meta { font-size: 9pt; color: ${LIGHT_GRAY}; }
-    .header .avatar { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; background: ${LIGHT_GRAY}; }
-    .section { padding: 16px 24px; }
-    .section.skills { background: ${ORANGE}; color: ${WHITE}; }
-    .section.skills h2 { margin: 0 0 12px 0; font-size: 12pt; font-weight: 600; }
-    .skill-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 10pt; }
+    :root { --page-gutter: 56px; }
+    body { margin: 0; font-family: 'Montserrat', sans-serif; font-size: 11pt; color: ${DARK_GRAY}; }
+    a.email-link { color: ${ORANGE}; text-decoration: underline; font-weight: 600; }
+    .page { width: 210mm; min-height: 297mm; padding: var(--page-gutter); }
+    .portfolio-header { position: relative; min-height: 160px; ${headerStyle} display: flex; align-items: center; justify-content: space-between; padding: 20px var(--page-gutter); margin: calc(-1 * var(--page-gutter)) calc(-1 * var(--page-gutter)) 0 calc(-1 * var(--page-gutter)); width: calc(100% + 2 * var(--page-gutter)); box-sizing: border-box; }
+    .header-branding { display: flex; align-items: center; }
+    .header-logo { height: 54px; width: auto; object-fit: contain; margin: 0; display: block; }
+    .header-avatar-wrap { width: 195px; height: 195px; border-radius: 50%; border: 3px solid #fff; background: rgba(220,235,255,0.45); overflow: hidden; flex-shrink: 0; box-sizing: border-box; }
+    .header-avatar-wrap .header-avatar { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+    .personal-info { display: flex; padding: 16px var(--page-gutter); gap: 24px; border-bottom: 1px dashed ${NAVY}; margin: 0 calc(-1 * var(--page-gutter)); width: calc(100% + 2 * var(--page-gutter)); box-sizing: border-box; }
+    .personal-info-left { flex: 1; }
+    .personal-info-left .name { margin: 0 0 4px 0; font-size: 20pt; font-weight: 700; color: ${DARK_GRAY}; }
+    .personal-info-left .position { margin: 0; font-size: 11pt; color: ${DARK_GRAY}; border-bottom: 2px solid ${NAVY}; padding-bottom: 2px; display: inline-block; }
+    .personal-info-right { flex: 1; text-align: right; font-size: 10pt; color: ${DARK_GRAY}; }
+    .personal-info-right .line { margin: 2px 0; }
+    .section { padding: 16px var(--page-gutter); margin: 0 calc(-1 * var(--page-gutter)); width: calc(100% + 2 * var(--page-gutter)); box-sizing: border-box; }
+    .section.skills { background: #f5f5f5; }
+    .section.skills h2 { margin: 0 0 12px 0; font-size: 12pt; font-weight: 600; color: ${ORANGE}; }
+    .skill-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 10pt; color: ${DARK_GRAY}; }
     .skill-label { flex: 0 0 180px; }
-    .skill-bar-track { flex: 1; height: 10px; background: rgba(255,255,255,0.3); border-radius: 4px; overflow: hidden; }
-    .skill-bar-fill { height: 100%; background: ${WHITE}; border-radius: 4px; transition: width 0.2s; }
+    .skill-bar-track { flex: 1; height: 10px; background: rgba(0,0,0,0.1); border-radius: 4px; overflow: hidden; }
+    .skill-bar-fill { height: 100%; background: ${ORANGE}; border-radius: 4px; }
     .skill-years { flex: 0 0 52px; text-align: right; font-size: 9pt; }
-    .body-section h2 { margin: 0 0 8px 0; font-size: 11pt; color: ${ORANGE}; }
-    .body-section p { margin: 0; line-height: 1.4; }
+    .section.certifications h2 { margin: 0 0 10px 0; font-size: 11pt; color: ${ORANGE}; }
+    .cert-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px 12px; }
+    .cert-card { background: #fafafa; border-left: 2px solid rgba(255,87,34,0.4); border-radius: 2px; padding: 8px 10px; break-inside: avoid; }
+    .cert-card-head { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    .cert-card-badge { height: 36px; width: auto; object-fit: contain; flex-shrink: 0; }
+    .cert-card-title { margin: 0; font-size: 10pt; font-weight: 700; color: ${NAVY}; line-height: 1.2; }
+    .cert-card-desc { margin: 0 0 6px 0; font-size: 8pt; color: ${DARK_GRAY}; line-height: 1.3; }
+    .cert-meta { display: grid; grid-template-columns: auto 1fr; gap: 0 10px; margin: 0; font-size: 7pt; }
+    .cert-meta-label { margin: 0; color: ${NAVY}; font-weight: 600; }
+    .cert-meta-value { margin: 0; color: ${DARK_GRAY}; }
+    .person-description { margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.08); font-size: 10pt; color: ${DARK_GRAY}; line-height: 1.5; white-space: pre-line; }
+    .section-subhead { margin: 16px 0 8px 0; font-size: 11pt; font-weight: 600; color: ${ORANGE}; }
+    .section-text { margin: 0; font-size: 10pt; color: ${DARK_GRAY}; line-height: 1.5; }
   </style>
 </head>
 <body>
   <div class="page">
-    <header class="header">
-      <div class="header-left">
-        <h1>${name}</h1>
-        <p class="position">${position}</p>
-        <p class="meta">${email ? `E-Mail: ${email}` : ''} ${companyName ? ` · ${companyName}` : ''}</p>
+    <header class="portfolio-header">
+      <div class="header-branding">
+        ${headerLogoDataUri ? `<img class="header-logo" src="${escapeHtml(headerLogoDataUri)}" alt="Thinkport – A Venitus Company">` : ''}
       </div>
-      ${person.imageUrl ? `<img class="avatar" src="${escapeHtml(person.imageUrl)}" alt="">` : ''}
+      ${person.imageUrl ? `<div class="header-avatar-wrap"><img class="header-avatar" src="${escapeHtml(person.imageUrl)}" alt=""></div>` : ''}
     </header>
+    <section class="personal-info">
+      <div class="personal-info-left">
+        <h1 class="name">${name}</h1>
+        <p class="position">${position}</p>
+      </div>
+      <div class="personal-info-right">
+        <p class="line">${name}</p>
+        <p class="line">${position}</p>
+        ${email ? `<p class="line">E-Mail: <a href="mailto:${escapeHtml(person.email ?? '')}" class="email-link">${email}</a></p>` : ''}
+        <p class="line">Erfahrung: ${experienceText}</p>
+      </div>
+    </section>
     <section class="section skills">
-      <h2>Skills & Erfahrung</h2>
+      <h2>Skills &amp; Erfahrung</h2>
       ${skillRows || '<p>Keine Skills hinterlegt.</p>'}
     </section>
-    <section class="section body-section">
-      <h2>Über mich</h2>
-      <p>${companyName}</p>
-    </section>
+    ${education ? `<section class="section"><h2>Ausbildung</h2><p class="section-text">${education}</p></section>` : ''}
+    ${certificates.length > 0 ? `<section class="section certifications"><h2>Zertifikate</h2><div class="cert-cards">${certCards}</div>${description ? `<h3 class="section-subhead">${aboutHeading}</h3><div class="person-description">${description}</div>` : ''}</section>` : ''}
+    ${certificates.length === 0 && description ? `<section class="section certifications"><h2>${aboutHeading}</h2><div class="person-description">${description}</div></section>` : ''}
+    ${bookingLinkUrl ? `<section class="section"><h2>Termin buchen</h2><p class="section-text">Über den folgenden Link können Sie einen Termin mit mir vereinbaren: <a href="${bookingLinkUrl}" class="email-link">Termin buchen</a>.</p></section>` : ''}
   </div>
 </body>
 </html>`;
@@ -168,11 +282,13 @@ export async function generatePortfolioPdf(person, outputPath) {
     }
     throw launchErr;
   }
+  const baseURL = 'file://' + projectRoot.replace(/\\/g, '/') + '/';
   try {
     const page = await browser.newPage();
     await page.setContent(html, {
       waitUntil: 'networkidle0',
       timeout: 10000,
+      baseURL,
     });
     const pdfBuffer = await page.pdf({
       format: 'A4',
@@ -200,7 +316,7 @@ export async function generatePortfolioPdf(person, outputPath) {
 /**
  * CLI entry when run as main (e.g. for single-person or sample run).
  * Usage: node scripts/generate-portfolio-pdf.mjs [--slug <slug>]
- * Without --slug: fetch all active people and generate into default output dir.
+ * Without --slug: fetch active Thinkport people (with skills) and generate into default output dir.
  */
 async function main() {
   const args = process.argv.slice(2);
@@ -212,16 +328,23 @@ async function main() {
     }
   }
 
-  const { getActivePeople } = await import('./thinkport-api-client.mjs');
+  const { getActiveThinkportPeopleWithSkills } = await import('./thinkport-api-client.mjs');
   const outputDir = join(projectRoot, 'release-assets', 'staff', 'portfolios');
   if (!existsSync(outputDir)) {
     mkdirSync(outputDir, { recursive: true });
   }
 
-  let people = await getActivePeople();
+  let people = await getActiveThinkportPeopleWithSkills();
   if (slugFilter) {
     const lower = String(slugFilter).toLowerCase();
     people = people.filter((p) => p.slug && p.slug.toLowerCase().includes(lower));
+  }
+
+  if (!existsSync(join(projectRoot, PORTFOLIO_HEADER_BACKGROUND))) {
+    warn(`Portfolio header background not found: ${PORTFOLIO_HEADER_BACKGROUND}`, 'portfolio');
+  }
+  if (!existsSync(join(projectRoot, PORTFOLIO_HEADER_LOGO))) {
+    warn(`Portfolio header logo not found: ${PORTFOLIO_HEADER_LOGO}`, 'portfolio');
   }
 
   for (const person of people) {

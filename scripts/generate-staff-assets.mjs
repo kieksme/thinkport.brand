@@ -7,7 +7,7 @@
  * - Generates iOS posters (template + portrait + job title) into release-assets/staff/ios-posters
  * - Generates business card PDFs (front/back) using existing pdf-lib generator
  * - Generates vCards (.vcf) into release-assets/staff/vcards
- * - Generates portfolio PDFs (all active people, with skill graphs) into release-assets/staff/portfolios
+ * - Generates portfolio PDFs (Thinkport staff only, with skill graphs) into release-assets/staff/portfolios
  * - Generates HTML + plain text email footers from templates
  * - Writes everything into release-assets/staff/* for later packaging in CI
  *
@@ -20,7 +20,7 @@ import { dirname, join, resolve } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import os from 'os';
 
-import { getActiveThinkportPeople, getActivePeople } from './thinkport-api-client.mjs';
+import { getActiveThinkportPeople, getActiveThinkportPeopleWithSkills } from './thinkport-api-client.mjs';
 import { generateAvatar } from './generate-avatar.mjs';
 import { generateIosPoster } from './generate-ios-poster.mjs';
 import { generateBusinessCardWithPdfLib, generateVCard } from './generate-card.mjs';
@@ -364,27 +364,27 @@ async function main() {
   try {
     info('Fetching active Thinkport people from API...');
     let thinkportPeople = await getActiveThinkportPeople();
-    info('Fetching all active people (with skills) for portfolios...');
-    let allActivePeople = await getActivePeople();
+    info('Fetching Thinkport people (with skills) for portfolios...');
+    let thinkportPeopleWithSkills = await getActiveThinkportPeopleWithSkills();
 
     if (args.slugFilter) {
       const filter = args.slugFilter;
       thinkportPeople = thinkportPeople.filter((p) => p.slug.toLowerCase().includes(filter));
-      allActivePeople = allActivePeople.filter((p) => p.slug.toLowerCase().includes(filter));
+      thinkportPeopleWithSkills = thinkportPeopleWithSkills.filter((p) => p.slug.toLowerCase().includes(filter));
       warn(
-        `Slug filter active ("${filter}") – Thinkport: ${thinkportPeople.length}, All: ${allActivePeople.length}`,
+        `Slug filter active ("${filter}") – Thinkport: ${thinkportPeople.length}`,
         'filter',
       );
     }
 
-    if (thinkportPeople.length === 0 && allActivePeople.length === 0) {
-      warn('No people returned from API after filtering – nothing to do');
+    if (thinkportPeople.length === 0 && thinkportPeopleWithSkills.length === 0) {
+      warn('No Thinkport people returned from API after filtering – nothing to do');
       return;
     }
 
     table(
       ['Slug', 'Name', 'Email', 'Location'],
-      (thinkportPeople.length > 0 ? thinkportPeople : allActivePeople).map((p) => [
+      (thinkportPeople.length > 0 ? thinkportPeople : thinkportPeopleWithSkills).map((p) => [
         p.slug,
         p.name,
         p.email || '',
@@ -397,7 +397,7 @@ async function main() {
     await generatePostersForPeople(thinkportPeople);
     await generateBusinessCardsForPeople(thinkportPeople);
     await generateVcardsForPeople(thinkportPeople);
-    await generatePortfoliosForPeople(allActivePeople);
+    await generatePortfoliosForPeople(thinkportPeopleWithSkills);
     await generateEmailFootersForPeople(thinkportPeople);
 
     success('All staff assets generated successfully');

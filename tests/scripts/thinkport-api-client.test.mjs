@@ -175,6 +175,22 @@ async function main() {
     expect(out[2].yearsOfExperience).toBe(null);
   });
 
+  test('normalizePerson includes certificates when present', () => {
+    const raw = {
+      name: 'Cert Person',
+      slug: 'cert-person',
+      certificates: [
+        { id: 'az-900', name: 'Azure Fundamentals', badgeUrl: 'https://example.com/badge.png' },
+      ],
+    };
+    const person = normalizePerson(raw);
+    expect(person.certificates).toBeDefined();
+    expect(person.certificates.length).toBe(1);
+    expect(person.certificates[0].id).toBe('az-900');
+    expect(person.certificates[0].name).toBe('Azure Fundamentals');
+    expect(person.certificates[0].badgeUrl).toBe('https://example.com/badge.png');
+  });
+
   let passed = 0;
   let failed = 0;
 

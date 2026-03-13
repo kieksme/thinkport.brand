@@ -143,7 +143,7 @@ pnpm run generate:ios:poster -- --portrait path/to/portrait.png --job-title "Ope
 pnpm run generate:ios:poster:samples
 ```
 
-Generate portfolio PDFs (one per person, with skill graphs showing years of experience). Requires the same API credentials as staff assets. Output: `release-assets/staff/portfolios/portfolio-<slug>.pdf`. Missing or null `yearsOfExperience` is shown as 0 years.
+Generate portfolio PDFs (one per person, with skill graphs showing years of experience). Requires the same API credentials as staff assets. Output: `release-assets/staff/portfolios/portfolio-<slug>.pdf`. Missing or null `yearsOfExperience` is shown as 0 years. The header uses the background graphic `assets/backgrounds/5.svg` and the Thinkport dark logo (`assets/logos/horizontal/thinkport-horizontal-dark.svg`); certificate badges are taken from the API when available.
 
 ```bash
 pnpm generate:portfolio:pdf
