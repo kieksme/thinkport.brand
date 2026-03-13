@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.0](https://github.com/kieksme/thinkport.brand/compare/v0.4.3...v0.5.0) (2026-03-13)
+
+
+### Features
+
+* **staff-assets:** add generation of staff assets from Thinkport API and update documentation ([3a1bd38](https://github.com/kieksme/thinkport.brand/commit/3a1bd3842916d4907deac887c9a7e9283668823b))
+* **wiki-sync:** add check for wiki repository existence before syncing ([7d7e9ac](https://github.com/kieksme/thinkport.brand/commit/7d7e9acc2a5789cb81e34153aff3910dad647614))
+
 ## [0.4.3](https://github.com/kieksme/thinkport.brand/compare/v0.4.2...v0.4.3) (2026-03-07)
 
 
