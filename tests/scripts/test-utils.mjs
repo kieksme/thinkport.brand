@@ -45,6 +45,9 @@ export function expect(actual) {
     toBeFalsy() {
       assert(!actual, `Expected falsy value, got ${actual}`);
     },
+    toBeDefined() {
+      assert(actual !== undefined, `Expected value to be defined, got ${actual}`);
+    },
     toContain(item) {
       assert(actual.includes(item), `Expected ${actual} to contain ${item}`);
     },

@@ -118,7 +118,7 @@ test('buildPortfolioHtml includes certificates section when person has certifica
   };
   const html = buildPortfolioHtml(person);
   assert(html.includes('Zertifikate'), 'Should have Zertifikate section');
-  assert(html.includes('cert-badge'), 'Should have certificate badge class');
+  assert(html.includes('cert-card'), 'Should have certificate card class');
   assert(html.includes('example.com/badge'), 'Should include badge URL');
 });
 
