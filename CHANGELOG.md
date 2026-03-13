@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.3](https://github.com/kieksme/thinkport.brand/compare/v0.5.2...v0.5.3) (2026-03-13)
+
+
+### Bug Fixes
+
+* **release:** enhance staff ZIP creation logic to check for non-empty directories ([0dd58c9](https://github.com/kieksme/thinkport.brand/commit/0dd58c9d9d7880432c432da64852d71bf0f3cf57))
+
 ## [0.5.2](https://github.com/kieksme/thinkport.brand/compare/v0.5.1...v0.5.2) (2026-03-13)
 
 
