@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.2](https://github.com/kieksme/thinkport.brand/compare/v0.5.1...v0.5.2) (2026-03-13)
+
+
+### Bug Fixes
+
+* **release:** add functionality to upload per-person staff ZIPs to GitHub release ([153e01a](https://github.com/kieksme/thinkport.brand/commit/153e01af4914f5a7d3ea53fed91a1d7e93bbfa2e))
+
 ## [0.5.1](https://github.com/kieksme/thinkport.brand/compare/v0.5.0...v0.5.1) (2026-03-13)
 
 
