@@ -45,8 +45,14 @@ jobs:
           THINKPORT_API_USERNAME: ${{ secrets.THINKPORT_API_USERNAME }}
           THINKPORT_API_PASSWORD: ${{ secrets.THINKPORT_API_PASSWORD }}
         run: |
+          if [ -z "${THINKPORT_API_USERNAME}" ] || [ -z "${THINKPORT_API_PASSWORD}" ]; then
+            echo "::warning::Thinkport staff assets were NOT generated – missing THINKPORT_API_USERNAME and/or THINKPORT_API_PASSWORD GitHub Action secrets."
+            echo "Skipping staff asset generation step."
+            exit 0
+          fi
+
           pnpm generate:staff:assets || {
-            echo "Staff asset generation failed – continuing without staff ZIPs";
+            echo "::warning::Staff asset generation failed – continuing without staff ZIPs (see logs above for details)."
           }
 
       - name: Copy release assets
