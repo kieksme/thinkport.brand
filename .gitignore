@@ -122,3 +122,9 @@ qrcode.png
 
 # playwrite mcp
 .playwright-mcp/
+
+# environment variables
+.env
+
+# release assets
+release-assets/

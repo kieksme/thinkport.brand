@@ -57,7 +57,7 @@ Products and applications built from our brand fundamentals:
 
 - [**Guidelines**](guidelines/) – Comprehensive brand guidelines and usage rules
 
-## Documentation
+### Detailed documentation
 
 Detailed documentation for each aspect of the brand identity:
 
@@ -98,12 +98,19 @@ The repository includes a business card generator that creates print-ready PDFs 
 pnpm install
 ```
 
+If you want to generate staff assets from the Thinkport People API locally, create a `.env` file based on `.env.example` and add:
+
+```bash
+THINKPORT_API_USERNAME=your-username-here
+THINKPORT_API_PASSWORD=your-password-here
+```
+
 1. (Optional but recommended) Install Ghostscript for font-to-path conversion:
    - macOS: `brew install ghostscript`
    - Linux: `sudo apt-get install ghostscript` or `sudo yum install ghostscript`
    - Windows: Download from [Ghostscript website](https://www.ghostscript.com/download/gsdnld.html)
 
-#### Usage
+#### Usage (CLI)
 
 Generate a business card:
 
@@ -115,6 +122,18 @@ Generate sample business cards:
 
 ```bash
 pnpm generate:card:samples
+```
+
+Generate staff assets (avatars, business cards, email footers) for active Thinkport employees:
+
+```bash
+pnpm generate:staff:assets
+```
+
+You can limit the generation to a subset by slug substring:
+
+```bash
+pnpm generate:staff:assets -- --slug alex
 ```
 
 #### Dependencies

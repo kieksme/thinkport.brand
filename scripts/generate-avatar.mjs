@@ -74,7 +74,10 @@ async function generateAvatar(portraitPath, size, outputPath, options = {}) {
         position: 'center',
       });
     if (grayscalePortrait) {
-      portraitPipeline = portraitPipeline.grayscale();
+      // Make grayscale portraits a bit more punchy for better contrast
+      portraitPipeline = portraitPipeline
+        .grayscale()
+        .linear(1.2, -20);
     }
     const resizedPortrait = await portraitPipeline.toBuffer();
 

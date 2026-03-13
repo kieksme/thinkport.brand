@@ -58,7 +58,21 @@ Do NOT use these materials for:
    - Maintain the integrity of logos and brand assets
    - Use appropriate file formats for your medium (print vs. digital)
 
-4. **Keep Materials Updated**
+4. **Generate Staff Assets from the Thinkport API (for internal use)**
+
+- Install dependencies with `pnpm install`
+- Create a `.env` file based on `.env.example` and set:
+  - `THINKPORT_API_USERNAME`
+  - `THINKPORT_API_PASSWORD`
+- Run:
+
+```bash
+pnpm generate:staff:assets
+```
+
+This will generate avatars, business cards, and email footers for active Thinkport employees into `release-assets/staff/`, which are then packaged and uploaded as a dedicated ZIP asset on each GitHub release.
+
+1. **Keep Materials Updated**
    - Periodically check for updates to brand materials
    - Replace outdated assets with current versions
    - Watch the repository for notifications of changes
@@ -117,7 +131,7 @@ To stay informed about changes:
 
 1. **Watch the Repository**
    - Click "Watch" on GitHub to receive notifications
-   
+
 2. **Check for Updates Regularly**
    - Review the commit history periodically
    - Download updated materials when available

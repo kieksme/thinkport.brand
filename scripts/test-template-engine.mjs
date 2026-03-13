@@ -8,35 +8,11 @@ import { readFileSync } from 'fs';
 import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { renderTemplate } from './template-engine.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = resolve(__dirname, '..');
-
-/**
- * Simple template engine - replaces {{variable}} placeholders
- * Also supports {{#if variable}}...{{/if}} conditionals
- */
-function renderTemplate(template, data) {
-  let result = template;
-
-  // Handle conditionals {{#if variable}}...{{/if}}
-  const conditionalRegex = /\{\{#if\s+(\w+)\}\}([\s\S]*?)\{\{\/if\}\}/g;
-  result = result.replace(conditionalRegex, (match, variable, content) => {
-    if (data[variable] && data[variable].toString().trim() !== '') {
-      return content;
-    }
-    return '';
-  });
-
-  // Replace simple placeholders {{variable}}
-  const placeholderRegex = /\{\{(\w+)\}\}/g;
-  result = result.replace(placeholderRegex, (match, variable) => {
-    return data[variable] || '';
-  });
-
-  return result;
-}
 
 // Test data
 const testData = {
