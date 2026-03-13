@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.7.1](https://github.com/kieksme/thinkport.brand/compare/v0.7.0...v0.7.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* **workflows:** update pnpm version to 10.32.1 in deploy and release workflows ([16f6b32](https://github.com/kieksme/thinkport.brand/commit/16f6b32799d6cbf1c6717c3e4ccad6aa907fd540))
+
 ## [0.7.0](https://github.com/kieksme/thinkport.brand/compare/v0.6.0...v0.7.0) (2026-03-13)
 
 
