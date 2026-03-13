@@ -117,15 +117,7 @@ async function generateIosPoster(portraitPath, jobTitle, outputPath, options = {
     .resize(targetW, targetH, { fit: 'contain' })
     .toBuffer();
 
-  const composites = [
-    {
-      input: portraitBuffer,
-      blend: 'over',
-      left: portraitLeft,
-      top: portraitTop,
-    },
-  ];
-
+  const composites = [];
   const jobTitleText = jobTitleOnly(jobTitle);
   if (jobTitleText) {
     const titleSvg = createJobTitleSvg(jobTitleText, width, height);
@@ -140,6 +132,12 @@ async function generateIosPoster(portraitPath, jobTitle, outputPath, options = {
       top: 0,
     });
   }
+  composites.push({
+    input: portraitBuffer,
+    blend: 'over',
+    left: portraitLeft,
+    top: portraitTop,
+  });
 
   const result = await base
     .composite(composites)
@@ -269,4 +267,4 @@ if (isMain) {
   main();
 }
 
-export { generateIosPoster, createJobTitleSvg };
+export { generateIosPoster, createJobTitleSvg, jobTitleOnly };

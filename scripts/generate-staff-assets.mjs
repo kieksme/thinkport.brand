@@ -6,6 +6,7 @@
  * - Generates avatars (multiple sizes, incl. grayscale variant) from remote image URLs
  * - Generates iOS posters (template + portrait + job title) into release-assets/staff/ios-posters
  * - Generates business card PDFs (front/back) using existing pdf-lib generator
+ * - Generates vCards (.vcf) into release-assets/staff/vcards
  * - Generates HTML + plain text email footers from templates
  * - Writes everything into release-assets/staff/* for later packaging in CI
  *
@@ -21,7 +22,7 @@ import os from 'os';
 import { getActiveThinkportPeople } from './thinkport-api-client.mjs';
 import { generateAvatar } from './generate-avatar.mjs';
 import { generateIosPoster } from './generate-ios-poster.mjs';
-import { generateBusinessCardWithPdfLib } from './generate-card.mjs';
+import { generateBusinessCardWithPdfLib, generateVCard } from './generate-card.mjs';
 import { renderTemplate } from './template-engine.mjs';
 import { header, info, success, warn, error, endGroup, table } from './misc-cli-utils.mjs';
 import { readFileSync } from 'fs';
@@ -34,6 +35,7 @@ const STAFF_BASE_DIR = join(projectRoot, 'release-assets', 'staff');
 const AVATAR_DIR = join(STAFF_BASE_DIR, 'avatars');
 const IOS_POSTER_DIR = join(STAFF_BASE_DIR, 'ios-posters');
 const CARD_DIR = join(STAFF_BASE_DIR, 'business-cards');
+const VCARD_DIR = join(STAFF_BASE_DIR, 'vcards');
 const FOOTER_HTML_DIR = join(STAFF_BASE_DIR, 'email-footers');
 const FOOTER_TEXT_DIR = join(STAFF_BASE_DIR, 'email-footers-text');
 const REPORT_DIR = join(STAFF_BASE_DIR, 'reports');
@@ -224,6 +226,24 @@ function toBusinessCardContact(person) {
   };
 }
 
+async function generateVcardsForPeople(people) {
+  ensureDir(VCARD_DIR);
+  let generatedCount = 0;
+  for (const person of people) {
+    const slug = person.slug;
+    const contact = {
+      ...toBusinessCardContact(person),
+      companyName: person.companyName || 'Thinkport GmbH',
+    };
+    const vcard = generateVCard(contact);
+    const outputPath = join(VCARD_DIR, `${slug}.vcf`);
+    writeFileSync(outputPath, vcard, 'utf8');
+    info(`vCard generated`, slug);
+    generatedCount++;
+  }
+  success(`vCard generation finished – ${generatedCount} files created`);
+}
+
 async function generateBusinessCardsForPeople(people) {
   ensureDir(CARD_DIR);
 
@@ -353,6 +373,7 @@ async function main() {
     await generateAvatarsForPeople(people);
     await generatePostersForPeople(people);
     await generateBusinessCardsForPeople(people);
+    await generateVcardsForPeople(people);
     await generateEmailFootersForPeople(people);
 
     success('All staff assets generated successfully');

@@ -3,7 +3,7 @@
  * Tests for generate-ios-poster.mjs
  */
 
-import { generateIosPoster, createJobTitleSvg } from '../../scripts/generate-ios-poster.mjs';
+import { generateIosPoster, createJobTitleSvg, jobTitleOnly } from '../../scripts/generate-ios-poster.mjs';
 import { existsSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
 import { fileURLToPath } from 'url';
@@ -56,12 +56,35 @@ async function runTests() {
 
 const { test, run } = await runTests();
 
-test('createJobTitleSvg returns buffer with SVG content', () => {
+test('jobTitleOnly returns empty for empty or null', () => {
+  assert(jobTitleOnly('') === '', 'Empty string');
+  assert(jobTitleOnly(null) === '', 'null');
+  assert(jobTitleOnly(undefined) === '', 'undefined');
+  assert(jobTitleOnly('   ') === '', 'Whitespace only');
+});
+
+test('jobTitleOnly returns plain title unchanged', () => {
+  assert(jobTitleOnly('Operations') === 'Operations', 'Operations');
+  assert(jobTitleOnly('Consulting') === 'Consulting', 'Consulting');
+});
+
+test('jobTitleOnly strips suffix after |', () => {
+  assert(jobTitleOnly('Senior Consultant | Thinkport') === 'Senior Consultant', 'Pipe suffix');
+  assert(jobTitleOnly('Lead | Thinkport GmbH') === 'Lead', 'Pipe with GmbH');
+});
+
+test('jobTitleOnly strips suffix after " bei "', () => {
+  assert(jobTitleOnly('Geschäftsführer bei Thinkport GmbH') === 'Geschäftsführer', 'bei suffix');
+  assert(jobTitleOnly('Dev bei External') === 'Dev', 'bei other');
+});
+
+test('createJobTitleSvg returns buffer with SVG content and font-weight 200', () => {
   const buf = createJobTitleSvg('Operations', 400, 800);
   assert(Buffer.isBuffer(buf), 'Should return a Buffer');
   const str = buf.toString('utf8');
   assert(str.includes('Operations'), 'SVG should contain job title text');
   assert(str.includes('text-anchor="middle"'), 'SVG should center text');
+  assert(str.includes('font-weight="200"'), 'SVG should use font-weight 200');
 });
 
 test('generateIosPoster throws when portrait path is missing', async () => {
@@ -158,6 +181,26 @@ test('generateIosPoster accepts empty job title', async () => {
   await generateIosPoster(portraitPath, '', outputPath);
 
   assert(existsSync(outputPath), 'Output should be created with empty job title');
+});
+
+test('generateIosPoster with job title containing " | Thinkport" only renders cleaned title', async () => {
+  const templatePath = join(projectRoot, 'assets', 'ios', 'poster.png');
+  if (!existsSync(templatePath)) {
+    throw new Error('Template assets/ios/poster.png required for test');
+  }
+  let portraitPath = join(testOutputDir, 'test-portrait.png');
+  if (!existsSync(portraitPath)) {
+    mkdirSync(testOutputDir, { recursive: true });
+    await sharp({
+      create: { width: 200, height: 200, channels: 4, background: { r: 80, g: 80, b: 80, alpha: 1 } },
+    })
+      .png()
+      .toFile(portraitPath);
+  }
+  const outputPath = join(testOutputDir, 'ios-poster-stripped-title.png');
+  await generateIosPoster(portraitPath, 'Operations | Thinkport GmbH', outputPath);
+  assert(existsSync(outputPath), 'Output should be created');
+  assert(jobTitleOnly('Operations | Thinkport GmbH') === 'Operations', 'jobTitleOnly strips suffix');
 });
 
 const success = await run();

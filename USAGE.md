@@ -70,7 +70,7 @@ Do NOT use these materials for:
 pnpm generate:staff:assets
 ```
 
-This will generate avatars, iOS posters, business cards, and email footers for active Thinkport employees into `release-assets/staff/` (including `release-assets/staff/ios-posters/` for per-person posters), which are then packaged and uploaded as a dedicated ZIP asset on each GitHub release.
+This will generate avatars, iOS posters, business cards, vCards (.vcf per person in `release-assets/staff/vcards/`), and email footers for active Thinkport employees into `release-assets/staff/` (including `release-assets/staff/ios-posters/` for per-person posters), which are then packaged and uploaded as a dedicated ZIP asset on each GitHub release.
 
 1. **Keep Materials Updated**
    - Periodically check for updates to brand materials

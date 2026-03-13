@@ -1132,6 +1132,8 @@ const isMainModule = process.argv[1] && (
   process.argv[1].endsWith('generate-card.mjs')
 );
 
+export { generateVCard };
+
 if (isMainModule) {
   main().catch((err) => {
     error(`Fehler: ${err.message}`);

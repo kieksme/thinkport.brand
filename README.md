@@ -124,7 +124,7 @@ Generate sample business cards:
 pnpm generate:card:samples
 ```
 
-Generate staff assets (avatars, iOS posters, business cards, email footers) for active Thinkport employees:
+Generate staff assets (avatars, iOS posters, business cards, vCards, email footers) for active Thinkport employees:
 
 ```bash
 pnpm generate:staff:assets
