@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.0](https://github.com/kieksme/thinkport.brand/compare/v0.6.0...v0.7.0) (2026-03-13)
+
+
+### Features
+
+* **portfolio:** add portfolio PDF generation for active staff and update related documentation ([934a7bf](https://github.com/kieksme/thinkport.brand/commit/934a7bfb115d1becad536643b712cadfe6817388))
+* **portfolio:** enhance portfolio PDF generation with new design and certificate support ([c08b7ba](https://github.com/kieksme/thinkport.brand/commit/c08b7ba643f84a0a2b0b880016e23b1e47ec57f1))
+
 ## [0.6.0](https://github.com/kieksme/thinkport.brand/compare/v0.5.4...v0.6.0) (2026-03-13)
 
 
