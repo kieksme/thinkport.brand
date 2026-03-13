@@ -98,8 +98,8 @@ jobs:
           fi
           cd ..
 
-          # Create staff assets ZIPs if staff directory exists
-          if [ -d release-assets/staff ]; then
+          # Create staff assets ZIPs if staff directory exists AND contains files
+          if [ -d release-assets/staff ] && find release-assets/staff -type f -print -quit | grep -q .; then
             cd release-assets
             zip -r ../thinkport-staff-assets-v${VERSION}.zip staff
 
@@ -140,13 +140,18 @@ jobs:
                   cp "email-footers-text/email-footer-${slug}.txt" "$tmpdir/email-footers-text"/
                 fi
 
-                zip -r "../../thinkport-staff-${slug}-v${VERSION}.zip" "$tmpdir"
+                # Only create ZIP if this person actually has files
+                if find "$tmpdir" -type f -print -quit | grep -q .; then
+                  zip -r "../../thinkport-staff-${slug}-v${VERSION}.zip" "$tmpdir"
+                fi
                 rm -rf "$tmpdir"
               done
               cd ..
             fi
 
             cd ..
+          else
+            echo "No staff files found – skipping staff ZIP creation"
           fi
 
       - name: Generate Release README
