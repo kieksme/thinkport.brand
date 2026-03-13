@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.5.1](https://github.com/kieksme/thinkport.brand/compare/v0.5.0...v0.5.1) (2026-03-13)
+
+
+### Bug Fixes
+
+* **branding:** update references from kieks to thinkport in release workflow, HTML contact, and staff asset generation ([f0f4cb3](https://github.com/kieksme/thinkport.brand/commit/f0f4cb32b7b221891a1d6faf0183338bfb290ffe))
+
 ## [0.5.0](https://github.com/kieksme/thinkport.brand/compare/v0.4.3...v0.5.0) (2026-03-13)
 
 
