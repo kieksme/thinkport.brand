@@ -6,6 +6,7 @@
 import {
   buildBasicAuthHeaderFromEnv,
   normalizePerson,
+  normalizePersonSkills,
 } from '../../scripts/thinkport-api-client.mjs';
 import { assert, expect } from './test-utils.mjs';
 
@@ -127,6 +128,51 @@ async function main() {
     expect(person.locationName).toBe('Remote');
     expect(person.addressLine).toBe(null);
     expect(person.position).toBe('Growth');
+  });
+
+  test('normalizePerson includes skills when present, sorted by yearsOfExperience desc', () => {
+    const raw = {
+      name: 'Skill Person',
+      slug: 'skill-person',
+      skills: [
+        { skill: { id: 'ts', name: 'TypeScript', category: 'Language', logo: null }, yearsOfExperience: 2 },
+        { skill: { id: 'go', name: 'Go', category: 'Language', logo: null }, yearsOfExperience: 5 },
+        { skill: { id: 'react', name: 'React', category: 'Frontend', logo: null }, yearsOfExperience: null },
+      ],
+    };
+
+    const person = normalizePerson(raw);
+    expect(person.skills).toBeDefined();
+    expect(person.skills.length).toBe(3);
+    expect(person.skills[0].id).toBe('go');
+    expect(person.skills[0].yearsOfExperience).toBe(5);
+    expect(person.skills[1].id).toBe('ts');
+    expect(person.skills[1].yearsOfExperience).toBe(2);
+    expect(person.skills[2].id).toBe('react');
+    expect(person.skills[2].yearsOfExperience).toBe(null);
+  });
+
+  test('normalizePersonSkills returns empty array for empty or invalid input', () => {
+    expect(normalizePersonSkills(null).length).toBe(0);
+    expect(normalizePersonSkills(undefined).length).toBe(0);
+    expect(normalizePersonSkills([]).length).toBe(0);
+    expect(normalizePersonSkills([{ skill: null }]).length).toBe(0);
+  });
+
+  test('normalizePersonSkills normalizes and sorts by yearsOfExperience desc', () => {
+    const raw = [
+      { skill: { id: 'a', name: 'A' }, yearsOfExperience: 1 },
+      { skill: { id: 'b', name: 'B' }, yearsOfExperience: 10 },
+      { skill: { id: 'c', name: 'C' }, yearsOfExperience: null },
+    ];
+    const out = normalizePersonSkills(raw);
+    expect(out.length).toBe(3);
+    expect(out[0].id).toBe('b');
+    expect(out[0].yearsOfExperience).toBe(10);
+    expect(out[1].id).toBe('a');
+    expect(out[1].yearsOfExperience).toBe(1);
+    expect(out[2].id).toBe('c');
+    expect(out[2].yearsOfExperience).toBe(null);
   });
 
   let passed = 0;

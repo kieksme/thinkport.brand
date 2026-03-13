@@ -20,6 +20,7 @@
     "generate:staff:assets": "node scripts/generate-staff-assets.mjs",
     "generate:ios:poster": "node scripts/generate-ios-poster.mjs",
     "generate:ios:poster:samples": "node scripts/generate-ios-poster-samples.mjs",
+    "generate:portfolio:pdf": "node scripts/generate-portfolio-pdf.mjs",
     "test": "node tests/scripts/run-all-tests.mjs"
   },
   "keywords": [
@@ -47,5 +48,5 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "packageManager": "pnpm@10.30.3"
+  "packageManager": "pnpm@10.32.1"
 }

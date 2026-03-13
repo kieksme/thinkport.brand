@@ -15,6 +15,7 @@ const testFiles = [
   'sample-data.test.mjs',
   'generate-card.test.mjs',
   'generate-ios-poster.test.mjs',
+  'generate-portfolio-pdf.test.mjs',
   'template-engine.test.mjs',
   'thinkport-api-client.test.mjs',
 ];

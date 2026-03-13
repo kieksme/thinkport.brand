@@ -124,7 +124,7 @@ Generate sample business cards:
 pnpm generate:card:samples
 ```
 
-Generate staff assets (avatars, iOS posters, business cards, vCards, email footers) for active Thinkport employees:
+Generate staff assets (avatars, iOS posters, business cards, vCards, portfolio PDFs, email footers) for active Thinkport employees:
 
 ```bash
 pnpm generate:staff:assets
@@ -142,6 +142,15 @@ Generate a single iOS poster (template + portrait + job title) or run the sample
 pnpm run generate:ios:poster -- --portrait path/to/portrait.png --job-title "Operations" --output output/ios-posters/poster.png
 pnpm run generate:ios:poster:samples
 ```
+
+Generate portfolio PDFs (one per person, with skill graphs showing years of experience). Requires the same API credentials as staff assets. Output: `release-assets/staff/portfolios/portfolio-<slug>.pdf`. Missing or null `yearsOfExperience` is shown as 0 years.
+
+```bash
+pnpm generate:portfolio:pdf
+pnpm generate:portfolio:pdf -- --slug alex
+```
+
+If portfolio PDFs fail with "Could not find Chrome", either install Chromium for Puppeteer (`pnpm exec puppeteer browsers install chrome`) or use system Chrome: on macOS the script will use `/Applications/Google Chrome.app` if present; otherwise set `PUPPETEER_EXECUTABLE_PATH` to your Chrome binary.
 
 #### Dependencies
 

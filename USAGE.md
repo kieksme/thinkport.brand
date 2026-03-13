@@ -70,7 +70,14 @@ Do NOT use these materials for:
 pnpm generate:staff:assets
 ```
 
-This will generate avatars, iOS posters, business cards, vCards (.vcf per person in `release-assets/staff/vcards/`), and email footers for active Thinkport employees into `release-assets/staff/` (including `release-assets/staff/ios-posters/` for per-person posters), which are then packaged and uploaded as a dedicated ZIP asset on each GitHub release.
+This will generate avatars, iOS posters, business cards, vCards (`.vcf` per person in `release-assets/staff/vcards/`), portfolio PDFs (one per active person with skill graphs in `release-assets/staff/portfolios/`), and email footers for active Thinkport employees into `release-assets/staff/` (including `release-assets/staff/ios-posters/` for per-person posters), which are then packaged and uploaded as a dedicated ZIP asset on each GitHub release. Portfolio PDFs include all active people (Thinkport and external) and visualize each person’s skills with years of experience; missing experience values are shown as 0 years.
+
+To generate only portfolio PDFs (same API credentials required):
+
+```bash
+pnpm generate:portfolio:pdf
+pnpm generate:portfolio:pdf -- --slug <substring>
+```
 
 1. **Keep Materials Updated**
    - Periodically check for updates to brand materials

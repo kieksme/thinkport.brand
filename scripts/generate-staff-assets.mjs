@@ -1,12 +1,13 @@
 #!/usr/bin/env node
 /**
- * Generate staff assets (avatars, business cards, email footers) for all active Thinkport employees.
+ * Generate staff assets (avatars, business cards, email footers, portfolio PDFs) for active staff.
  *
  * - Fetches people from Thinkport GraphQL API (Basic Auth via THINKPORT_API_USERNAME/PASSWORD)
  * - Generates avatars (multiple sizes, incl. grayscale variant) from remote image URLs
  * - Generates iOS posters (template + portrait + job title) into release-assets/staff/ios-posters
  * - Generates business card PDFs (front/back) using existing pdf-lib generator
  * - Generates vCards (.vcf) into release-assets/staff/vcards
+ * - Generates portfolio PDFs (all active people, with skill graphs) into release-assets/staff/portfolios
  * - Generates HTML + plain text email footers from templates
  * - Writes everything into release-assets/staff/* for later packaging in CI
  *
@@ -19,10 +20,11 @@ import { dirname, join, resolve } from 'path';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
 import os from 'os';
 
-import { getActiveThinkportPeople } from './thinkport-api-client.mjs';
+import { getActiveThinkportPeople, getActivePeople } from './thinkport-api-client.mjs';
 import { generateAvatar } from './generate-avatar.mjs';
 import { generateIosPoster } from './generate-ios-poster.mjs';
 import { generateBusinessCardWithPdfLib, generateVCard } from './generate-card.mjs';
+import { generatePortfolioPdf } from './generate-portfolio-pdf.mjs';
 import { renderTemplate } from './template-engine.mjs';
 import { header, info, success, warn, error, endGroup, table } from './misc-cli-utils.mjs';
 import { readFileSync } from 'fs';
@@ -36,6 +38,7 @@ const AVATAR_DIR = join(STAFF_BASE_DIR, 'avatars');
 const IOS_POSTER_DIR = join(STAFF_BASE_DIR, 'ios-posters');
 const CARD_DIR = join(STAFF_BASE_DIR, 'business-cards');
 const VCARD_DIR = join(STAFF_BASE_DIR, 'vcards');
+const PORTFOLIO_DIR = join(STAFF_BASE_DIR, 'portfolios');
 const FOOTER_HTML_DIR = join(STAFF_BASE_DIR, 'email-footers');
 const FOOTER_TEXT_DIR = join(STAFF_BASE_DIR, 'email-footers-text');
 const REPORT_DIR = join(STAFF_BASE_DIR, 'reports');
@@ -244,6 +247,23 @@ async function generateVcardsForPeople(people) {
   success(`vCard generation finished – ${generatedCount} files created`);
 }
 
+async function generatePortfoliosForPeople(people) {
+  ensureDir(PORTFOLIO_DIR);
+  let generatedCount = 0;
+  for (const person of people) {
+    const slug = person.slug;
+    const outputPath = join(PORTFOLIO_DIR, `portfolio-${slug}.pdf`);
+    try {
+      await generatePortfolioPdf(person, outputPath);
+      info(`Portfolio generated`, slug);
+      generatedCount++;
+    } catch (err) {
+      error(`Portfolio failed for ${slug}: ${err.message}`);
+    }
+  }
+  success(`Portfolio PDF generation finished – ${generatedCount} files created`);
+}
+
 async function generateBusinessCardsForPeople(people) {
   ensureDir(CARD_DIR);
 
@@ -343,25 +363,28 @@ async function main() {
 
   try {
     info('Fetching active Thinkport people from API...');
-    let people = await getActiveThinkportPeople();
+    let thinkportPeople = await getActiveThinkportPeople();
+    info('Fetching all active people (with skills) for portfolios...');
+    let allActivePeople = await getActivePeople();
 
     if (args.slugFilter) {
       const filter = args.slugFilter;
-      people = people.filter((p) => p.slug.toLowerCase().includes(filter));
+      thinkportPeople = thinkportPeople.filter((p) => p.slug.toLowerCase().includes(filter));
+      allActivePeople = allActivePeople.filter((p) => p.slug.toLowerCase().includes(filter));
       warn(
-        `Slug filter active ("${filter}") – processing ${people.length} person(s)`,
+        `Slug filter active ("${filter}") – Thinkport: ${thinkportPeople.length}, All: ${allActivePeople.length}`,
         'filter',
       );
     }
 
-    if (people.length === 0) {
+    if (thinkportPeople.length === 0 && allActivePeople.length === 0) {
       warn('No people returned from API after filtering – nothing to do');
       return;
     }
 
     table(
       ['Slug', 'Name', 'Email', 'Location'],
-      people.map((p) => [
+      (thinkportPeople.length > 0 ? thinkportPeople : allActivePeople).map((p) => [
         p.slug,
         p.name,
         p.email || '',
@@ -370,11 +393,12 @@ async function main() {
       { padding: 2, headerColor: 'cyan', border: false },
     );
 
-    await generateAvatarsForPeople(people);
-    await generatePostersForPeople(people);
-    await generateBusinessCardsForPeople(people);
-    await generateVcardsForPeople(people);
-    await generateEmailFootersForPeople(people);
+    await generateAvatarsForPeople(thinkportPeople);
+    await generatePostersForPeople(thinkportPeople);
+    await generateBusinessCardsForPeople(thinkportPeople);
+    await generateVcardsForPeople(thinkportPeople);
+    await generatePortfoliosForPeople(allActivePeople);
+    await generateEmailFootersForPeople(thinkportPeople);
 
     success('All staff assets generated successfully');
   } catch (err) {

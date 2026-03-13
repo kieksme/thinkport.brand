@@ -53,6 +53,7 @@ const PEOPLE_QUERY = `
       slug
       image
       email
+      jobTitle
       circle
       department
       locationLabel
@@ -83,6 +84,63 @@ const PEOPLE_QUERY = `
         issueDate
         expiryDate
         verificationUrl
+      }
+    }
+  }
+`;
+
+/**
+ * Query for people including skills with yearsOfExperience (for portfolio PDF etc.).
+ */
+const PEOPLE_WITH_SKILLS_QUERY = `
+  query GetPeopleWithSkills($isThinkport: Boolean!, $isActive: Boolean) {
+    people(isThinkport: $isThinkport, isActive: $isActive) {
+      givenName
+      familyName
+      name
+      slug
+      image
+      email
+      jobTitle
+      circle
+      department
+      locationLabel
+      location {
+        id
+        name
+        description
+        address {
+          street
+          postalCode
+          city
+          country
+        }
+      }
+      company {
+        id
+        name
+        url
+        logo
+        active
+      }
+      certificates {
+        id
+        name
+        issuer
+        level
+        badgeUrl
+        issueDate
+        expiryDate
+        verificationUrl
+      }
+      skills {
+        skill {
+          id
+          name
+          category
+          logo
+        }
+        yearsOfExperience
       }
     }
   }
@@ -145,6 +203,16 @@ async function executeGraphQL({ url = DEFAULT_API_URL, query, operationName, var
 }
 
 /**
+ * Normalized skill with years of experience (from PersonSkill).
+ * @typedef {Object} NormalizedSkill
+ * @property {string} id
+ * @property {string|null} name
+ * @property {string|null} category
+ * @property {string|null} logoUrl
+ * @property {number|null} yearsOfExperience
+ */
+
+/**
  * Normalized person model used by generators.
  * @typedef {Object} NormalizedPerson
  * @property {string} name
@@ -162,6 +230,7 @@ async function executeGraphQL({ url = DEFAULT_API_URL, query, operationName, var
  * @property {string|null} postalCode
  * @property {string|null} addressLine
  * @property {string|null} position
+ * @property {NormalizedSkill[]} [skills]
  */
 
 /**
@@ -207,7 +276,9 @@ function normalizePerson(person) {
   const position =
     person.jobTitle || person.position || person.department || person.circle || null;
 
-  return {
+  const skills = normalizePersonSkills(person.skills);
+
+  const result = {
     name: displayName,
     slug:
       person.slug ||
@@ -226,6 +297,34 @@ function normalizePerson(person) {
     addressLine,
     position,
   };
+  if (skills.length > 0) {
+    result.skills = skills;
+  }
+  return result;
+}
+
+/**
+ * Normalize API PersonSkill[] into a stable shape for generators.
+ * Sorted by yearsOfExperience descending (null treated as 0).
+ * @param {any} rawSkills
+ * @returns {NormalizedSkill[]}
+ */
+function normalizePersonSkills(rawSkills) {
+  if (!Array.isArray(rawSkills) || rawSkills.length === 0) {
+    return [];
+  }
+  const list = rawSkills
+    .filter((s) => s && s.skill)
+    .map((s) => ({
+      id: s.skill.id || '',
+      name: s.skill.name ?? null,
+      category: s.skill.category ?? null,
+      logoUrl: s.skill.logo ?? null,
+      yearsOfExperience: s.yearsOfExperience != null ? Number(s.yearsOfExperience) : null,
+    }))
+    .filter((s) => s.id);
+  list.sort((a, b) => (b.yearsOfExperience ?? 0) - (a.yearsOfExperience ?? 0));
+  return list;
 }
 
 /**
@@ -251,5 +350,42 @@ export async function getActiveThinkportPeople() {
   return normalized;
 }
 
-export { buildBasicAuthHeaderFromEnv, executeGraphQL, normalizePerson, DEFAULT_API_URL };
+/**
+ * Fetch all active people (Thinkport and external) with skills for portfolio etc.
+ * Uses two queries (isThinkport: true and false) and merges; deduplicates by slug.
+ * @returns {Promise<NormalizedPerson[]>}
+ */
+export async function getActivePeople() {
+  const [dataThinkport, dataExternal] = await Promise.all([
+    executeGraphQL({
+      query: PEOPLE_WITH_SKILLS_QUERY,
+      operationName: 'GetPeopleWithSkills',
+      variables: { isThinkport: true, isActive: true },
+    }),
+    executeGraphQL({
+      query: PEOPLE_WITH_SKILLS_QUERY,
+      operationName: 'GetPeopleWithSkills',
+      variables: { isThinkport: false, isActive: true },
+    }),
+  ]);
+
+  const rawThinkport = Array.isArray(dataThinkport?.people) ? dataThinkport.people : [];
+  const rawExternal = Array.isArray(dataExternal?.people) ? dataExternal.people : [];
+  const bySlug = new Map();
+  for (const p of [...rawThinkport, ...rawExternal]) {
+    const normalized = normalizePerson(p);
+    if (normalized && normalized.name && !bySlug.has(normalized.slug)) {
+      bySlug.set(normalized.slug, normalized);
+    }
+  }
+  return Array.from(bySlug.values());
+}
+
+export {
+  buildBasicAuthHeaderFromEnv,
+  executeGraphQL,
+  normalizePerson,
+  normalizePersonSkills,
+  DEFAULT_API_URL,
+};
 
