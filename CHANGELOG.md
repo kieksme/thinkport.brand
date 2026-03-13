@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.6.0](https://github.com/kieksme/thinkport.brand/compare/v0.5.4...v0.6.0) (2026-03-13)
+
+
+### Features
+
+* **ios-posters:** add iOS poster generation and update documentation ([39dc637](https://github.com/kieksme/thinkport.brand/commit/39dc6377a2e98eeaeddab5ad3e7a24d837aad241))
+* **staff-assets:** add vCard generation for active Thinkport employees and update documentation ([6f474e8](https://github.com/kieksme/thinkport.brand/commit/6f474e825e2e0954fc02fd571146aff70979ff82))
+
+
+### Bug Fixes
+
+* **poster-generation:** adjust job title font size and add function to strip company suffix from job titles ([feb1b7b](https://github.com/kieksme/thinkport.brand/commit/feb1b7b18614ed478f4f2fa71f89efed11bcc198))
+* **release:** add condition to upload icons ZIP only if it exists ([eea743f](https://github.com/kieksme/thinkport.brand/commit/eea743fad42913e0727bfdfac2b77c02450f6198))
+
 ## [0.5.4](https://github.com/kieksme/thinkport.brand/compare/v0.5.3...v0.5.4) (2026-03-13)
 
 
