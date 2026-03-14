@@ -122,6 +122,84 @@ test('buildPortfolioHtml includes certificates section when person has certifica
   assert(html.includes('example.com/badge'), 'Should include badge URL');
 });
 
+test('buildPortfolioHtml shows Termin buchen section with QR section styling when bookingLink is set', () => {
+  const person = {
+    name: 'Bookable',
+    slug: 'bookable',
+    position: 'Consultant',
+    bookingLink: 'https://cal.example.com/book',
+  };
+  const html = buildPortfolioHtml(person);
+  assert(html.includes('Termin buchen'), 'Should have Termin buchen heading');
+  assert(html.includes('qr-section'), 'Should have QR section class');
+  assert(html.includes('cal.example.com/book'), 'Should include booking URL in link');
+  assert(html.includes('e5e7e6'), 'Should have gray QR section background');
+});
+
+test('buildPortfolioHtml does not show Termin buchen section when bookingLink is missing', () => {
+  const person = { name: 'No Booking', slug: 'no-booking', position: 'Dev' };
+  const html = buildPortfolioHtml(person);
+  assert(!html.includes('Termin buchen</h2>'), 'Should not have Termin buchen section');
+});
+
+test('buildPortfolioHtml includes booking QR when options.bookingQrDataUrl is passed', () => {
+  const person = {
+    name: 'QR Person',
+    slug: 'qr-person',
+    position: 'Lead',
+    bookingLink: 'https://book.example.com',
+  };
+  const fakeQrDataUrl = 'data:image/png;base64,iVBORw0KGgo=';
+  const html = buildPortfolioHtml(person, { bookingQrDataUrl: fakeQrDataUrl });
+  assert(html.includes('Buchungslink'), 'Should have booking QR caption');
+  assert(html.includes('data:image/png;base64,'), 'Should embed QR data URL');
+  assert(html.includes('alt="QR Code Termin buchen"'), 'Booking QR img should have alt');
+});
+
+test('buildPortfolioHtml includes vCard QR in separate section when options.vcardQrDataUrl is passed', () => {
+  const person = { name: 'VCard Person', slug: 'vcard-person', position: 'Architect' };
+  const fakeVcardQrDataUrl = 'data:image/png;base64,abcd1234=';
+  const html = buildPortfolioHtml(person, { vcardQrDataUrl: fakeVcardQrDataUrl });
+  assert(html.includes('qr-section'), 'Should have QR section class');
+  assert(html.includes('Kontaktdaten</h2>'), 'Should have Kontaktdaten heading');
+  assert(html.includes('Kontakt speichern'), 'Should have vCard caption');
+  assert(html.includes('alt="QR Code vCard Kontakt"'), 'vCard QR img should have alt');
+  assert(html.includes('abcd1234='), 'Should embed vCard QR data URL');
+});
+
+test('buildPortfolioHtml booking section only has booking QR; vCard is in own section', () => {
+  const person = {
+    name: 'Dual QR',
+    slug: 'dual-qr',
+    position: 'Consultant',
+    bookingLink: 'https://meet.example.com',
+  };
+  const html = buildPortfolioHtml(person, {
+    bookingQrDataUrl: 'data:image/png;base64,booking',
+    vcardQrDataUrl: 'data:image/png;base64,vcard',
+  });
+  assert(html.includes('Termin buchen'), 'Should have booking section');
+  assert(html.includes('QR-Code scannen für Buchungslink'), 'Booking section should have booking caption only');
+  assert(html.includes('Kontaktdaten</h2>'), 'vCard section should have Kontaktdaten heading');
+  assert(html.includes('qr-block'), 'Both sections should use qr-block for QR display');
+});
+
+test('buildPortfolioHtml personalizes booking and vCard text with given name', () => {
+  const person = {
+    name: 'Christina Friede',
+    givenName: 'Christina',
+    slug: 'christina-friede',
+    position: 'Consultant',
+    bookingLink: 'https://cal.example.com/c',
+  };
+  const html = buildPortfolioHtml(person, {
+    bookingQrDataUrl: 'data:image/png;base64,x',
+    vcardQrDataUrl: 'data:image/png;base64,y',
+  });
+  assert(html.includes('Termin mit Christina vereinbaren'), 'Booking intro should use first name');
+  assert(html.includes('Kontaktdaten von Christina in Ihr Adressbuch'), 'vCard intro should use first name');
+});
+
 test('generatePortfolioPdf creates PDF file at output path', async () => {
   if (!existsSync(testOutputDir)) {
     mkdirSync(testOutputDir, { recursive: true });
@@ -152,6 +230,27 @@ test('generatePortfolioPdf handles person with no skills', async () => {
   const { readFileSync } = await import('fs');
   const buf = readFileSync(outputPath);
   assert(buf.length > 0 && buf.toString('binary', 0, 5) === '%PDF-', 'Should be valid PDF');
+});
+
+test('generatePortfolioPdf with bookingLink creates PDF with booking and vCard QR section', async () => {
+  if (!existsSync(testOutputDir)) {
+    mkdirSync(testOutputDir, { recursive: true });
+  }
+  const outputPath = join(testOutputDir, 'portfolio-booking.pdf');
+  const person = {
+    name: 'Booking Test',
+    slug: 'booking-test',
+    position: 'Consultant',
+    bookingLink: 'https://cal.example.com/me',
+    email: 'booking@example.com',
+    companyName: 'Thinkport GmbH',
+  };
+  await generatePortfolioPdf(person, outputPath);
+  assert(existsSync(outputPath), 'PDF file should be created');
+  const { readFileSync } = await import('fs');
+  const buf = readFileSync(outputPath);
+  assert(buf.length > 0, 'PDF should not be empty');
+  assert(buf.toString('binary', 0, 5) === '%PDF-', 'Should be valid PDF');
 });
 
 const success = await run();
