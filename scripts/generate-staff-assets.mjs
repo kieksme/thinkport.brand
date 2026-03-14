@@ -3,7 +3,7 @@
  * Generate staff assets (avatars, business cards, email footers, portfolio PDFs) for active staff.
  *
  * - Fetches people from Thinkport GraphQL API (Basic Auth via THINKPORT_API_USERNAME/PASSWORD)
- * - Generates avatars (multiple sizes, incl. grayscale variant) from remote image URLs
+ * - Generates avatars (multiple sizes, incl. grayscale variant and one set with random background from assets/backgrounds) from remote image URLs
  * - Generates iOS posters (template + portrait + job title) into release-assets/staff/ios-posters
  * - Generates business card PDFs (front/back) using existing pdf-lib generator
  * - Generates vCards (.vcf) into release-assets/staff/vcards
@@ -17,7 +17,7 @@
 
 import { fileURLToPath } from 'url';
 import { dirname, join, resolve } from 'path';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'fs';
 import os from 'os';
 
 import { getActiveThinkportPeople, getActiveThinkportPeopleWithSkills } from './thinkport-api-client.mjs';
@@ -42,6 +42,19 @@ const PORTFOLIO_DIR = join(STAFF_BASE_DIR, 'portfolios');
 const FOOTER_HTML_DIR = join(STAFF_BASE_DIR, 'email-footers');
 const FOOTER_TEXT_DIR = join(STAFF_BASE_DIR, 'email-footers-text');
 const REPORT_DIR = join(STAFF_BASE_DIR, 'reports');
+const BACKGROUNDS_DIR = join(projectRoot, 'assets', 'backgrounds');
+
+/**
+ * List SVG files in assets/backgrounds and return one random path (relative to project root).
+ * @returns {string|null} Path like "assets/backgrounds/7.svg" or null if none found
+ */
+function pickRandomBackgroundPath() {
+  if (!existsSync(BACKGROUNDS_DIR)) return null;
+  const files = readdirSync(BACKGROUNDS_DIR).filter((f) => f.endsWith('.svg'));
+  if (files.length === 0) return null;
+  const chosen = files[Math.floor(Math.random() * files.length)];
+  return join('assets', 'backgrounds', chosen);
+}
 
 function ensureDir(path) {
   if (!existsSync(path)) {
@@ -141,6 +154,21 @@ async function generateAvatarsForPeople(people) {
           message: err.message,
         });
         break;
+      }
+    }
+
+    // One additional avatar set per person with a random background from assets/backgrounds
+    const randomBgPath = pickRandomBackgroundPath();
+    if (randomBgPath) {
+      const bgName = randomBgPath.split('/').pop()?.replace(/\.svg$/i, '') || 'bg';
+      for (const size of sizes) {
+        const altPath = join(AVATAR_DIR, `avatar-${slug}-${size}-bg-${bgName}.png`);
+        try {
+          await generateAvatar(portraitPath, size, altPath, { backgroundPath: randomBgPath });
+          generatedCount += 1;
+        } catch (err) {
+          error(`Failed to generate avatar with background ${bgName} at size ${size}: ${err.message}`, slug);
+        }
       }
     }
   }

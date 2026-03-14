@@ -30,11 +30,11 @@ const AVATAR_CONFIG = CONFIG.avatarGenerator;
  * @param {string} portraitPath - Path to cut-out portrait image (PNG with transparency)
  * @param {number} size - Output size in pixels (square)
  * @param {string} outputPath - Output file path
- * @param {{ grayscalePortrait?: boolean }} [options] - Optional: grayscalePortrait = true for person in grayscale, background in color
+ * @param {{ grayscalePortrait?: boolean, backgroundPath?: string }} [options] - Optional: grayscalePortrait; backgroundPath = path to SVG (relative to project root or absolute) for custom background
  * @returns {Promise<void>}
  */
 async function generateAvatar(portraitPath, size, outputPath, options = {}) {
-  const { grayscalePortrait = false } = options;
+  const { grayscalePortrait = false, backgroundPath: customBackgroundPath } = options;
 
   try {
     // Validate inputs
@@ -42,7 +42,9 @@ async function generateAvatar(portraitPath, size, outputPath, options = {}) {
       throw new Error(`Portrait image not found: ${portraitPath}`);
     }
 
-    const backgroundPath = join(projectRoot, AVATAR_CONFIG.abstractBackgroundPath);
+    const backgroundPath = customBackgroundPath
+      ? (customBackgroundPath.startsWith('/') ? customBackgroundPath : join(projectRoot, customBackgroundPath))
+      : join(projectRoot, AVATAR_CONFIG.abstractBackgroundPath);
     if (!existsSync(backgroundPath)) {
       throw new Error(`Abstract background not found: ${backgroundPath}`);
     }
@@ -57,11 +59,12 @@ async function generateAvatar(portraitPath, size, outputPath, options = {}) {
       mkdirSync(outputDir, { recursive: true });
     }
 
-    info(`Generating ${size}x${size}px avatar with Abstract 5 background${grayscalePortrait ? ' (portrait in grayscale)' : ''}...`);
+    const bgLabel = customBackgroundPath ? `custom background (${basename(backgroundPath)})` : 'Abstract 5 background';
+    info(`Generating ${size}x${size}px avatar with ${bgLabel}${grayscalePortrait ? ' (portrait in grayscale)' : ''}...`);
 
     const targetSize = size;
 
-    // Rasterize Abstract 5 SVG to size×size as background (always color)
+    // Rasterize SVG to size×size as background (always color)
     const background = await sharp(readFileSync(backgroundPath))
       .resize(size, size, { fit: 'cover', position: 'center' })
       .png()
