@@ -18,6 +18,7 @@
     "generate:readme-header": "node scripts/generate-readme-header.mjs",
     "generate:readme-header:samples": "node scripts/generate-readme-header-samples.mjs",
     "generate:staff:assets": "node scripts/generate-staff-assets.mjs",
+    "generate:vcards": "node scripts/generate-staff-assets.mjs --vcards-only",
     "generate:ios:poster": "node scripts/generate-ios-poster.mjs",
     "generate:ios:poster:samples": "node scripts/generate-ios-poster-samples.mjs",
     "generate:portfolio:pdf": "node scripts/generate-portfolio-pdf.mjs",

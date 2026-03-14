@@ -74,9 +74,11 @@ function escapeVcardText(s) {
  * @param {string} [data.tz] - Optional time zone (e.g. "Europe/Berlin" or "+01:00")
  * @param {string} [data.note] - Optional NOTE text
  * @param {string[]|string} [data.categories] - Optional CATEGORIES (array or comma-separated string)
+ * @param {{ forQr?: boolean }} [options] - If forQr is true, only PHOTO;VALUE=URI is used (no base64), so the vCard stays small for QR codes
  * @returns {string} vCard formatted string (RFC 2426 line endings \r\n)
  */
-function generateVCard(data) {
+function generateVCard(data, options = {}) {
+  const forQr = options.forQr === true;
   const lines = ['BEGIN:VCARD', 'VERSION:3.0'];
 
   const prodId = CONFIG?.vcard?.prodId || '-//Thinkport GmbH//Brand Staff Assets//EN';
@@ -102,16 +104,21 @@ function generateVCard(data) {
   const companyName = data.companyName || 'Thinkport GmbH';
   lines.push(`ORG:${companyName}`);
 
-  // Add photo/avatar (vCard 3.0: PHOTO;VALUE=URI or PHOTO;ENCODING=b for base64)
-  if (data.photoUrl) {
+  // Photo: for QR use URI only (small payload); for .vcf use base64 so contact apps display the image
+  if (forQr && data.photoUrl) {
     const photoUrl = normalizeUrl(data.photoUrl);
     const ext = photoUrl.split('.').pop()?.toLowerCase().replace(/\?.*$/, '') || '';
     const photoType = data.photoType || (ext === 'png' ? 'PNG' : ext === 'gif' ? 'GIF' : 'JPEG');
     lines.push(...foldVcardLine(`PHOTO;VALUE=URI;TYPE=${photoType}:${photoUrl}`, 75));
-  } else if (data.photoBase64) {
+  } else if (!forQr && data.photoBase64) {
     const type = (data.photoType || 'JPEG').toUpperCase();
     const folded = foldVcardLine(`PHOTO;ENCODING=b;TYPE=${type}:${data.photoBase64}`, 75);
     lines.push(...folded);
+  } else if (!forQr && data.photoUrl) {
+    const photoUrl = normalizeUrl(data.photoUrl);
+    const ext = photoUrl.split('.').pop()?.toLowerCase().replace(/\?.*$/, '') || '';
+    const photoType = data.photoType || (ext === 'png' ? 'PNG' : ext === 'gif' ? 'GIF' : 'JPEG');
+    lines.push(...foldVcardLine(`PHOTO;VALUE=URI;TYPE=${photoType}:${photoUrl}`, 75));
   }
 
   if (data.email) {
@@ -933,9 +940,9 @@ export async function generateBusinessCardWithPdfLib(contactData, outputDir) {
     mkdirSync(outputDir, { recursive: true });
   }
   
-  // Generate vCard
+  // Generate vCard for QR (URI-only photo so payload stays small and scannable)
   cardProgress('Generiere vCard-Daten …', 'generating');
-  const vCardData = generateVCard(contactData);
+  const vCardData = generateVCard(contactData, { forQr: true });
   cardProgress('vCard-Daten generiert', 'done');
   
   // Generate QR code

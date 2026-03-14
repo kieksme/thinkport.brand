@@ -73,12 +73,15 @@ function parseArgs() {
   const args = process.argv.slice(2);
   const result = {
     slugFilter: null,
+    vcardsOnly: false,
   };
 
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     if (arg === '--slug' && i + 1 < args.length) {
       result.slugFilter = String(args[++i]).toLowerCase();
+    } else if (arg === '--vcards-only') {
+      result.vcardsOnly = true;
     }
   }
 
@@ -112,6 +115,26 @@ async function downloadImageToTempFile(url, slug) {
   const tmpPath = join(tmpDir, `${safeSlug}.png`);
   writeFileSync(tmpPath, buffer);
   return tmpPath;
+}
+
+/**
+ * Fetch a remote image and return base64 + MIME type for vCard PHOTO;ENCODING=b.
+ * Many contact apps only display photos when embedded as base64, not as URI.
+ * @param {string} url - Image URL (e.g. from API)
+ * @returns {Promise<{ base64: string, type: string }|null>} PNG/JPEG type and base64, or null on failure
+ */
+async function fetchImageAsBase64(url) {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) return null;
+    const contentType = (response.headers.get('content-type') || '').toLowerCase();
+    const type = contentType.includes('png') ? 'PNG' : 'JPEG';
+    const arrayBuffer = await response.arrayBuffer();
+    const base64 = Buffer.from(arrayBuffer).toString('base64');
+    return { base64, type };
+  } catch {
+    return null;
+  }
 }
 
 async function generateAvatarsForPeople(people) {
@@ -264,6 +287,22 @@ function toBusinessCardContact(person) {
   };
 }
 
+/**
+ * Try to load poster image as base64 for vCard PHOTO. Uses iOS poster if present, so the vCard shows the poster (template + portrait + job title).
+ * @param {string} slug - Person slug
+ * @returns {{ base64: string, type: 'PNG' }|null}
+ */
+function loadPosterAsBase64(slug) {
+  const posterPath = join(IOS_POSTER_DIR, `poster-${slug}.png`);
+  if (!existsSync(posterPath)) return null;
+  try {
+    const buffer = readFileSync(posterPath);
+    return { base64: buffer.toString('base64'), type: 'PNG' };
+  } catch {
+    return null;
+  }
+}
+
 async function generateVcardsForPeople(people) {
   ensureDir(VCARD_DIR);
   const config = loadConfig();
@@ -271,10 +310,26 @@ async function generateVcardsForPeople(people) {
   for (const person of people) {
     const slug = person.slug;
     const office = getVcardOffice(config, person.locationCity ?? null, person.locationId ?? null);
+    let photoBase64 = undefined;
+    let photoType = undefined;
+    // Prefer poster image (template + portrait + job title) when available; otherwise avatar from API
+    const posterPhoto = loadPosterAsBase64(slug);
+    if (posterPhoto) {
+      photoBase64 = posterPhoto.base64;
+      photoType = posterPhoto.type;
+    } else if (person.imageUrl) {
+      const fetched = await fetchImageAsBase64(person.imageUrl);
+      if (fetched) {
+        photoBase64 = fetched.base64;
+        photoType = fetched.type;
+      }
+    }
     const contact = {
       ...toBusinessCardContact(person),
       companyName: person.companyName || 'Thinkport GmbH',
-      photoUrl: person.imageUrl || undefined,
+      photoUrl: photoBase64 ? undefined : (person.imageUrl || undefined),
+      photoBase64,
+      photoType,
       geo: office?.geo,
       tz: office?.tz,
       note: config?.vcard?.defaultNote ?? undefined,
@@ -319,8 +374,12 @@ async function generateBusinessCardsForPeople(people) {
     const personCardDir = join(CARD_DIR, slug);
     ensureDir(personCardDir);
 
+    const contactWithPhoto = {
+      ...contact,
+      photoUrl: person.imageUrl || undefined,
+    };
     try {
-      await generateBusinessCardWithPdfLib(contact, personCardDir);
+      await generateBusinessCardWithPdfLib(contactWithPhoto, personCardDir);
     } catch (err) {
       error(`Failed to generate business card: ${err.message}`, slug);
     }
@@ -435,14 +494,18 @@ async function main() {
       { padding: 2, headerColor: 'cyan', border: false },
     );
 
-    await generateAvatarsForPeople(thinkportPeople);
-    await generatePostersForPeople(thinkportPeople);
-    await generateBusinessCardsForPeople(thinkportPeople);
-    await generateVcardsForPeople(thinkportPeople);
-    await generatePortfoliosForPeople(thinkportPeopleWithSkills);
-    await generateEmailFootersForPeople(thinkportPeople);
-
-    success('All staff assets generated successfully');
+    if (args.vcardsOnly) {
+      await generateVcardsForPeople(thinkportPeople);
+      success('vCards generated successfully');
+    } else {
+      await generateAvatarsForPeople(thinkportPeople);
+      await generatePostersForPeople(thinkportPeople);
+      await generateBusinessCardsForPeople(thinkportPeople);
+      await generateVcardsForPeople(thinkportPeople);
+      await generatePortfoliosForPeople(thinkportPeopleWithSkills);
+      await generateEmailFootersForPeople(thinkportPeople);
+      success('All staff assets generated successfully');
+    }
   } catch (err) {
     error(`Staff asset generation failed: ${err.message}`);
     process.exitCode = 1;
