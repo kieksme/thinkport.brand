@@ -57,7 +57,6 @@ const PEOPLE_QUERY = `
       image
       email
       phone
-      mobile
       jobTitle
       circle
       department
@@ -113,7 +112,6 @@ const PEOPLE_WITH_SKILLS_QUERY = `
       image
       email
       phone
-      mobile
       jobTitle
       circle
       department
