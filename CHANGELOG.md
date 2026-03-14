@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.9.0](https://github.com/kieksme/thinkport.brand/compare/v0.8.0...v0.9.0) (2026-03-14)
+
+
+### Features
+
+* **avatars:** enhance avatar generation to support custom backgrounds and random selection from assets ([cbca777](https://github.com/kieksme/thinkport.brand/commit/cbca7771ac4ccfdbc4da9fa03a7280c7f0589ab2))
+* **contact:** enhance person data handling by adding phone and mobile fields to vCard and staff assets generation ([08c0be0](https://github.com/kieksme/thinkport.brand/commit/08c0be025d3d92e73f3e0f58ded2833e54656d66))
+* **dotenv:** add dotenv dependency and configure environment variables in staff assets generation script ([1afd334](https://github.com/kieksme/thinkport.brand/commit/1afd33418e31aaf1ef70fd34345249e9c11b87a3))
+* **staff-assets:** update background selection to exclude dark variants for improved visual consistency ([cec0df8](https://github.com/kieksme/thinkport.brand/commit/cec0df88ed4a87a9c579d460dfeaf51fa5eed88d))
+* **vCard:** add support for photo URLs and base64 images in vCard generation ([3cd9414](https://github.com/kieksme/thinkport.brand/commit/3cd9414dad45cd381a4e85453844fc25a91095a1))
+* **vCard:** add vCard generation option for QR codes and enhance photo handling with base64 support ([5b6695f](https://github.com/kieksme/thinkport.brand/commit/5b6695fd9bf967509969f9bea6818e99891d0a45))
+* **vCard:** implement office location resolution and enhance vCard generation with GEO, TZ, NOTE, and CATEGORIES support ([56c24b0](https://github.com/kieksme/thinkport.brand/commit/56c24b0d00770b6ed7af3207a84a5b5d3f404f90))
+
 ## [0.8.0](https://github.com/kieksme/thinkport.brand/compare/v0.7.1...v0.8.0) (2026-03-14)
 
 
