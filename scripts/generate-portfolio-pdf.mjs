@@ -14,7 +14,6 @@ import puppeteer from 'puppeteer';
 import QRCode from 'qrcode';
 import { PDFDocument } from 'pdf-lib';
 import { loadConfig } from './config-loader.mjs';
-import { generateVCard } from './generate-card.mjs';
 import { info, error, warn } from './misc-cli-utils.mjs';
 
 /**
@@ -115,25 +114,38 @@ async function generateBookingQrDataUrl(url) {
 }
 
 /**
- * Build contact data for vCard from normalized person (same shape as generate-card expects).
- * @param {Object} person - Normalized person
- * @returns {Object} Contact data for generateVCard
+ * Build vCard 3.0 string from normalized person (minimal set: FN, N, TITLE, ORG, EMAIL, ADR).
+ * @param {Object} person - Normalized person (name, position, email, companyName, street, locationCity, postalCode, locationCountry, …)
+ * @returns {string} vCard formatted string
  */
-function personToContactData(person) {
-  return {
-    name: person.name ?? '',
-    position: person.position ?? null,
-    companyName: person.companyName ?? 'Thinkport GmbH',
-    email: person.email ?? null,
-    phone: person.phone ?? null,
-    mobile: person.mobile ?? null,
-    address: person.street ?? null,
-    city: person.locationCity ?? null,
-    postalCode: person.postalCode ?? null,
-    country: person.locationCountry ?? null,
-    website: person.companyUrl ?? null,
-    socialMedia: person.socialMedia ?? null,
-  };
+function buildVCardFromPerson(person) {
+  const lines = ['BEGIN:VCARD', 'VERSION:3.0'];
+  const name = (person.name ?? '').trim();
+  if (name) {
+    lines.push(`FN:${name}`);
+    const parts = name.split(/\s+/);
+    const family = parts.length >= 2 ? parts.slice(-1)[0] : name;
+    const given = parts.length >= 2 ? parts.slice(0, -1).join(' ') : '';
+    lines.push(`N:${family};${given};;;`);
+  }
+  if (person.position) {
+    lines.push(`TITLE:${String(person.position).replace(/\n/g, ' ')}`);
+  }
+  const org = person.companyName || 'Thinkport GmbH';
+  lines.push(`ORG:${org}`);
+  if (person.email) {
+    lines.push(`EMAIL;TYPE=WORK,INTERNET:${person.email}`);
+  }
+  const city = person.locationCity ?? '';
+  const postalCode = person.postalCode ?? '';
+  const country = person.locationCountry ?? 'Deutschland';
+  const street = person.street ?? '';
+  if (street || city || postalCode) {
+    const adr = ['', '', street, city, '', postalCode, country];
+    lines.push(`ADR;TYPE=WORK:${adr.join(';')}`);
+  }
+  lines.push('END:VCARD');
+  return lines.join('\r\n');
 }
 
 /**
@@ -328,9 +340,7 @@ export async function generatePortfolioPdf(person, outputPath) {
   const bookingPromise = person.bookingLink
     ? generateBookingQrDataUrl(person.bookingLink)
     : Promise.resolve(null);
-  const vcardPromise = generateVcardQrDataUrl(
-    generateVCard(personToContactData(person)),
-  );
+  const vcardPromise = generateVcardQrDataUrl(buildVCardFromPerson(person));
   const [bookingQrDataUrl, vcardQrDataUrl] = await Promise.all([
     bookingPromise,
     vcardPromise,
