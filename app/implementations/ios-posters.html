@@ -152,6 +152,13 @@
         color: #666;
         font-family: var(--font-body);
       }
+      .poster-mock-preview {
+        display: block;
+        margin: 0 auto;
+        max-height: 420px;
+        width: auto;
+        border-radius: 0.5rem;
+      }
     </style>
   </head>
   <body>
@@ -213,34 +220,12 @@
             <code class="bg-gray-200 px-2 py-1 rounded">pnpm run generate:ios:poster:samples</code>.
           </p>
 
-          <div class="flex flex-wrap justify-center items-end gap-6 mb-8">
-            <div class="poster-example">
-              <img
-                src="{{basePath}}examples/ios/porti-poster.png"
-                alt="iOS poster example with portrait and job title"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-              />
-              <div style="display: none;" class="text-sm text-gray-500 italic">Run generate:ios:poster:samples to generate examples.</div>
-              <p class="poster-example-label">Example poster</p>
-            </div>
-            <div class="poster-example">
-              <img
-                src="{{basePath}}examples/ios/poster-thinkport-avatar-alademann-operations.png"
-                alt="iOS poster Operations example"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-              />
-              <div style="display: none;" class="text-sm text-gray-500 italic">Sample (generated)</div>
-              <p class="poster-example-label">Operations</p>
-            </div>
-            <div class="poster-example">
-              <img
-                src="{{basePath}}examples/ios/poster-thinkport-avatar-alademann-development.png"
-                alt="iOS poster Development example"
-                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
-              />
-              <div style="display: none;" class="text-sm text-gray-500 italic">Sample (generated)</div>
-              <p class="poster-example-label">Development</p>
-            </div>
+          <div class="flex flex-wrap justify-center mb-8">
+            <img
+              class="poster-mock-preview"
+              src="{{basePath}}ios/poster-preview.png"
+              alt="iOS poster mock – template with portrait and job title"
+            />
           </div>
         </div>
       </section>

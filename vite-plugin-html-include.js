@@ -203,6 +203,7 @@ function determineActiveStates(filePath) {
     activeWebApplications: false,
     activeEmailFooter: false,
     activeAvatars: false,
+    activeIosPosters: false,
     activeGithub: false,
     activeLinkedin: false,
     activePortfolioPdf: false,
@@ -255,6 +256,8 @@ function determineActiveStates(filePath) {
       states.activeEmailFooter = true;
     } else if (normalizedPath.includes('avatars.html')) {
       states.activeAvatars = true;
+    } else if (normalizedPath.includes('ios-posters.html')) {
+      states.activeIosPosters = true;
     } else if (normalizedPath.includes('github.html')) {
       states.activeGithub = true;
     } else if (normalizedPath.includes('linkedin.html')) {
@@ -352,6 +355,11 @@ const HERO_CONTENT_MAP = {
     heroTitle: 'Avatars',
     heroSubtitle: 'Square avatar graphics with cut-out portraits and Abstract 5 background',
     heroExtras: heroExtrasTags('<span class="text-aqua">Square Format</span> • <span class="text-fuchsia">Brand Colors</span> • <span class="text-aqua">Cut-out Portraits</span>'),
+  },
+  'implementations/ios-posters.html': {
+    heroTitle: 'iOS Posters',
+    heroSubtitle: 'Vertical posters with template, portrait and job title for team profiles',
+    heroExtras: heroExtrasTags('<span class="text-aqua">Template</span> • <span class="text-fuchsia">Portrait</span> • <span class="text-aqua">Job Title</span>'),
   },
   'implementations/business-cards.html': {
     heroTitle: 'Business Cards',
