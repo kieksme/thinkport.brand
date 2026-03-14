@@ -47,11 +47,14 @@ const BACKGROUNDS_DIR = join(projectRoot, 'assets', 'backgrounds');
 
 /**
  * List SVG files in assets/backgrounds and return one random path (relative to project root).
+ * Excludes dark variants (filenames containing "-dark" before .svg) so only light backgrounds are chosen.
  * @returns {string|null} Path like "assets/backgrounds/7.svg" or null if none found
  */
 function pickRandomBackgroundPath() {
   if (!existsSync(BACKGROUNDS_DIR)) return null;
-  const files = readdirSync(BACKGROUNDS_DIR).filter((f) => f.endsWith('.svg'));
+  const files = readdirSync(BACKGROUNDS_DIR).filter(
+    (f) => f.endsWith('.svg') && !f.toLowerCase().includes('-dark')
+  );
   if (files.length === 0) return null;
   const chosen = files[Math.floor(Math.random() * files.length)];
   return join('assets', 'backgrounds', chosen);
