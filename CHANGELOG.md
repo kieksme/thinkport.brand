@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.8.0](https://github.com/kieksme/thinkport.brand/compare/v0.7.1...v0.8.0) (2026-03-14)
+
+
+### Features
+
+* **certificates:** add description, category, and skills fields to certificates in queries ([27f394a](https://github.com/kieksme/thinkport.brand/commit/27f394acd7736f197f20d90a57893fe7d0602b7f))
+* **portfolio:** add personalized booking and vCard sections with QR code support in portfolio PDF ([e951d92](https://github.com/kieksme/thinkport.brand/commit/e951d924283fd8a3c056b8f55d6ada44ebfae3ce))
+* **portfolio:** integrate QR code generation for booking links and vCards in portfolio PDF ([950d6eb](https://github.com/kieksme/thinkport.brand/commit/950d6eb6b5c1e9cb4a6fc5fd4973e684eb826007))
+
+
+### Bug Fixes
+
+* **avatars:** remove unused avatar images and update test assertions for portfolio PDF generation ([cfcfcbf](https://github.com/kieksme/thinkport.brand/commit/cfcfcbfa0cbdd10b136259a7dba15126a1f37790))
+
 ## [0.7.1](https://github.com/kieksme/thinkport.brand/compare/v0.7.0...v0.7.1) (2026-03-13)
 
 
