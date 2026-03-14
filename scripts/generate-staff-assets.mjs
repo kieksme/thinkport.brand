@@ -237,6 +237,7 @@ async function generateVcardsForPeople(people) {
     const contact = {
       ...toBusinessCardContact(person),
       companyName: person.companyName || 'Thinkport GmbH',
+      photoUrl: person.imageUrl || undefined,
     };
     const vcard = generateVCard(contact);
     const outputPath = join(VCARD_DIR, `${slug}.vcf`);

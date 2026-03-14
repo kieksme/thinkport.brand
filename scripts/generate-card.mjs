@@ -36,8 +36,30 @@ const CONFIG = loadConfig();
 const CARD_CONFIG = CONFIG.businessCard;
 
 /**
+ * Fold a long vCard line per RFC 2426 (max 75 octets per line, continuation with space).
+ * @param {string} line - Full property line
+ * @param {number} maxLen - Max length of first line (default 75)
+ * @returns {string[]} Array of lines (first line, then continuation lines each starting with space)
+ */
+function foldVcardLine(line, maxLen = 75) {
+  if (line.length <= maxLen) return [line];
+  const result = [line.slice(0, maxLen)];
+  let remaining = line.slice(maxLen);
+  const continuationMax = maxLen - 1; // continuation line starts with one space
+  while (remaining.length > 0) {
+    const chunk = remaining.length > continuationMax ? remaining.slice(0, continuationMax) : remaining;
+    result.push(' ' + chunk);
+    remaining = remaining.slice(chunk.length);
+  }
+  return result;
+}
+
+/**
  * Generate vCard string from contact data
- * @param {Object} data - Contact data
+ * @param {Object} data - Contact data (name, position, email, org, address, etc.)
+ * @param {string} [data.photoUrl] - Optional avatar/photo URL (vCard 3.0 PHOTO;VALUE=URI)
+ * @param {string} [data.photoBase64] - Optional base64-encoded photo (PHOTO;ENCODING=b)
+ * @param {string} [data.photoType] - Optional MIME type hint for photo (e.g. 'JPEG', 'PNG')
  * @returns {string} vCard formatted string
  */
 function generateVCard(data) {
@@ -61,6 +83,18 @@ function generateVCard(data) {
   // Add organization/company name
   const companyName = data.companyName || 'Thinkport GmbH';
   lines.push(`ORG:${companyName}`);
+
+  // Add photo/avatar (vCard 3.0: PHOTO;VALUE=URI or PHOTO;ENCODING=b for base64)
+  if (data.photoUrl) {
+    const photoUrl = normalizeUrl(data.photoUrl);
+    const ext = photoUrl.split('.').pop()?.toLowerCase().replace(/\?.*$/, '') || '';
+    const photoType = data.photoType || (ext === 'png' ? 'PNG' : ext === 'gif' ? 'GIF' : 'JPEG');
+    lines.push(...foldVcardLine(`PHOTO;VALUE=URI;TYPE=${photoType}:${photoUrl}`, 75));
+  } else if (data.photoBase64) {
+    const type = (data.photoType || 'JPEG').toUpperCase();
+    const folded = foldVcardLine(`PHOTO;ENCODING=b;TYPE=${type}:${data.photoBase64}`, 75);
+    lines.push(...folded);
+  }
 
   if (data.email) {
     lines.push(`EMAIL;TYPE=WORK,INTERNET:${data.email}`);
