@@ -81,8 +81,11 @@ const PEOPLE_QUERY = `
       certificates {
         id
         name
+        description
         issuer
+        category
         level
+        skills
         badgeUrl
         issueDate
         expiryDate
@@ -132,8 +135,11 @@ const PEOPLE_WITH_SKILLS_QUERY = `
       certificates {
         id
         name
+        description
         issuer
+        category
         level
+        skills
         badgeUrl
         issueDate
         expiryDate
