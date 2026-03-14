@@ -297,7 +297,7 @@ export function buildPortfolioHtml(person, options = {}) {
     .section-subhead { margin: 16px 0 8px 0; font-size: 11pt; font-weight: 600; color: ${ORANGE}; }
     .section-text { margin: 0; font-size: 10pt; color: ${DARK_GRAY}; line-height: 1.5; }
     .section h2 + *, .section h3 + *, .section-subhead + * { break-before: avoid; page-break-before: avoid; }
-    .section.qr-section { background: #e5e7e6; border-left: 4px solid ${ORANGE}; padding: 24px var(--page-gutter); border-radius: 0 6px 6px 0; }
+    .section.qr-section { background: #e5e7e6; border-left: 4px solid ${ORANGE}; padding: 24px var(--page-gutter); border-radius: 0 6px 6px 0; break-inside: avoid; page-break-inside: avoid; }
     .section.qr-section h2 { color: ${ORANGE}; font-size: 13pt; font-weight: 700; margin: 0 0 12px 0; letter-spacing: 0.02em; }
     .section.qr-section .section-text { font-weight: 500; font-size: 10pt; line-height: 1.5; margin: 0; color: ${DARK_GRAY}; }
     .section.qr-section .email-link { font-weight: 700; }
