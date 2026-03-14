@@ -19,6 +19,7 @@ import { fileURLToPath } from 'url';
 import { dirname, join, resolve } from 'path';
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'fs';
 import os from 'os';
+import dotenv from 'dotenv';
 
 import { getActiveThinkportPeople, getActiveThinkportPeopleWithSkills } from './thinkport-api-client.mjs';
 import { generateAvatar } from './generate-avatar.mjs';
@@ -33,6 +34,8 @@ import { readFileSync } from 'fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = resolve(__dirname, '..');
+
+dotenv.config({ path: join(projectRoot, '.env') });
 
 const STAFF_BASE_DIR = join(projectRoot, 'release-assets', 'staff');
 const AVATAR_DIR = join(STAFF_BASE_DIR, 'avatars');
