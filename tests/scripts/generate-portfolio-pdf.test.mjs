@@ -5,6 +5,7 @@
 
 import {
   buildPortfolioHtml,
+  buildVCardFromPerson,
   generatePortfolioPdf,
 } from '../../scripts/generate-portfolio-pdf.mjs';
 import { existsSync, mkdirSync } from 'fs';
@@ -182,6 +183,39 @@ test('buildPortfolioHtml booking section only has booking QR; vCard is in own se
   assert(html.includes('QR-Code scannen für Buchungslink'), 'Booking section should have booking caption only');
   assert(html.includes('Kontaktdaten</h2>'), 'vCard section should have Kontaktdaten heading');
   assert(html.includes('qr-block'), 'Both sections should use qr-block for QR display');
+});
+
+test('buildVCardFromPerson includes PRODID and REV', () => {
+  const person = {
+    name: 'Test Person',
+    slug: 'test-person',
+    position: 'Engineer',
+    email: 'test@example.com',
+    companyName: 'Thinkport GmbH',
+  };
+  const vcard = buildVCardFromPerson(person);
+  assert(vcard.includes('BEGIN:VCARD'), 'Should start with BEGIN:VCARD');
+  assert(vcard.includes('VERSION:3.0'), 'Should declare vCard 3.0');
+  assert(vcard.includes('PRODID:'), 'Should include PRODID');
+  assert(vcard.includes('REV:'), 'Should include REV');
+  assert(/REV:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/.test(vcard), 'REV should be ISO 8601 UTC');
+  assert(vcard.includes('END:VCARD'), 'Should end with END:VCARD');
+});
+
+test('buildVCardFromPerson includes GEO and TZ when person has Leipzig office', () => {
+  const person = {
+    name: 'Leipzig Person',
+    slug: 'leipzig-person',
+    position: 'Consultant',
+    email: 'lp@example.com',
+    locationCity: 'Leipzig',
+    street: 'Markgrafenstraße 2',
+    postalCode: '04109',
+    locationCountry: 'Deutschland',
+  };
+  const vcard = buildVCardFromPerson(person);
+  assert(vcard.includes('GEO:51.339695;12.373075'), 'Should include Leipzig GEO from config');
+  assert(vcard.includes('TZ:Europe/Berlin'), 'Should include TZ from config');
 });
 
 test('buildPortfolioHtml personalizes booking and vCard text with given name', () => {

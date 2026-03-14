@@ -235,6 +235,7 @@ async function executeGraphQL({ url = DEFAULT_API_URL, query, operationName, var
  * @property {string|null} imageUrl
  * @property {string} companyName
  * @property {string|null} companyUrl
+ * @property {string|null} locationId
  * @property {string|null} locationName
  * @property {string|null} locationCity
  * @property {string|null} locationCountry
@@ -322,6 +323,7 @@ function normalizePerson(person) {
     imageUrl: person.image || null,
     companyName,
     companyUrl,
+    locationId: location && location.id ? location.id : null,
     locationName,
     locationCity: address && address.city ? address.city : null,
     locationCountry: address && address.country ? address.country : null,

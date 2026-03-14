@@ -13,7 +13,7 @@ import { platform } from 'os';
 import puppeteer from 'puppeteer';
 import QRCode from 'qrcode';
 import { PDFDocument } from 'pdf-lib';
-import { loadConfig } from './config-loader.mjs';
+import { loadConfig, getVcardOffice } from './config-loader.mjs';
 import { info, error, warn } from './misc-cli-utils.mjs';
 
 /**
@@ -114,12 +114,18 @@ async function generateBookingQrDataUrl(url) {
 }
 
 /**
- * Build vCard 3.0 string from normalized person (minimal set: FN, N, TITLE, ORG, EMAIL, ADR).
- * @param {Object} person - Normalized person (name, position, email, companyName, street, locationCity, postalCode, locationCountry, …)
- * @returns {string} vCard formatted string
+ * Build vCard 3.0 string from normalized person (FN, N, TITLE, ORG, EMAIL, ADR, PRODID, REV, optional GEO/TZ).
+ * @param {Object} person - Normalized person (name, position, email, companyName, street, locationCity, postalCode, locationCountry, locationId, …)
+ * @param {Object} [config] - Optional config (from loadConfig()); used for PRODID and office GEO/TZ. If omitted, CONFIG is used.
+ * @returns {string} vCard formatted string (RFC 2426 \r\n)
  */
-function buildVCardFromPerson(person) {
+export function buildVCardFromPerson(person, config = null) {
+  const conf = config ?? CONFIG;
   const lines = ['BEGIN:VCARD', 'VERSION:3.0'];
+  const prodId = conf?.vcard?.prodId || '-//Thinkport GmbH//Brand Staff Assets//EN';
+  lines.push(`PRODID:${prodId}`);
+  lines.push(`REV:${new Date().toISOString().replace(/\.\d{3}Z$/, 'Z')}`);
+
   const name = (person.name ?? '').trim();
   if (name) {
     lines.push(`FN:${name}`);
@@ -143,6 +149,13 @@ function buildVCardFromPerson(person) {
   if (street || city || postalCode) {
     const adr = ['', '', street, city, '', postalCode, country];
     lines.push(`ADR;TYPE=WORK:${adr.join(';')}`);
+  }
+  const office = getVcardOffice(conf, person.locationCity ?? null, person.locationId ?? null);
+  if (office?.geo && typeof office.geo === 'string' && office.geo.includes(';')) {
+    lines.push(`GEO:${office.geo.trim()}`);
+  }
+  if (office?.tz && typeof office.tz === 'string') {
+    lines.push(`TZ:${office.tz.trim()}`);
   }
   lines.push('END:VCARD');
   return lines.join('\r\n');

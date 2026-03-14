@@ -3,7 +3,7 @@
  * Tests for generate-card.mjs
  */
 
-import { generateBusinessCardWithPdfLib } from '../../scripts/generate-card.mjs';
+import { generateBusinessCardWithPdfLib, generateVCard } from '../../scripts/generate-card.mjs';
 import { getSampleContact } from '../../scripts/sample-data.mjs';
 import { readFileSync, existsSync, mkdirSync } from 'fs';
 import { join, resolve } from 'path';
@@ -104,6 +104,41 @@ test('should handle missing optional fields', async () => {
   
   assert(existsSync(result.front), 'Should generate PDF with minimal data');
   assert(existsSync(result.back), 'Should generate back PDF');
+});
+
+test('generateVCard includes PRODID and REV and uses \\r\\n line endings', () => {
+  const data = { name: 'VCard Test', email: 'v@example.com', companyName: 'Thinkport GmbH' };
+  const vcard = generateVCard(data);
+  assert(vcard.includes('BEGIN:VCARD'), 'Should start with BEGIN:VCARD');
+  assert(vcard.includes('PRODID:'), 'Should include PRODID');
+  assert(vcard.includes('REV:'), 'Should include REV');
+  assert(/REV:\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z/.test(vcard), 'REV should be ISO 8601 UTC');
+  assert(vcard.includes('\r\n'), 'Should use RFC 2426 line endings \\r\\n');
+});
+
+test('generateVCard includes GEO and TZ when provided', () => {
+  const data = {
+    name: 'Geo Person',
+    email: 'geo@example.com',
+    geo: '51.339695;12.373075',
+    tz: 'Europe/Berlin',
+  };
+  const vcard = generateVCard(data);
+  assert(vcard.includes('GEO:51.339695;12.373075'), 'Should include GEO');
+  assert(vcard.includes('TZ:Europe/Berlin'), 'Should include TZ');
+});
+
+test('generateVCard includes NOTE and CATEGORIES when provided', () => {
+  const data = {
+    name: 'Note Person',
+    email: 'n@example.com',
+    note: 'Kontakt über thinkport.digital',
+    categories: ['Thinkport', 'Consulting'],
+  };
+  const vcard = generateVCard(data);
+  assert(vcard.includes('NOTE:'), 'Should include NOTE');
+  assert(vcard.includes('Kontakt über thinkport.digital'), 'NOTE should contain text');
+  assert(vcard.includes('CATEGORIES:Thinkport,Consulting'), 'Should include CATEGORIES');
 });
 
 // Run tests

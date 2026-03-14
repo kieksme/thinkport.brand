@@ -111,3 +111,29 @@ export function getProjectRoot() {
 export function getScriptsDir() {
   return __dirname;
 }
+
+/**
+ * Resolve vCard office entry (GEO, TZ) for a location from config.vcard.offices.
+ * Lookup order: by locationId, then by locationCity (case-insensitive, trimmed).
+ * @param {Object} config - Full config object (from loadConfig())
+ * @param {string|null} [locationCity] - City name (e.g. "Leipzig")
+ * @param {string|null} [locationId] - Location id from API
+ * @returns {{ geo?: string, tz?: string }|null} Office with geo (lat;lon) and/or tz, or null
+ */
+export function getVcardOffice(config, locationCity, locationId) {
+  const offices = config?.vcard?.offices;
+  if (!offices || typeof offices !== 'object') return null;
+  const byId = locationId && offices[locationId];
+  if (byId && (byId.geo || byId.tz)) return { geo: byId.geo, tz: byId.tz };
+  const cityKey =
+    locationCity && typeof locationCity === 'string'
+      ? locationCity.trim()
+      : '';
+  if (!cityKey) return null;
+  const byCity = Object.entries(offices).find(
+    ([key]) => key.trim().toLowerCase() === cityKey.toLowerCase()
+  );
+  if (!byCity) return null;
+  const [, office] = byCity;
+  return office && (office.geo || office.tz) ? { geo: office.geo, tz: office.tz } : null;
+}

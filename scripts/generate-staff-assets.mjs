@@ -27,6 +27,7 @@ import { generateBusinessCardWithPdfLib, generateVCard } from './generate-card.m
 import { generatePortfolioPdf } from './generate-portfolio-pdf.mjs';
 import { renderTemplate } from './template-engine.mjs';
 import { header, info, success, warn, error, endGroup, table } from './misc-cli-utils.mjs';
+import { loadConfig, getVcardOffice } from './config-loader.mjs';
 import { readFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -259,13 +260,19 @@ function toBusinessCardContact(person) {
 
 async function generateVcardsForPeople(people) {
   ensureDir(VCARD_DIR);
+  const config = loadConfig();
   let generatedCount = 0;
   for (const person of people) {
     const slug = person.slug;
+    const office = getVcardOffice(config, person.locationCity ?? null, person.locationId ?? null);
     const contact = {
       ...toBusinessCardContact(person),
       companyName: person.companyName || 'Thinkport GmbH',
       photoUrl: person.imageUrl || undefined,
+      geo: office?.geo,
+      tz: office?.tz,
+      note: config?.vcard?.defaultNote ?? undefined,
+      categories: config?.vcard?.defaultCategories ?? undefined,
     };
     const vcard = generateVCard(contact);
     const outputPath = join(VCARD_DIR, `${slug}.vcf`);

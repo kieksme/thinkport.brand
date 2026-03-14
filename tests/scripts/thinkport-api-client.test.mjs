@@ -102,6 +102,7 @@ async function main() {
     expect(person.imageUrl).toBe('https://example.com/image.png');
     expect(person.companyName).toBe('Thinkport GmbH');
     expect(person.companyUrl).toBe('https://thinkport.digital');
+    expect(person.locationId).toBe('frankfurt');
     expect(person.locationName).toBe('Frankfurt');
     expect(person.locationCity).toBe('Frankfurt');
     expect(person.locationCountry).toBe('Deutschland');
@@ -125,6 +126,7 @@ async function main() {
     expect(person.slug).toBe('no-slug-person');
     expect(person.companyName).toBe('Thinkport GmbH');
     expect(person.companyUrl).toBe(null);
+    expect(person.locationId).toBe(null);
     expect(person.locationName).toBe('Remote');
     expect(person.addressLine).toBe(null);
     expect(person.position).toBe('Growth');

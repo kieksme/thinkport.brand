@@ -55,15 +55,33 @@ function foldVcardLine(line, maxLen = 75) {
 }
 
 /**
+ * Escape text for vCard 3.0 value (backslash-escape \ ; , and newlines per RFC 2426).
+ * @param {string} s - Raw value
+ * @returns {string}
+ */
+function escapeVcardText(s) {
+  if (s == null || typeof s !== 'string') return '';
+  return s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r/g, '').replace(/\n/g, '\\n');
+}
+
+/**
  * Generate vCard string from contact data
  * @param {Object} data - Contact data (name, position, email, org, address, etc.)
  * @param {string} [data.photoUrl] - Optional avatar/photo URL (vCard 3.0 PHOTO;VALUE=URI)
  * @param {string} [data.photoBase64] - Optional base64-encoded photo (PHOTO;ENCODING=b)
  * @param {string} [data.photoType] - Optional MIME type hint for photo (e.g. 'JPEG', 'PNG')
- * @returns {string} vCard formatted string
+ * @param {string} [data.geo] - Optional GEO (lat;lon per RFC 2426, e.g. "51.339695;12.373075")
+ * @param {string} [data.tz] - Optional time zone (e.g. "Europe/Berlin" or "+01:00")
+ * @param {string} [data.note] - Optional NOTE text
+ * @param {string[]|string} [data.categories] - Optional CATEGORIES (array or comma-separated string)
+ * @returns {string} vCard formatted string (RFC 2426 line endings \r\n)
  */
 function generateVCard(data) {
   const lines = ['BEGIN:VCARD', 'VERSION:3.0'];
+
+  const prodId = CONFIG?.vcard?.prodId || '-//Thinkport GmbH//Brand Staff Assets//EN';
+  lines.push(`PRODID:${prodId}`);
+  lines.push(`REV:${new Date().toISOString().replace(/\.\d{3}Z$/, 'Z')}`);
 
   if (data.name) {
     lines.push(`FN:${data.name}`);
@@ -121,6 +139,13 @@ function generateVCard(data) {
     lines.push(`ADR;TYPE=WORK:${addressParts.join(';')}`);
   }
 
+  if (data.geo && typeof data.geo === 'string' && data.geo.includes(';')) {
+    lines.push(`GEO:${data.geo.trim()}`);
+  }
+  if (data.tz && typeof data.tz === 'string') {
+    lines.push(`TZ:${data.tz.trim()}`);
+  }
+
   // Add website URL (if present)
   if (data.website) {
     const url = normalizeUrl(data.website);
@@ -150,8 +175,19 @@ function generateVCard(data) {
     }
   }
 
+  if (data.note && typeof data.note === 'string' && data.note.trim()) {
+    lines.push(`NOTE:${escapeVcardText(data.note.trim())}`);
+  }
+  if (data.categories) {
+    const cat =
+      Array.isArray(data.categories)
+        ? data.categories.map((c) => String(c).trim()).filter(Boolean).join(',')
+        : String(data.categories).trim();
+    if (cat) lines.push(`CATEGORIES:${cat}`);
+  }
+
   lines.push('END:VCARD');
-  return lines.join('\n');
+  return lines.join('\r\n');
 }
 
 // Business card dimensions from config
