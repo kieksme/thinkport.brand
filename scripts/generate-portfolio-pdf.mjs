@@ -11,7 +11,10 @@ import { dirname, join, resolve } from 'path';
 import { writeFileSync, existsSync, mkdirSync, readFileSync } from 'fs';
 import { platform } from 'os';
 import puppeteer from 'puppeteer';
+import QRCode from 'qrcode';
+import { PDFDocument } from 'pdf-lib';
 import { loadConfig } from './config-loader.mjs';
+import { generateVCard } from './generate-card.mjs';
 import { info, error, warn } from './misc-cli-utils.mjs';
 
 /**
@@ -96,12 +99,66 @@ function fileToDataUri(absolutePath) {
 }
 
 /**
+ * Generate QR code as data URL for embedding in HTML (e.g. booking link).
+ * @param {string} url - URL to encode
+ * @returns {Promise<string|null>} Data URL or null on error
+ */
+const QR_OPTIONS = { errorCorrectionLevel: 'M', type: 'image/png', width: 280, margin: 1 };
+
+async function generateBookingQrDataUrl(url) {
+  if (!url || typeof url !== 'string') return null;
+  try {
+    return await QRCode.toDataURL(url, QR_OPTIONS);
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Build contact data for vCard from normalized person (same shape as generate-card expects).
+ * @param {Object} person - Normalized person
+ * @returns {Object} Contact data for generateVCard
+ */
+function personToContactData(person) {
+  return {
+    name: person.name ?? '',
+    position: person.position ?? null,
+    companyName: person.companyName ?? 'Thinkport GmbH',
+    email: person.email ?? null,
+    phone: person.phone ?? null,
+    mobile: person.mobile ?? null,
+    address: person.street ?? null,
+    city: person.locationCity ?? null,
+    postalCode: person.postalCode ?? null,
+    country: person.locationCountry ?? null,
+    website: person.companyUrl ?? null,
+    socialMedia: person.socialMedia ?? null,
+  };
+}
+
+/**
+ * Generate QR code as data URL for vCard string (same size as booking QR).
+ * @param {string} vCardData - vCard 3.0 string
+ * @returns {Promise<string|null>} Data URL or null on error
+ */
+async function generateVcardQrDataUrl(vCardData) {
+  if (!vCardData || typeof vCardData !== 'string') return null;
+  try {
+    return await QRCode.toDataURL(vCardData, QR_OPTIONS);
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Build single-page portfolio HTML for a person (new design with header image).
  * Header looks like assets/portfolio/portfoilo-header.png: background from background SVG (assets/backgrounds), branding from SVG logos (Thinkport + A Venitus Company). Then personal info, skill bars, certificates.
  * @param {Object} person - Normalized person with optional skills[], certificates[]
+ * @param {{ bookingQrDataUrl?: string|null, vcardQrDataUrl?: string|null }} [options] - Optional QR data URLs (booking link, vCard)
  * @returns {string} Full HTML document
  */
-export function buildPortfolioHtml(person) {
+export function buildPortfolioHtml(person, options = {}) {
+  const { bookingQrDataUrl = null, vcardQrDataUrl = null } = options;
   const name = escapeHtml(person.name ?? '');
   const position = escapeHtml(person.position ?? '');
   const email = escapeHtml(person.email ?? '');
@@ -181,11 +238,13 @@ export function buildPortfolioHtml(person) {
   <title>${name} – Portfolio</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    @page { size: A4; margin: 2cm 0; }
+    @page :first { margin-top: 0; margin-bottom: 2cm; }
     * { box-sizing: border-box; }
     :root { --page-gutter: 56px; }
     body { margin: 0; font-family: 'Montserrat', sans-serif; font-size: 11pt; color: ${DARK_GRAY}; }
     a.email-link { color: ${ORANGE}; text-decoration: underline; font-weight: 600; }
-    .page { width: 210mm; min-height: 297mm; padding: var(--page-gutter); }
+    .page { width: 210mm; min-height: 297mm; padding: var(--page-gutter); padding-bottom: max(2cm, var(--page-gutter)); }
     .portfolio-header { position: relative; min-height: 160px; ${headerStyle} display: flex; align-items: center; justify-content: space-between; padding: 20px var(--page-gutter); margin: calc(-1 * var(--page-gutter)) calc(-1 * var(--page-gutter)) 0 calc(-1 * var(--page-gutter)); width: calc(100% + 2 * var(--page-gutter)); box-sizing: border-box; }
     .header-branding { display: flex; align-items: center; }
     .header-logo { height: 54px; width: auto; object-fit: contain; margin: 0; display: block; }
@@ -198,6 +257,7 @@ export function buildPortfolioHtml(person) {
     .personal-info-right { flex: 1; text-align: right; font-size: 10pt; color: ${DARK_GRAY}; }
     .personal-info-right .line { margin: 2px 0; }
     .section { padding: 16px var(--page-gutter); margin: 0 calc(-1 * var(--page-gutter)); width: calc(100% + 2 * var(--page-gutter)); box-sizing: border-box; }
+    .section h2, .section h3, .section-subhead { break-after: avoid; page-break-after: avoid; }
     .section.skills { background: #f5f5f5; }
     .section.skills h2 { margin: 0 0 12px 0; font-size: 12pt; font-weight: 600; color: ${ORANGE}; }
     .skill-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 10pt; color: ${DARK_GRAY}; }
@@ -218,6 +278,11 @@ export function buildPortfolioHtml(person) {
     .person-description { margin-top: 16px; padding-top: 12px; border-top: 1px solid rgba(0,0,0,0.08); font-size: 10pt; color: ${DARK_GRAY}; line-height: 1.5; white-space: pre-line; }
     .section-subhead { margin: 16px 0 8px 0; font-size: 11pt; font-weight: 600; color: ${ORANGE}; }
     .section-text { margin: 0; font-size: 10pt; color: ${DARK_GRAY}; line-height: 1.5; }
+    .section h2 + *, .section h3 + *, .section-subhead + * { break-before: avoid; page-break-before: avoid; }
+    .booking-qr-wrap { margin-top: 12px; display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
+    .booking-qr-item { display: flex; flex-direction: column; gap: 6px; }
+    .booking-qr-wrap img.booking-qr { width: 200px; height: 200px; display: block; }
+    .booking-qr-caption { font-size: 9pt; color: ${DARK_GRAY}; }
   </style>
 </head>
 <body>
@@ -247,7 +312,7 @@ export function buildPortfolioHtml(person) {
     ${education ? `<section class="section"><h2>Ausbildung</h2><p class="section-text">${education}</p></section>` : ''}
     ${certificates.length > 0 ? `<section class="section certifications"><h2>Zertifikate</h2><div class="cert-cards">${certCards}</div>${description ? `<h3 class="section-subhead">${aboutHeading}</h3><div class="person-description">${description}</div>` : ''}</section>` : ''}
     ${certificates.length === 0 && description ? `<section class="section certifications"><h2>${aboutHeading}</h2><div class="person-description">${description}</div></section>` : ''}
-    ${bookingLinkUrl ? `<section class="section"><h2>Termin buchen</h2><p class="section-text">Über den folgenden Link können Sie einen Termin mit mir vereinbaren: <a href="${bookingLinkUrl}" class="email-link">Termin buchen</a>.</p></section>` : ''}
+    ${bookingLinkUrl ? `<section class="section"><h2>Termin buchen</h2><p class="section-text">Über den folgenden Link können Sie einen Termin mit mir vereinbaren: <a href="${bookingLinkUrl}" class="email-link">Termin buchen</a>.</p><div class="booking-qr-wrap">${bookingQrDataUrl ? `<div class="booking-qr-item"><img src="${escapeHtml(bookingQrDataUrl)}" class="booking-qr" alt="QR Code Termin buchen" width="200" height="200"><span class="booking-qr-caption">QR-Code scannen für Buchungslink</span></div>` : ''}${vcardQrDataUrl ? `<div class="booking-qr-item"><img src="${escapeHtml(vcardQrDataUrl)}" class="booking-qr" alt="QR Code vCard Kontakt" width="200" height="200"><span class="booking-qr-caption">QR-Code scannen für Kontaktdaten (vCard)</span></div>` : ''}</div></section>` : ''}
   </div>
 </body>
 </html>`;
@@ -260,7 +325,17 @@ export function buildPortfolioHtml(person) {
  * @returns {Promise<string>} Resolved with outputPath on success
  */
 export async function generatePortfolioPdf(person, outputPath) {
-  const html = buildPortfolioHtml(person);
+  const bookingPromise = person.bookingLink
+    ? generateBookingQrDataUrl(person.bookingLink)
+    : Promise.resolve(null);
+  const vcardPromise = generateVcardQrDataUrl(
+    generateVCard(personToContactData(person)),
+  );
+  const [bookingQrDataUrl, vcardQrDataUrl] = await Promise.all([
+    bookingPromise,
+    vcardPromise,
+  ]);
+  const html = buildPortfolioHtml(person, { bookingQrDataUrl, vcardQrDataUrl });
   const executablePath = getChromeExecutablePath();
   const launchOptions = {
     headless: 'new',
@@ -297,11 +372,28 @@ export async function generatePortfolioPdf(person, outputPath) {
       preferCSSPageSize: false,
     });
     await browser.close();
+
+    const name = person.name || 'Portfolio';
+    const position = person.position || '';
+    const title = `${name} – Portfolio`;
+    const subject = position ? `Portfolio – ${position}` : 'Staff portfolio – Thinkport GmbH';
+    const keywords = ['Thinkport', 'Portfolio', name].filter(Boolean);
+    if (position) keywords.push(position);
+
+    const pdfDoc = await PDFDocument.load(pdfBuffer);
+    pdfDoc.setTitle(title);
+    pdfDoc.setAuthor(name);
+    pdfDoc.setSubject(subject);
+    pdfDoc.setKeywords(keywords);
+    pdfDoc.setCreator('Thinkport Brand – Portfolio PDF Generator');
+    pdfDoc.setProducer('Thinkport GmbH');
+    const pdfWithMeta = await pdfDoc.save();
+
     const dir = dirname(outputPath);
     if (!existsSync(dir)) {
       mkdirSync(dir, { recursive: true });
     }
-    writeFileSync(outputPath, pdfBuffer);
+    writeFileSync(outputPath, Buffer.from(pdfWithMeta));
     return outputPath;
   } catch (err) {
     await browser.close().catch(() => {});
