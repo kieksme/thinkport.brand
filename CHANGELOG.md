@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.10.0](https://github.com/kieksme/thinkport.brand/compare/v0.9.0...v0.10.0) (2026-03-14)
+
+
+### Features
+
+* **ios-posters:** add iOS Posters section with navigation and styling updates ([625ae59](https://github.com/kieksme/thinkport.brand/commit/625ae5954218416d646c4c2f618c25aa1eb5aab0))
+
 ## [0.9.0](https://github.com/kieksme/thinkport.brand/compare/v0.8.0...v0.9.0) (2026-03-14)
 
 
