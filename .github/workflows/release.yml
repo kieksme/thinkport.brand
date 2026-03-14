@@ -104,12 +104,14 @@ jobs:
           fi
           cd ..
 
-          # Create staff assets ZIPs if staff directory exists AND contains files
+          # Create staff assets ZIP (only: avatars, business-cards, email-footers, email-footers-text)
           if [ -d release-assets/staff ] && find release-assets/staff -type f -print -quit | grep -q .; then
-            cd release-assets
-            zip -r ../thinkport-staff-assets-v${VERSION}.zip staff
+            cd release-assets/staff
+            zip -r ../../thinkport-staff-assets-v${VERSION}.zip avatars business-cards email-footers email-footers-text 2>/dev/null || true
+            cd ../..
 
-            # Per-person staff ZIPs
+            # Per-person staff ZIPs (same four folders only)
+            cd release-assets
             if [ -d staff/email-footers ]; then
               cd staff
               for footer in email-footers/email-footer-*.html; do
