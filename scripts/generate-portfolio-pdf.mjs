@@ -291,6 +291,10 @@ export function buildPortfolioHtml(person, options = {}) {
     .section-subhead { margin: 16px 0 8px 0; font-size: 11pt; font-weight: 600; color: ${ORANGE}; }
     .section-text { margin: 0; font-size: 10pt; color: ${DARK_GRAY}; line-height: 1.5; }
     .section h2 + *, .section h3 + *, .section-subhead + * { break-before: avoid; page-break-before: avoid; }
+    .section.section-booking { background: #e8eae9; border-left: 4px solid ${ORANGE}; padding: 20px var(--page-gutter); }
+    .section.section-booking h2 { color: ${ORANGE}; font-size: 13pt; font-weight: 700; margin: 0 0 10px 0; }
+    .section.section-booking .section-text { font-weight: 500; }
+    .section.section-booking .email-link { font-weight: 700; }
     .booking-qr-wrap { margin-top: 12px; display: flex; align-items: flex-start; gap: 20px; flex-wrap: wrap; }
     .booking-qr-item { display: flex; flex-direction: column; gap: 6px; }
     .booking-qr-wrap img.booking-qr { width: 200px; height: 200px; display: block; }
@@ -324,7 +328,7 @@ export function buildPortfolioHtml(person, options = {}) {
     ${education ? `<section class="section"><h2>Ausbildung</h2><p class="section-text">${education}</p></section>` : ''}
     ${certificates.length > 0 ? `<section class="section certifications"><h2>Zertifikate</h2><div class="cert-cards">${certCards}</div>${description ? `<h3 class="section-subhead">${aboutHeading}</h3><div class="person-description">${description}</div>` : ''}</section>` : ''}
     ${certificates.length === 0 && description ? `<section class="section certifications"><h2>${aboutHeading}</h2><div class="person-description">${description}</div></section>` : ''}
-    ${bookingLinkUrl ? `<section class="section"><h2>Termin buchen</h2><p class="section-text">Über den folgenden Link können Sie einen Termin mit mir vereinbaren: <a href="${bookingLinkUrl}" class="email-link">Termin buchen</a>.</p><div class="booking-qr-wrap">${bookingQrDataUrl ? `<div class="booking-qr-item"><img src="${escapeHtml(bookingQrDataUrl)}" class="booking-qr" alt="QR Code Termin buchen" width="200" height="200"><span class="booking-qr-caption">QR-Code scannen für Buchungslink</span></div>` : ''}${vcardQrDataUrl ? `<div class="booking-qr-item"><img src="${escapeHtml(vcardQrDataUrl)}" class="booking-qr" alt="QR Code vCard Kontakt" width="200" height="200"><span class="booking-qr-caption">QR-Code scannen für Kontaktdaten (vCard)</span></div>` : ''}</div></section>` : ''}
+    ${bookingLinkUrl ? `<section class="section section-booking"><h2>Termin buchen</h2><p class="section-text">Über den folgenden Link können Sie einen Termin mit mir vereinbaren: <a href="${bookingLinkUrl}" class="email-link">Termin buchen</a>.</p><div class="booking-qr-wrap">${bookingQrDataUrl ? `<div class="booking-qr-item"><img src="${escapeHtml(bookingQrDataUrl)}" class="booking-qr" alt="QR Code Termin buchen" width="200" height="200"><span class="booking-qr-caption">QR-Code scannen für Buchungslink</span></div>` : ''}${vcardQrDataUrl ? `<div class="booking-qr-item"><img src="${escapeHtml(vcardQrDataUrl)}" class="booking-qr" alt="QR Code vCard Kontakt" width="200" height="200"><span class="booking-qr-caption">QR-Code scannen für Kontaktdaten (vCard)</span></div>` : ''}</div></section>` : ''}
   </div>
 </body>
 </html>`;
