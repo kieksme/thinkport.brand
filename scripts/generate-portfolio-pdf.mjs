@@ -142,6 +142,12 @@ export function buildVCardFromPerson(person, config = null) {
   if (person.email) {
     lines.push(`EMAIL;TYPE=WORK,INTERNET:${person.email}`);
   }
+  if (person.phone) {
+    lines.push(`TEL;TYPE=WORK,VOICE:${person.phone}`);
+  }
+  if (person.mobile) {
+    lines.push(`TEL;TYPE=CELL:${person.mobile}`);
+  }
   const city = person.locationCity ?? '';
   const postalCode = person.postalCode ?? '';
   const country = person.locationCountry ?? 'Deutschland';

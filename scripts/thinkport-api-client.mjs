@@ -56,6 +56,8 @@ const PEOPLE_QUERY = `
       bookingLink
       image
       email
+      phone
+      mobile
       jobTitle
       circle
       department
@@ -110,6 +112,8 @@ const PEOPLE_WITH_SKILLS_QUERY = `
       bookingLink
       image
       email
+      phone
+      mobile
       jobTitle
       circle
       department
@@ -232,6 +236,8 @@ async function executeGraphQL({ url = DEFAULT_API_URL, query, operationName, var
  * @property {string|null} givenName
  * @property {string|null} familyName
  * @property {string|null} email
+ * @property {string|null} phone
+ * @property {string|null} mobile
  * @property {string|null} imageUrl
  * @property {string} companyName
  * @property {string|null} companyUrl
@@ -320,6 +326,8 @@ function normalizePerson(person) {
     givenName,
     familyName,
     email: person.email || null,
+    phone: person.phone || null,
+    mobile: person.mobile || null,
     imageUrl: person.image || null,
     companyName,
     companyUrl,
