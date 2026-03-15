@@ -36,6 +36,39 @@ const DEFAULT_BACKGROUND_PATH = join(projectRoot, 'assets', 'backgrounds', '5-da
 /** Minimum contrast ratio for logo on background (WCAG 2.1 Level AA for large graphics). */
 const MIN_LOGO_CONTRAST = 3;
 
+/**
+ * Convert RGB (0–255) to hex string.
+ * @param {number} r - Red
+ * @param {number} g - Green
+ * @param {number} b - Blue
+ * @returns {string} Hex e.g. "#0B2649"
+ */
+function rgbToHex(r, g, b) {
+  const clamp = (v) => Math.round(Math.max(0, Math.min(255, v)));
+  return '#' + [r, g, b].map(clamp).map((x) => x.toString(16).padStart(2, '0')).join('');
+}
+
+/**
+ * Derive lighter and darker variants from a brand color for background polygon fills.
+ * Harmonizes the background graphic with the chosen brand color.
+ * @param {string} colorHex - Base brand color hex
+ * @returns {{ base: string, lighter: string, darker: string }}
+ */
+function deriveBackgroundVariants(colorHex) {
+  const rgb = hexToRgb(colorHex);
+  if (!rgb) return { base: colorHex, lighter: colorHex, darker: colorHex };
+  const { r, g, b } = rgb;
+  // Lighter: blend toward white (30%)
+  const lighter = rgbToHex(
+    r + (255 - r) * 0.3,
+    g + (255 - g) * 0.3,
+    b + (255 - b) * 0.3
+  );
+  // Darker: blend toward black (25%)
+  const darker = rgbToHex(r * 0.75, g * 0.75, b * 0.75);
+  return { base: colorHex, lighter, darker };
+}
+
 /** LinkedIn background palette: Thinkport primary colors only (config.linkedin.colors). */
 function getLinkedInColors() {
   const c = CONFIG.linkedin?.colors || CONFIG.brand.colors;
@@ -187,11 +220,32 @@ async function getBackgroundLayer(width, height, colorHex) {
   }
 
   let svgContent = readFileSync(backgroundPath, 'utf-8');
+
+  // Disable CSS animations so the rasterized frame is static and predictable
+  svgContent = svgContent.replace(
+    /animation: [^;]+;/g,
+    'animation: none;'
+  );
+
   // Replace first rect fill (background base) with brand color
   svgContent = svgContent.replace(
     /(<rect\s[^>]*?)fill="#[0-9a-fA-F]{6}"([^>]*>)/,
     `$1fill="${colorHex}"$2`
   );
+
+  // Replace polygon fills with brand-harmonized variants (5-dark.svg uses grey/teal; map to lighter/darker of colorHex)
+  const { lighter, darker } = deriveBackgroundVariants(colorHex);
+  const polygonColorMap = [
+    ['#485b59', lighter],
+    ['#4d5f67', darker],
+    ['#496165', lighter],
+    ['#2f3b3d', darker],
+    ['#576e70', lighter],
+  ];
+  for (const [originalHex, variantHex] of polygonColorMap) {
+    svgContent = svgContent.split(originalHex).join(variantHex);
+  }
+
   const bgBuffer = await sharp(Buffer.from(svgContent))
     .resize(width, height, { fit: 'cover' })
     .png()
@@ -284,7 +338,8 @@ async function generateLinkedInImage(type, options) {
 
     // Validate color – use config.json brand colors only (Thinkport LinkedIn palette)
     const linkedinColors = getLinkedInColors();
-    const colorHex = linkedinColors[color.toLowerCase()];
+    const colorKey = Object.keys(linkedinColors).find((k) => k.toLowerCase() === String(color).toLowerCase());
+    const colorHex = colorKey ? linkedinColors[colorKey] : null;
     if (!colorHex) {
       throw new Error(`Invalid color: ${color}. Must be one of: darkBlue, orange, turquoise`);
     }
@@ -746,7 +801,13 @@ async function main() {
 }
 
 // Run if called directly
-if (import.meta.url === `file://${process.argv[1]}`) {
+const currentFile = fileURLToPath(import.meta.url);
+const isMain = process.argv[1] && (
+  currentFile === process.argv[1] ||
+  currentFile.endsWith(process.argv[1]) ||
+  process.argv[1].endsWith('generate-image-linkedin.mjs')
+);
+if (isMain) {
   main();
 }
 
