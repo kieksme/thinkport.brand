@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 /**
  * Generate sample avatars
- * Creates example avatars with Abstract 5 (default) and optional other backgrounds (Abstract 3, 7)
+ * Creates example avatars with Abstract 5 (default) and other backgrounds (Abstract 1, 2, 3, 4, 7)
  */
 
 import { join, resolve, basename, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import sharp from 'sharp';
+import { existsSync, mkdirSync } from 'fs';
 import { generateAvatar } from './generate-avatar.mjs';
 import { header, success, info, error, endGroup } from './misc-cli-utils.mjs';
 
@@ -21,30 +20,10 @@ const BACKGROUND_VARIANTS = [
   { path: 'assets/backgrounds/5.svg', fileSuffix: '', generateGrayscale: true },
   { path: 'assets/backgrounds/3.svg', fileSuffix: '-abstract-3', generateGrayscale: false },
   { path: 'assets/backgrounds/7.svg', fileSuffix: '-abstract-7', generateGrayscale: false },
+  { path: 'assets/backgrounds/1.svg', fileSuffix: '-abstract-1', generateGrayscale: false },
+  { path: 'assets/backgrounds/2.svg', fileSuffix: '-abstract-2', generateGrayscale: false },
+  { path: 'assets/backgrounds/4.svg', fileSuffix: '-abstract-4', generateGrayscale: false },
 ];
-
-/** Placeholder portrait filename when source/avatars is empty (so samples can be generated without real portraits). */
-const PLACEHOLDER_FILENAME = 'placeholder.png';
-
-/**
- * Create a neutral placeholder portrait (512×512) so sample generation works without real source images.
- * @param {string} outputPath - Full path for the placeholder PNG
- * @returns {Promise<void>}
- */
-async function createPlaceholderPortrait(outputPath) {
-  const size = 512;
-  const buffer = await sharp({
-    create: {
-      width: size,
-      height: size,
-      channels: 4,
-      background: { r: 180, g: 180, b: 190, alpha: 1 },
-    },
-  })
-    .png()
-    .toBuffer();
-  writeFileSync(outputPath, buffer);
-}
 
 /**
  * Generate all sample avatars (one per portrait, size, and background variant)
@@ -77,26 +56,25 @@ async function generateSampleAvatars() {
     .map(file => join(sourceDir, file));
 
   if (portraitFiles.length === 0) {
-    const placeholderPath = join(sourceDir, PLACEHOLDER_FILENAME);
-    info('Keine Portrait-Dateien in source/avatars – erstelle Platzhalter für Beispiel-Ausgabe.');
-    await createPlaceholderPortrait(placeholderPath);
-    portraitFiles = [placeholderPath];
+    error('Keine Portrait-Dateien in source/avatars gefunden.');
+    info('Für die Beispielseite (Tobias Drexler): pnpm run generate:staff:assets --slug tobias (API-Zugang nötig).');
+    info('Oder Portrait(s) als PNG/JPG in source/avatars ablegen und den Befehl erneut ausführen.');
+    process.exit(1);
   }
 
   const sizes = [256, 512];
   let totalAvatars = 0;
   const generatedAvatars = [];
 
+  // Use generic filenames (no person/placeholder name) so examples/avatars stays neutral
   for (const portraitPath of portraitFiles) {
     const portraitName = basename(portraitPath, extname(portraitPath));
     info(`\nVerarbeite Portrait: ${portraitName}`);
 
     for (const size of sizes) {
-      const fileNameSlug = portraitName;
-
       for (const variant of BACKGROUND_VARIANTS) {
         const options = { backgroundPath: variant.path };
-        const baseName = `avatar-${fileNameSlug}-${size}${variant.fileSuffix}`;
+        const baseName = `avatar-${size}${variant.fileSuffix}`;
 
         // Full color
         const outputFileName = `${baseName}.png`;
@@ -104,7 +82,7 @@ async function generateSampleAvatars() {
         try {
           info(`  Generiere: ${outputFileName}`);
           await generateAvatar(portraitPath, size, outputPath, options);
-          generatedAvatars.push(outputFileName);
+          if (!generatedAvatars.includes(outputFileName)) generatedAvatars.push(outputFileName);
           totalAvatars++;
         } catch (err) {
           error(`  Fehler bei ${outputFileName}: ${err.message}`);
@@ -112,12 +90,12 @@ async function generateSampleAvatars() {
 
         // Grayscale (only for default Abstract 5)
         if (variant.generateGrayscale) {
-          const grayscaleFileName = `${baseName}-grayscale.png`;
+          const grayscaleFileName = `avatar-${size}-grayscale.png`;
           const grayscalePath = join(outputDir, grayscaleFileName);
           try {
             info(`  Generiere: ${grayscaleFileName}`);
             await generateAvatar(portraitPath, size, grayscalePath, { ...options, grayscalePortrait: true });
-            generatedAvatars.push(grayscaleFileName);
+            if (!generatedAvatars.includes(grayscaleFileName)) generatedAvatars.push(grayscaleFileName);
             totalAvatars++;
           } catch (err) {
             error(`  Fehler bei ${grayscaleFileName}: ${err.message}`);
@@ -138,7 +116,7 @@ async function main() {
     header('Sample Avatars Generator', 'Generiere Beispiel-Avatare mit verschiedenen Hintergründen', 'bgCyan');
 
     info('Generiere Beispiel-Avatare:');
-    info('  - Hintergründe: Abstract 3, Abstract 5 (Standard + Graustufen), Abstract 7');
+    info('  - Hintergründe: Abstract 1, 2, 3, 4, 5 (Standard + Graustufen), 7');
     info('  - Varianten: Farbe + Graustufen-Portrait nur bei Abstract 5');
     info('  - Größen: 256px, 512px');
     info('');
