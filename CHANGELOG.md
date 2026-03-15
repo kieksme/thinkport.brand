@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.16.0](https://github.com/kieksme/thinkport.brand/compare/v0.15.0...v0.16.0) (2026-03-15)
+
+
+### Features
+
+* **assets:** add font-face definitions and update SVG headers for consistency across samples ([f2931ac](https://github.com/kieksme/thinkport.brand/commit/f2931ac3dbd65eb5eb0a386caa5e3e33cda80e69))
+
 ## [0.15.0](https://github.com/kieksme/thinkport.brand/compare/v0.14.0...v0.15.0) (2026-03-15)
 
 
