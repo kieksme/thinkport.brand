@@ -35,6 +35,23 @@
   .polygon-11 { animation: rotate1 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 30s; }
   .polygon-12 { animation: rotate2 270s linear infinite, colorShift 36s ease-in-out infinite, zoom 54s ease-in-out infinite; transform-origin: center; animation-delay: 33s; }
 </style>
+    <style>
+      @font-face {
+        font-family: HankenGrotesk;
+        src: url("../../assets/fonts/hanken-grotesk/500/regular.ttf") format("truetype");
+        font-weight: 500 700;
+      }
+      @font-face {
+        font-family: SourceSans3;
+        src: url("../../assets/fonts/source-sans-3/400/regular.ttf") format("truetype");
+        font-weight: 400;
+      }
+      @font-face {
+        font-family: SourceSans3;
+        src: url("../../assets/fonts/source-sans-3/700/regular.ttf") format("truetype");
+        font-weight: 700;
+      }
+    </style>
     <linearGradient id="readmeOverlay" x1="0" x2="1" y1="0" y2="0" gradientUnits="objectBoundingBox">
       <stop offset="0" stop-color="#0B2649" stop-opacity="0.72"/>
       <stop offset="0.5" stop-color="#0B2649" stop-opacity="0.5"/>
@@ -49,7 +66,7 @@
 </clipPath>
 </defs>
   </defs>
-  <!-- Background: embedded 5.svg -->
+  <!-- Background: embedded 5.svg (same as OG banners) -->
   <g transform="translate(600,100) scale(1.171875) translate(-512,-512)"><rect x="0" y="0" width="1024" height="1024" fill="#1ea1b9" />
 <g transform="scale(4.000000) translate(0.5 0.5)">
 <polygon class="polygon-1" fill="#57c8b9" fill-opacity="0.501961" points="0,0 268,-15 0,148" />
@@ -67,7 +84,7 @@
 </g></g>
   <!-- Dark overlay for contrast -->
   <rect width="1200" height="200" fill="url(#readmeOverlay)"/>
-  <!-- Thinkport + Venitus horizontal logo (70% of banner height, vertically centred) -->
+  <!-- Thinkport + Venitus horizontal logo (hidden when title would overlap) -->
   <g transform="translate(56, 64) scale(0.207492795389049)"><g clip-path="url(#readme-clip0_201_144)">
 <path d="M820.1 162.6L773.7 101.4L773.5 101.2H766.2V179.2H775.1V117.8L821.3 179L821.4 179.2H829V101.2H820.1V162.6ZM683.6 101.2H692.7V179.2H683.6V101.2ZM601.1 134.1H564V101.2H554.9V179.2H564V143.3H601.1V179.2H610.2V101.2H601.1V134.1ZM434.1 110.4H453.4V179.2H462.6V110.4H481.5V101.2H434.1V110.4ZM960.1 101.2H948L911.5 137.9V101.2H902.4V179.2H911.5V140.6L947.4 179.1L947.5 179.2H960.3L922.2 139.1L960.1 101.2ZM1346.6 142.1C1348.5 140.7 1350.2 139.1 1351.5 137.2C1352.8 135.3 1353.9 133.2 1354.7 131C1355.5 128.7 1355.9 126.3 1355.9 123.9C1355.9 120.8 1355.3 117.8 1354.1 115.1C1352.9 112.4 1351.3 110 1349.3 108C1347.3 106 1344.9 104.4 1342.2 103.2C1339.5 102 1336.5 101.4 1333.5 101.4H1304.3V179.4H1313.4V146.5H1330.8L1348.8 179.4H1359.1L1341.1 145.3C1343 144.4 1344.9 143.4 1346.6 142.1ZM1346.8 123.8C1346.8 125.6 1346.4 127.4 1345.7 129C1345 130.6 1344 132 1342.8 133.2C1341.6 134.4 1340.2 135.4 1338.6 136.1C1337 136.8 1335.2 137.2 1333.4 137.2H1313.3V110.4H1333.4C1335.2 110.4 1337 110.8 1338.6 111.5C1340.2 112.2 1341.7 113.2 1342.9 114.4C1344.1 115.6 1345.1 117 1345.8 118.6C1346.4 120.3 1346.8 122 1346.8 123.8ZM1432.1 101.2V110.4H1451.4V179.2H1460.6V110.4H1479.5V101.2H1432.1ZM1221.7 112.3C1218.7 108.7 1214.8 105.7 1210.3 103.5C1205.7 101.3 1200.4 100.2 1194.4 100.2C1188.4 100.2 1183.1 101.3 1178.6 103.5C1174.1 105.7 1170.3 108.6 1167.3 112.3C1164.3 115.9 1162 120.2 1160.4 124.9C1158.9 129.6 1158.1 134.6 1158.1 139.8C1158.1 145 1158.9 150 1160.4 154.8C1161.9 159.6 1164.2 163.9 1167.3 167.6C1170.3 171.3 1174.1 174.3 1178.6 176.5C1183.1 178.7 1188.4 179.9 1194.4 179.9C1200.4 179.9 1205.7 178.8 1210.3 176.5C1214.9 174.3 1218.7 171.3 1221.7 167.6C1224.7 163.9 1227 159.6 1228.6 154.8C1230.1 150 1230.9 145 1230.9 139.8C1230.9 134.6 1230.1 129.6 1228.6 124.9C1227 120.2 1224.7 115.9 1221.7 112.3ZM1221.6 139.9C1221.6 144.1 1221 148.1 1219.9 151.8C1218.8 155.5 1217 158.8 1214.8 161.6C1212.5 164.4 1209.7 166.6 1206.3 168.2C1202.9 169.8 1198.9 170.6 1194.4 170.6C1190 170.6 1186 169.8 1182.7 168.1C1179.4 166.5 1176.5 164.2 1174.3 161.4C1172 158.6 1170.3 155.3 1169.2 151.6C1168 147.9 1167.5 143.9 1167.5 139.8C1167.5 135.7 1168.1 131.7 1169.2 128C1170.3 124.3 1172.1 121 1174.3 118.3C1176.6 115.5 1179.4 113.3 1182.7 111.7C1186 110.1 1190 109.3 1194.4 109.3C1198.9 109.3 1202.9 110.1 1206.3 111.8C1209.7 113.4 1212.5 115.7 1214.8 118.4C1217.1 121.2 1218.8 124.4 1219.9 128.1C1221 131.8 1221.6 135.8 1221.6 139.9ZM1078.1 107.9C1076.1 105.9 1073.7 104.3 1071 103.1C1068.3 101.9 1065.3 101.3 1062.3 101.3H1033V179.3H1042.1V146.4H1062.2C1065.3 146.4 1068.2 145.8 1070.9 144.7C1073.6 143.6 1076 141.9 1078 139.9C1080 137.9 1081.6 135.5 1082.8 132.8C1084 130.1 1084.6 127.1 1084.6 124C1084.6 120.9 1084 117.9 1082.8 115.2C1081.7 112.3 1080.1 109.9 1078.1 107.9ZM1075.6 123.8C1075.6 125.6 1075.2 127.4 1074.5 129C1073.8 130.6 1072.8 132 1071.6 133.2C1070.4 134.4 1069 135.4 1067.4 136.1C1065.8 136.8 1064 137.2 1062.2 137.2H1042.1V110.4H1062.2C1064 110.4 1065.8 110.8 1067.4 111.5C1069 112.2 1070.5 113.2 1071.7 114.4C1072.9 115.6 1073.9 117 1074.6 118.6C1075.2 120.3 1075.6 122 1075.6 123.8Z" fill="white"/>
 <path d="M1133.41 270.5L1129.91 258.92H1113.49L1110 270.5H1101.12L1114.82 227.66H1128.76L1142.52 270.5H1133.41ZM1120.31 236.24L1115.79 251.12H1127.49L1122.97 236.24H1120.31Z" fill="white" fill-opacity="0.6"/>
@@ -98,6 +115,9 @@
 </g>
 </g>
   </g>
-  <!-- Title (Montserrat 400) – right-aligned, vertically centred -->
-  <text x="1144" y="120" text-anchor="end" font-family="'Montserrat', sans-serif" font-size="56" font-weight="200" fill="#FFFFFF">Web Application</text>
+  <!-- Title + subtitle + tag + accent (right-aligned, vertically centred) -->
+  <text x="1144" y="81" text-anchor="end" font-family="HankenGrotesk, 'Hanken Grotesk', sans-serif" font-size="48" font-weight="700" fill="#FFFFFF">Web Application</text>
+  <text x="1144" y="118" text-anchor="end" font-family="SourceSans3, 'Source Sans 3', sans-serif" font-size="22" font-weight="400" fill="#E8E8E8">Frontend and user interfaces</text>
+  <text x="1144" y="144" text-anchor="end" font-family="SourceSans3, 'Source Sans 3', sans-serif" font-size="20" font-weight="400" fill="#00BCD4">React • TypeScript • Vite</text>
+  <rect x="1024" y="164" width="120" height="4" fill="#00BCD4"/>
 </svg>
