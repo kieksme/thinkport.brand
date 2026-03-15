@@ -578,30 +578,34 @@
               </h3>
               <div class="mb-4">
                 <img
-                  src="{{repoBaseUrl}}/.github/social-preview.png"
+                  src="{{basePath}}assets/banner/opengraph/implementations.svg"
                   alt="Social Preview Beispiel"
                   class="w-full rounded-lg border border-gray-200"
-                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
                 />
-                <div style="display: none;" class="text-sm text-gray-500 italic">
-                  Social Preview wird generiert...
-                </div>
               </div>
+              <p class="font-body text-sm text-gray-600 mb-4">
+                Das Vorschaubild entspricht dem Stil der Thinkport Social Previews (2:1, Branding).
+                Nach dem Setup findest du die Dateien unter
+                <code class="bg-gray-200 px-1 rounded">.github/social-preview.png</code> bzw.
+                <code class="bg-gray-200 px-1 rounded">.github/social-preview.svg</code> im Repository.
+              </p>
               <div class="flex gap-2">
                 <a
                   href="{{repoBaseUrl}}/.github/social-preview.svg"
                   target="_blank"
+                  rel="noopener"
                   class="text-aqua hover:underline text-sm"
                 >
-                  SVG
+                  SVG im Repo
                 </a>
                 <span class="text-gray-400"> • </span>
                 <a
                   href="{{repoBaseUrl}}/.github/social-preview.png"
                   target="_blank"
+                  rel="noopener"
                   class="text-aqua hover:underline text-sm"
                 >
-                  PNG
+                  PNG im Repo
                 </a>
               </div>
             </div>
