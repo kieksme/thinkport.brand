@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.12.0](https://github.com/kieksme/thinkport.brand/compare/v0.11.0...v0.12.0) (2026-03-15)
+
+
+### Features
+
+* **avatars:** add placeholder portrait generation for sample avatars when no source images are available ([01956fe](https://github.com/kieksme/thinkport.brand/commit/01956fe5446e84ca14bf4b74fcc569e9e3859bed))
+* **avatars:** enhance avatar generation with multiple background options and update documentation ([f5bfb5d](https://github.com/kieksme/thinkport.brand/commit/f5bfb5d84f3f33395763ea873f377ffb66e1f2e7))
+* **implementations:** add Beispiel-Apps section with Light and Dark mode iframes ([8939208](https://github.com/kieksme/thinkport.brand/commit/89392082f4fd974f64f2786ea4eaaf79cb28cb76))
+* **implementations:** add new portfolio PDF and Teams sections, update business card PDF links ([a28b353](https://github.com/kieksme/thinkport.brand/commit/a28b35317005fd3d27bdb600f99639ffbe6722b7))
+* **linkedin:** enhance LinkedIn image generation with brand color harmonization and static output adjustments ([40dd727](https://github.com/kieksme/thinkport.brand/commit/40dd727be085add7aa175d4eb76c645db5739d11))
+* **teams:** implement image modal for team backgrounds with enhanced interactivity and styling ([8bf5873](https://github.com/kieksme/thinkport.brand/commit/8bf5873f13bbbcf95a5ecdae394ad78db0f5ad5b))
+* **theme:** introduce dynamic theme color support across HTML templates and configuration ([a910bc9](https://github.com/kieksme/thinkport.brand/commit/a910bc9950f407fde9e0ac417980645cdaee1efa))
+
+
+### Bug Fixes
+
+* **avatars:** create source directory for avatar images if not found and prompt user for image placement ([3241d45](https://github.com/kieksme/thinkport.brand/commit/3241d45a1db682adc675edb09b42ff64c7bea3c2))
+* **email-footer:** update logo handling in email footer templates to use CID for inline attachment and improve iframe preview functionality ([54c9bb5](https://github.com/kieksme/thinkport.brand/commit/54c9bb5fc4d19679d80048d7e9f5eef73b542644))
+* **ios-posters:** update poster image source to new mock file and add missing mock image ([264b4c6](https://github.com/kieksme/thinkport.brand/commit/264b4c6759cc9d5712eb76c7626cf380e57d2fd7))
+* **portfolio:** add example portfolio path to PDF generation instructions and update HTML links to use dynamic base URL ([b9a80c0](https://github.com/kieksme/thinkport.brand/commit/b9a80c018e64798cd0e252b506305a98464b78e1))
+
 ## [0.11.0](https://github.com/kieksme/thinkport.brand/compare/v0.10.0...v0.11.0) (2026-03-15)
 
 
