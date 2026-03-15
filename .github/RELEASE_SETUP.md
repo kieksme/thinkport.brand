@@ -61,13 +61,26 @@ This will create a release PR for the specified version.
 
 ## Troubleshooting
 
-If release-please fails with commit parsing errors:
+### "Could not resolve to a node with the global id of 'PR_...'" (after deleting releases)
+
+This happens when Release Please tries to add a label to a Pull Request that no longer exists (e.g. after you deleted releases and the associated Release PR was closed or deleted).
+
+**Fix:**
+
+1. **Create one release again** so Release Please has a baseline:
+   - Create tag `v0.15.0` (or whatever version is in `.release-please-manifest.json`):  
+     `git tag v0.15.0 && git push origin v0.15.0`
+   - In GitHub: **Releases** → **Draft a new release** → choose that tag → Publish.
+2. **Close any open Release Please PRs** (e.g. "chore(main): release X.Y.Z") so the next run creates a fresh one instead of updating a stale reference.
+3. **Re-run the Release Please workflow** (Actions → Release Please → Run workflow) or push a new commit to `main`.
+
+### Commit parsing errors
 
 - This is normal for the initial setup before the first release exists
 - Create the initial release manually as described above
 - Future releases will work automatically
 
-If you see JSON parsing errors:
+### JSON parsing errors
 
 - Ensure `.release-please-manifest.json` is valid JSON
 - The file should contain: `{ ".": "0.1.0" }`
