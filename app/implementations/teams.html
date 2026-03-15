@@ -137,6 +137,129 @@
         height: auto;
         display: block;
       }
+
+      /* Teams image modal */
+      .teams-gallery-trigger {
+        padding: 0;
+        border: none;
+        background: none;
+        cursor: pointer;
+        display: block;
+        width: 100%;
+        text-align: left;
+      }
+      .teams-gallery-trigger:hover img,
+      .teams-gallery-trigger:focus-visible img {
+        border-color: var(--color-aqua-600, #0d9488);
+      }
+      .teams-image-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background: rgba(0, 0, 0, 0.7);
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transition: opacity 0.2s ease, visibility 0.2s ease;
+      }
+      .teams-image-modal.is-open {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+      .teams-image-modal__backdrop {
+        position: absolute;
+        inset: 0;
+      }
+      .teams-image-modal__content {
+        position: relative;
+        max-width: 90vw;
+        max-height: 90vh;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .teams-image-modal__content img {
+        max-width: 100%;
+        max-height: 60vh;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        border-radius: 0.75rem;
+        background: #fff;
+      }
+      .teams-image-modal__caption {
+        margin-top: 0.75rem;
+        font-family: inherit;
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #1e3a5f;
+      }
+      .teams-image-modal__meta {
+        margin-top: 1rem;
+        padding: 1rem;
+        max-width: 100%;
+        text-align: center;
+        background: #fff;
+        border-radius: 0.5rem;
+      }
+      .teams-image-modal__title {
+        font-family: inherit;
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1e3a5f;
+        margin: 0 0 0.5rem;
+      }
+      .teams-image-modal__description {
+        font-family: inherit;
+        font-size: 0.875rem;
+        color: #4b5563;
+        margin: 0 0 0.75rem;
+        line-height: 1.5;
+      }
+      .teams-image-modal__download {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+      }
+      .teams-image-modal__nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0.75rem;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        color: #1e3a5f;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        line-height: 1;
+      }
+      .teams-image-modal__nav:hover {
+        background: #fff;
+      }
+      .teams-image-modal__nav--prev { left: 0.5rem; }
+      .teams-image-modal__nav--next { right: 0.5rem; }
+      .teams-image-modal__close {
+        position: absolute;
+        top: -2.5rem;
+        right: 0;
+        padding: 0.5rem;
+        border: none;
+        background: rgba(255, 255, 255, 0.9);
+        color: #1e3a5f;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        line-height: 1;
+      }
+      .teams-image-modal__close:hover {
+        background: #fff;
+      }
     </style>
   </head>
   <body>
@@ -188,11 +311,14 @@
 
           <div class="background-grid">
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-city.png"
-                alt="Thinkport Teams Hintergrund – City"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – City">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-city.png"
+                  alt="Thinkport Teams Hintergrund – City"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 City
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -209,11 +335,14 @@
             </div>
 
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-norway.png"
-                alt="Thinkport Teams Hintergrund – Norway"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – Norway">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-norway.png"
+                  alt="Thinkport Teams Hintergrund – Norway"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 Norway
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -231,11 +360,14 @@
             </div>
 
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-planat.png"
-                alt="Thinkport Teams Hintergrund – Planat"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – Planat">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-planat.png"
+                  alt="Thinkport Teams Hintergrund – Planat"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 Planat
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -253,11 +385,14 @@
             </div>
 
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-desert.png"
-                alt="Thinkport Teams Hintergrund – Desert"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – Desert">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-desert.png"
+                  alt="Thinkport Teams Hintergrund – Desert"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 Desert
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -274,11 +409,14 @@
             </div>
 
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-moonlight.png"
-                alt="Thinkport Teams Hintergrund – Moonlight"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – Moonlight">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-moonlight.png"
+                  alt="Thinkport Teams Hintergrund – Moonlight"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 Moonlight
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -296,11 +434,14 @@
             </div>
 
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-stormyweather.png"
-                alt="Thinkport Teams Hintergrund – Stormy Weather"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – Stormy Weather">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-stormyweather.png"
+                  alt="Thinkport Teams Hintergrund – Stormy Weather"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 Stormy Weather
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -318,11 +459,14 @@
             </div>
 
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-cluster.png"
-                alt="Thinkport Teams Hintergrund – Cluster"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – Cluster">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-cluster.png"
+                  alt="Thinkport Teams Hintergrund – Cluster"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 Cluster
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -340,11 +484,14 @@
             </div>
 
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-owl.png"
-                alt="Thinkport Teams Hintergrund – Owl"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – Owl">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-owl.png"
+                  alt="Thinkport Teams Hintergrund – Owl"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 Owl
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -362,11 +509,14 @@
             </div>
 
             <div class="card-aqua background-card">
-              <img
-                src="{{basePath}}examples/teams/backgounds/thinkport-teams-abstract.png"
-                alt="Thinkport Teams Hintergrund – Abstract"
-              />
-              <h3 class="font-heading text-lg font-bold text-navy mt-4 mb-1">
+              <button type="button" class="teams-gallery-trigger" aria-label="Bild vergrößern – Abstract">
+                <img
+                  src="{{basePath}}examples/teams/backgounds/thinkport-teams-abstract.png"
+                  alt="Thinkport Teams Hintergrund – Abstract"
+                />
+              </button>
+              <p class="font-body text-xs text-gray-500 mb-1">Klicken zum Vergrößern</p>
+              <h3 class="font-heading text-lg font-bold text-navy mt-2 mb-1">
                 Abstract
               </h3>
               <p class="font-body text-sm text-gray-600 mb-3">
@@ -582,6 +732,47 @@
           </div>
         </div>
       </section>
+
+      <!-- Teams image modal (enlarged view) -->
+      <div
+        id="teams-image-modal"
+        class="teams-image-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-hidden="true"
+        aria-labelledby="teams-image-modal-title"
+      >
+        <div class="teams-image-modal__backdrop" id="teams-image-modal-backdrop"></div>
+        <div class="teams-image-modal__content">
+          <button
+            type="button"
+            class="teams-image-modal__close"
+            id="teams-image-modal-close"
+            aria-label="Schließen"
+          >
+            <i class="ti ti-x" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="teams-image-modal__nav teams-image-modal__nav--prev" id="teams-image-modal-prev" aria-label="Vorheriges Bild">
+            <i class="ti ti-chevron-left" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="teams-image-modal__nav teams-image-modal__nav--next" id="teams-image-modal-next" aria-label="Nächstes Bild">
+            <i class="ti ti-chevron-right" aria-hidden="true"></i>
+          </button>
+          <img
+            id="teams-image-modal-img"
+            src=""
+            alt=""
+          />
+          <div class="teams-image-modal__meta">
+            <h3 id="teams-image-modal-title" class="teams-image-modal__title"></h3>
+            <p id="teams-image-modal-description" class="teams-image-modal__description"></p>
+            <a id="teams-image-modal-download" href="#" download class="teams-image-modal__download text-aqua hover:underline font-body">
+              <i class="ti ti-download" aria-hidden="true"></i>
+              <span>PNG herunterladen</span>
+            </a>
+          </div>
+        </div>
+      </div>
     </main>
 
     <!-- include: implementations-grid -->
@@ -598,6 +789,112 @@
           mobileMenu.classList.toggle("open");
         });
       }
+
+      // Teams image modal (enlarged view)
+      (function () {
+        const modal = document.getElementById("teams-image-modal");
+        const modalBackdrop = document.getElementById("teams-image-modal-backdrop");
+        const modalCloseBtn = document.getElementById("teams-image-modal-close");
+        const modalPrevBtn = document.getElementById("teams-image-modal-prev");
+        const modalNextBtn = document.getElementById("teams-image-modal-next");
+        const modalImg = document.getElementById("teams-image-modal-img");
+        const modalTitle = document.getElementById("teams-image-modal-title");
+        const modalDescription = document.getElementById("teams-image-modal-description");
+        const modalDownload = document.getElementById("teams-image-modal-download");
+        const cards = document.querySelectorAll(".background-card");
+        const triggers = document.querySelectorAll(".teams-gallery-trigger");
+
+        const items = Array.from(cards).map(function (card) {
+          const img = card.querySelector(".teams-gallery-trigger img");
+          const heading = card.querySelector("h3");
+          const descEl = card.querySelector(".font-body.text-sm.text-gray-600");
+          const downloadLink = card.querySelector("a[download]");
+          return {
+            src: img ? img.src : "",
+            alt: img ? img.alt || "" : "",
+            title: heading ? heading.textContent.trim() : "",
+            description: descEl ? descEl.textContent.trim() : "",
+            downloadHref: downloadLink ? downloadLink.getAttribute("href") || "" : "",
+          };
+        });
+
+        let lastTrigger = null;
+        let currentIndex = 0;
+
+        function updateModalContent() {
+          const item = items[currentIndex];
+          if (!item || !modalImg) return;
+          modalImg.src = item.src;
+          modalImg.alt = item.alt;
+          if (modalTitle) modalTitle.textContent = item.title;
+          if (modalDescription) modalDescription.textContent = item.description;
+          if (modalDownload) {
+            modalDownload.setAttribute("href", item.downloadHref);
+          }
+          if (modalPrevBtn) {
+            modalPrevBtn.disabled = currentIndex <= 0;
+            modalPrevBtn.style.visibility = currentIndex <= 0 ? "hidden" : "visible";
+          }
+          if (modalNextBtn) {
+            modalNextBtn.disabled = currentIndex >= items.length - 1;
+            modalNextBtn.style.visibility = currentIndex >= items.length - 1 ? "hidden" : "visible";
+          }
+        }
+
+        function openModal(index) {
+          if (!modal || !modalImg || index < 0 || index >= items.length) return;
+          currentIndex = index;
+          updateModalContent();
+          modal.setAttribute("aria-hidden", "false");
+          modal.classList.add("is-open");
+          document.body.style.overflow = "hidden";
+          if (modalCloseBtn) modalCloseBtn.focus();
+        }
+
+        function goPrev() {
+          if (currentIndex > 0) openModal(currentIndex - 1);
+        }
+
+        function goNext() {
+          if (currentIndex < items.length - 1) openModal(currentIndex + 1);
+        }
+
+        function closeModal() {
+          if (!modal) return;
+          modal.setAttribute("aria-hidden", "true");
+          modal.classList.remove("is-open");
+          document.body.style.overflow = "";
+          if (lastTrigger && typeof lastTrigger.focus === "function") lastTrigger.focus();
+          lastTrigger = null;
+        }
+
+        triggers.forEach(function (trigger, index) {
+          trigger.addEventListener("click", function () {
+            lastTrigger = trigger;
+            openModal(index);
+          });
+        });
+
+        if (modalCloseBtn) modalCloseBtn.addEventListener("click", closeModal);
+        if (modalBackdrop) modalBackdrop.addEventListener("click", closeModal);
+        if (modalPrevBtn) modalPrevBtn.addEventListener("click", function (e) { e.stopPropagation(); goPrev(); });
+        if (modalNextBtn) modalNextBtn.addEventListener("click", function (e) { e.stopPropagation(); goNext(); });
+
+        document.addEventListener("keydown", function (e) {
+          if (!modal || !modal.classList.contains("is-open")) return;
+          if (e.key === "Escape") {
+            closeModal();
+            return;
+          }
+          if (e.key === "ArrowLeft") {
+            goPrev();
+            e.preventDefault();
+          } else if (e.key === "ArrowRight") {
+            goNext();
+            e.preventDefault();
+          }
+        });
+      })();
     </script>
     <!-- include: analytics -->
   </body>
