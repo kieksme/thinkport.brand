@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.12.1](https://github.com/kieksme/thinkport.brand/compare/v0.12.0...v0.12.1) (2026-03-15)
+
+
+### Bug Fixes
+
+* **deploy:** update VITE_BASE_PATH for GitHub Pages to reflect correct asset URL structure ([f821ad3](https://github.com/kieksme/thinkport.brand/commit/f821ad3101673af87668124e390b5bf5849e5ca7))
+
 ## [0.12.0](https://github.com/kieksme/thinkport.brand/compare/v0.11.0...v0.12.0) (2026-03-15)
 
 
