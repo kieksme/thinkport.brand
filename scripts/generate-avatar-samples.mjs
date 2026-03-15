@@ -7,7 +7,8 @@
 import { join, resolve, basename, extname } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
+import sharp from 'sharp';
 import { generateAvatar } from './generate-avatar.mjs';
 import { header, success, info, error, endGroup } from './misc-cli-utils.mjs';
 
@@ -21,6 +22,29 @@ const BACKGROUND_VARIANTS = [
   { path: 'assets/backgrounds/3.svg', fileSuffix: '-abstract-3', generateGrayscale: false },
   { path: 'assets/backgrounds/7.svg', fileSuffix: '-abstract-7', generateGrayscale: false },
 ];
+
+/** Placeholder portrait filename when source/avatars is empty (so samples can be generated without real portraits). */
+const PLACEHOLDER_FILENAME = 'placeholder.png';
+
+/**
+ * Create a neutral placeholder portrait (512×512) so sample generation works without real source images.
+ * @param {string} outputPath - Full path for the placeholder PNG
+ * @returns {Promise<void>}
+ */
+async function createPlaceholderPortrait(outputPath) {
+  const size = 512;
+  const buffer = await sharp({
+    create: {
+      width: size,
+      height: size,
+      channels: 4,
+      background: { r: 180, g: 180, b: 190, alpha: 1 },
+    },
+  })
+    .png()
+    .toBuffer();
+  writeFileSync(outputPath, buffer);
+}
 
 /**
  * Generate all sample avatars (one per portrait, size, and background variant)
@@ -41,7 +65,7 @@ async function generateSampleAvatars() {
   }
 
   const { readdirSync } = await import('fs');
-  const portraitFiles = readdirSync(sourceDir)
+  let portraitFiles = readdirSync(sourceDir)
     .filter(file => {
       const ext = extname(file).toLowerCase();
       if (ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') {
@@ -53,8 +77,10 @@ async function generateSampleAvatars() {
     .map(file => join(sourceDir, file));
 
   if (portraitFiles.length === 0) {
-    error('Keine Portrait-Dateien in source/avatars gefunden!');
-    process.exit(1);
+    const placeholderPath = join(sourceDir, PLACEHOLDER_FILENAME);
+    info('Keine Portrait-Dateien in source/avatars – erstelle Platzhalter für Beispiel-Ausgabe.');
+    await createPlaceholderPortrait(placeholderPath);
+    portraitFiles = [placeholderPath];
   }
 
   const sizes = [256, 512];
