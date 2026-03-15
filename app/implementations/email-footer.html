@@ -342,6 +342,8 @@
     <!-- include: footer -->
 
     <script>
+        // Logo URL for iframe preview only (CID is used in actual email code)
+        const EMAIL_FOOTER_LOGO_PREVIEW_URL = '{{basePath}}logos/horizontal/thinkport-horizontal-dark.svg';
         // Email footer templates
         const emailFooters = {
             standard: `<!-- Standard Email Footer -->
@@ -352,7 +354,7 @@
                 <!-- Logo -->
                 <tr>
                     <td align="left" style="padding-bottom: 20px;">
-                        <img src="{{basePath}}logos/horizontal/thinkport-horizontal-dark.svg" alt="Thinkport Logo" width="128" height="32" style="display: block; height: 32px; width: auto;">
+                        <img src="cid:thinkport-logo" alt="Thinkport Logo" width="128" height="32" style="display: block; height: 32px; width: auto;">
                     </td>
                 </tr>
                 <!-- Contact Information -->
@@ -416,7 +418,7 @@
                 <!-- Logo -->
                 <tr>
                     <td align="left" style="padding-bottom: 25px;">
-                        <img src="{{basePath}}logos/horizontal/thinkport-horizontal-dark.svg" alt="Thinkport Logo" width="128" height="32" style="display: block; height: 32px; width: auto; filter: brightness(0) invert(1);">
+                        <img src="cid:thinkport-logo" alt="Thinkport Logo" width="128" height="32" style="display: block; height: 32px; width: auto; filter: brightness(0) invert(1);">
                     </td>
                 </tr>
                 <!-- Content Grid -->
@@ -499,13 +501,14 @@ Unsere Hinweise zur Verarbeitung Ihrer personenbezogenen Daten finden Sie unter 
                 const codeElement = document.getElementById(preview.id.replace('-preview', '-code-content'));
                 
                 if (iframe && codeElement) {
-                    // Set code content (textContent so HTML is shown as source, not rendered)
+                    // Set code content (textContent so HTML is shown as source, not rendered) – keep CID for copy
                     codeElement.textContent = preview.template;
                     if (typeof Prism !== 'undefined') {
                         Prism.highlightElement(codeElement);
                     }
                     
-                    // Create preview document
+                    // For iframe preview only: replace CID with logo URL so the image displays
+                    const previewHtml = preview.template.replace(/cid:thinkport-logo/g, EMAIL_FOOTER_LOGO_PREVIEW_URL);
                     const doc = iframe.contentDocument || iframe.contentWindow.document;
                     doc.open();
                     doc.write(`
@@ -518,7 +521,7 @@ Unsere Hinweise zur Verarbeitung Ihrer personenbezogenen Daten finden Sie unter 
                             </style>
                         </head>
                         <body>
-                            ${preview.template}
+                            ${previewHtml}
                         </body>
                         </html>
                     `);
