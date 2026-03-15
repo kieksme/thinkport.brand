@@ -30,7 +30,9 @@ async function generateSampleAvatars() {
   const outputDir = join(projectRoot, 'examples', 'avatars');
 
   if (!existsSync(sourceDir)) {
-    error(`Quellverzeichnis nicht gefunden: ${sourceDir}`);
+    mkdirSync(sourceDir, { recursive: true });
+    info(`Quellverzeichnis erstellt: source/avatars`);
+    error('Bitte Portrait-Bilder (PNG/JPG) in source/avatars ablegen und den Befehl erneut ausführen.');
     process.exit(1);
   }
 
