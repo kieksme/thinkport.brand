@@ -505,6 +505,22 @@ async function main() {
     info('Fetching Thinkport people (with skills) for portfolios...');
     let thinkportPeopleWithSkills = await getActiveThinkportPeopleWithSkills();
 
+    // Defensive filter: only include people whose company name contains "Thinkport"
+    // (API is expected to return only Thinkport with isThinkport: true; this avoids external staff getting assets)
+    const isThinkportCompany = (p) => (p.companyName || '').toLowerCase().includes('thinkport');
+    const excludedSlugs = new Set([
+      ...thinkportPeople.filter((p) => !isThinkportCompany(p)).map((p) => p.slug),
+      ...thinkportPeopleWithSkills.filter((p) => !isThinkportCompany(p)).map((p) => p.slug),
+    ]);
+    thinkportPeople = thinkportPeople.filter(isThinkportCompany);
+    thinkportPeopleWithSkills = thinkportPeopleWithSkills.filter(isThinkportCompany);
+    if (excludedSlugs.size > 0) {
+      warn(
+        `Excluded ${excludedSlugs.size} person(s) without Thinkport company (defensive filter): ${[...excludedSlugs].sort().join(', ')}`,
+        'filter',
+      );
+    }
+
     if (args.slugFilter) {
       const filter = args.slugFilter;
       thinkportPeople = thinkportPeople.filter((p) => p.slug.toLowerCase().includes(filter));
