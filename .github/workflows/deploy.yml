@@ -61,7 +61,9 @@ jobs:
 
       - name: Build
         env:
-          VITE_BASE_PATH: ${{ format('/{0}/', github.event.repository.name) }}
+          # Use root base path so the site works when served from custom domain (e.g. brand.thinkport.digital).
+          # GitHub Pages with custom domain serves dist at the domain root, not under /repo-name/.
+          VITE_BASE_PATH: '/'
         run: pnpm build
 
       - name: Setup Pages
