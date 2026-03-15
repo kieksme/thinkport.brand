@@ -11,6 +11,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 const REPO_BASE_URL = 'https://raw.githubusercontent.com/kieksme/thinkport.brand/main'
 /** Base path for app assets/routing. Override via VITE_BASE_PATH in CI for GitHub Pages repo deployments. */
 const APP_BASE_PATH = process.env.VITE_BASE_PATH || '/'
+/** Brand theme color (primary dark blue) for meta theme-color and manifest. Must be a hex color. */
+const THEME_COLOR = '#0B2649'
 
 const MIME_TYPES = {
   '.png': 'image/png',
@@ -49,12 +51,12 @@ function serveExamplesPlugin() {
 }
 
 // Plugin to copy manifest.json, sitemap.xml, and CHANGELOG.md to dist root
-const copyRootFilesPlugin = ({ repoBaseUrl }) => {
+const copyRootFilesPlugin = ({ repoBaseUrl, themeColor }) => {
   return {
     name: 'copy-root-files',
     closeBundle() {
       const appFilesToCopy = ['manifest.json', 'sitemap.xml']
-      const appFilesWithReplace = ['sitemap.xml']
+      const appFilesWithReplace = ['sitemap.xml', 'manifest.json']
       const rootFilesToCopy = ['CHANGELOG.md']
       const appDir = resolve(__dirname, 'app')
       const assetsDir = resolve(__dirname, 'assets')
@@ -68,7 +70,8 @@ const copyRootFilesPlugin = ({ repoBaseUrl }) => {
         
         if (existsSync(src)) {
           if (appFilesWithReplace.includes(file)) {
-            const content = readFileSync(src, 'utf-8').replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl)
+            let content = readFileSync(src, 'utf-8').replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl)
+            if (themeColor) content = content.replace(/\{\{themeColor\}\}/g, themeColor)
             writeFileSync(dest, content)
           } else {
             copyFileSync(src, dest)
@@ -118,11 +121,12 @@ export default defineConfig({
   plugins: [
     htmlInclude({
       repoBaseUrl: REPO_BASE_URL,
+      themeColor: THEME_COLOR,
       swetrixProjectId: process.env.VITE_SWETRIX_PROJECT_ID || 'MU8JYS8kagYf',
     }),
     serveExamplesPlugin(),
     tailwindcss(),
-    copyRootFilesPlugin({ repoBaseUrl: REPO_BASE_URL }),
+    copyRootFilesPlugin({ repoBaseUrl: REPO_BASE_URL, themeColor: THEME_COLOR }),
   ],
   build: {
     outDir: resolve(__dirname, 'dist'),

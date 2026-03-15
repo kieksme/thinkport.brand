@@ -13,6 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  */
 export function htmlInclude(options = {}) {
   const repoBaseUrl = options.repoBaseUrl ?? ''
+  const themeColor = options.themeColor ?? '#0B2649'
   const swetrixProjectId = options.swetrixProjectId ?? ''
   const navigationPath = resolve(__dirname, 'app/components/navigation.html');
   const footerPath = resolve(__dirname, 'app/components/footer.html');
@@ -116,7 +117,7 @@ export function htmlInclude(options = {}) {
       const basePath = depth > 0 ? '../'.repeat(depth) : '';
 
       if (!hasNavigation && !hasFooter && !hasHero && !hasAnalytics && !hasFundamentalsGrid && !hasImplementationsGrid) {
-        return html.replace(/\{\{basePath\}\}/g, basePath).replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl);
+        return html.replace(/\{\{basePath\}\}/g, basePath).replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl).replace(/\{\{themeColor\}\}/g, themeColor);
       }
 
       // Determine active page based on file path
@@ -180,8 +181,8 @@ export function htmlInclude(options = {}) {
         html = html.replace('<!-- include: implementations-grid -->', implementationsGrid);
       }
 
-      // Replace {{basePath}} and {{repoBaseUrl}} everywhere (head links, img src, a href, og:image, etc.)
-      html = html.replace(/\{\{basePath\}\}/g, basePath).replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl);
+      // Replace {{basePath}}, {{repoBaseUrl}}, and {{themeColor}} everywhere (head links, img src, a href, og:image, meta theme-color, etc.)
+      html = html.replace(/\{\{basePath\}\}/g, basePath).replace(/\{\{repoBaseUrl\}\}/g, repoBaseUrl).replace(/\{\{themeColor\}\}/g, themeColor);
 
       return html;
     }
