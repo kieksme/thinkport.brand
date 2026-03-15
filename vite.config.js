@@ -146,6 +146,8 @@ export default defineConfig({
         'implementations/github': resolve(__dirname, 'app/implementations/github.html'),
         'implementations/linkedin': resolve(__dirname, 'app/implementations/linkedin.html'),
         'implementations/ios-posters': resolve(__dirname, 'app/implementations/ios-posters.html'),
+        'implementations/portfolio-pdf': resolve(__dirname, 'app/implementations/portfolio-pdf.html'),
+        'implementations/teams': resolve(__dirname, 'app/implementations/teams.html'),
         impressum: resolve(__dirname, 'app/impressum.html'),
         'google920fd9ad773da353': resolve(__dirname, 'app/google920fd9ad773da353.html'),
       },
