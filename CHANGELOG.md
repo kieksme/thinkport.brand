@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.0](https://github.com/kieksme/thinkport.brand/compare/v0.13.0...v0.14.0) (2026-03-15)
+
+
+### Features
+
+* **github:** replace social preview image with Thinkport-Venitus logo and update description for accuracy ([7a0a7ca](https://github.com/kieksme/thinkport.brand/commit/7a0a7ca830b3ac96c4587edd9ee1c484dc5e65aa))
+* **github:** update social preview image paths and enhance description for clarity ([facd2df](https://github.com/kieksme/thinkport.brand/commit/facd2df09ec40052e3d6f500f06ef33bd4dc7ef0))
+
 ## [0.13.0](https://github.com/kieksme/thinkport.brand/compare/v0.12.1...v0.13.0) (2026-03-15)
 
 
