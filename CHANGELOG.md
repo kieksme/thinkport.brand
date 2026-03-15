@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.15.0](https://github.com/kieksme/thinkport.brand/compare/v0.14.0...v0.15.0) (2026-03-15)
+
+
+### Features
+
+* **assets:** update Thinkport logo references in SVG files and implement new logo content for implementations banner ([99495a8](https://github.com/kieksme/thinkport.brand/commit/99495a847f2edbc55514f6e9f7b77f7887623471))
+
 ## [0.14.0](https://github.com/kieksme/thinkport.brand/compare/v0.13.0...v0.14.0) (2026-03-15)
 
 
