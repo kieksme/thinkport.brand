@@ -150,7 +150,7 @@
                     ></iframe>
                 </div>
                 <p class="text-center mt-2 font-body text-gray-700">
-                    <a href="https://cdn.jsdelivr.net/gh/kieksme/thinkport.brand@main/release-assets/staff/portfolios/portfolio-andre-lademann.pdf"
+                    <a href="{{repoBaseUrl}}/examples/portfolios/portfolio-andre-lademann.pdf"
                        target="_blank"
                        rel="noopener noreferrer"
                        class="text-aqua-700 hover:underline font-semibold">
@@ -168,7 +168,7 @@
 
     <script>
         (function() {
-            var pdfUrl = 'https://cdn.jsdelivr.net/gh/kieksme/thinkport.brand@main/release-assets/staff/portfolios/portfolio-andre-lademann.pdf';
+            var pdfUrl = '{{repoBaseUrl}}/examples/portfolios/portfolio-andre-lademann.pdf';
             var iframe = document.getElementById('portfolio-pdf-iframe');
             if (iframe) {
                 iframe.src = pdfUrl;
