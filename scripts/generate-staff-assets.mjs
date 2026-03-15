@@ -41,6 +41,8 @@ const STAFF_BASE_DIR = join(projectRoot, 'release-assets', 'staff');
 const AVATAR_DIR = join(STAFF_BASE_DIR, 'avatars');
 /** Same variants as generate-avatar-samples so the implementations/avatars.html example section can show real staff avatars. */
 const EXAMPLES_AVATAR_DIR = join(projectRoot, 'examples', 'avatars');
+/** Only this person's avatars are written to examples/avatars with generic filenames (Tobias D.). */
+const EXAMPLE_AVATAR_SLUG = 'tobias';
 const SAMPLE_BACKGROUND_VARIANTS = [
   { path: 'assets/backgrounds/5.svg', fileSuffix: '', generateGrayscale: true },
   { path: 'assets/backgrounds/3.svg', fileSuffix: '-abstract-3', generateGrayscale: false },
@@ -212,25 +214,27 @@ async function generateAvatarsForPeople(people) {
       }
     }
 
-    // Write sample set to examples/avatars with generic filenames (no person name) for implementations/avatars.html
-    ensureDir(EXAMPLES_AVATAR_DIR);
-    for (const size of sizes) {
-      for (const variant of SAMPLE_BACKGROUND_VARIANTS) {
-        const baseName = `avatar-${size}${variant.fileSuffix}.png`;
-        const outputPath = join(EXAMPLES_AVATAR_DIR, baseName);
-        try {
-          await generateAvatar(portraitPath, size, outputPath, { backgroundPath: variant.path });
-          generatedCount += 1;
-          if (variant.generateGrayscale) {
-            const grayscalePath = join(EXAMPLES_AVATAR_DIR, `avatar-${size}-grayscale.png`);
-            await generateAvatar(portraitPath, size, grayscalePath, {
-              backgroundPath: variant.path,
-              grayscalePortrait: true,
-            });
+    // Write sample set to examples/avatars with generic filenames only for the designated example person (Tobias D.)
+    if (slug.toLowerCase().includes(EXAMPLE_AVATAR_SLUG)) {
+      ensureDir(EXAMPLES_AVATAR_DIR);
+      for (const size of sizes) {
+        for (const variant of SAMPLE_BACKGROUND_VARIANTS) {
+          const baseName = `avatar-${size}${variant.fileSuffix}.png`;
+          const outputPath = join(EXAMPLES_AVATAR_DIR, baseName);
+          try {
+            await generateAvatar(portraitPath, size, outputPath, { backgroundPath: variant.path });
             generatedCount += 1;
+            if (variant.generateGrayscale) {
+              const grayscalePath = join(EXAMPLES_AVATAR_DIR, `avatar-${size}-grayscale.png`);
+              await generateAvatar(portraitPath, size, grayscalePath, {
+                backgroundPath: variant.path,
+                grayscalePortrait: true,
+              });
+              generatedCount += 1;
+            }
+          } catch (err) {
+            error(`Failed to generate example avatar ${baseName}: ${err.message}`, slug);
           }
-        } catch (err) {
-          error(`Failed to generate example avatar ${baseName}: ${err.message}`, slug);
         }
       }
     }
