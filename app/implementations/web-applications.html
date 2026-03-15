@@ -325,6 +325,46 @@ export default defineConfig({
         </div>
       </section>
 
+      <!-- Beispiel-Apps Section (Light / Dark iframes) -->
+      <section class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+          <h2
+            class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8"
+          >
+            Beispiel-Apps
+          </h2>
+          <p class="font-body text-lg text-gray-700 mb-8">
+            Zwei minimale Beispiel-Apps im Thinkport-Stil: eine im Light-Mode
+            und eine im Dark-Mode. So können Ihre Webanwendungen in beiden
+            Themes aussehen.
+          </p>
+          <div class="grid md:grid-cols-2 gap-8">
+            <div class="rounded-lg overflow-hidden border border-gray-200 shadow-md bg-white">
+              <p class="font-body text-sm font-semibold text-navy px-4 py-2 bg-gray-50 border-b border-gray-200">
+                Light Mode
+              </p>
+              <iframe
+                title="Thinkport Beispiel-App Light Mode"
+                src="{{basePath}}demos/example-app-light.html"
+                class="w-full border-0 block"
+                style="height: 360px;"
+              ></iframe>
+            </div>
+            <div class="rounded-lg overflow-hidden border border-gray-200 shadow-md bg-white">
+              <p class="font-body text-sm font-semibold text-navy px-4 py-2 bg-gray-50 border-b border-gray-200">
+                Dark Mode
+              </p>
+              <iframe
+                title="Thinkport Beispiel-App Dark Mode"
+                src="{{basePath}}demos/example-app-dark.html"
+                class="w-full border-0 block"
+                style="height: 360px;"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- Button Examples Section -->
       <section class="py-16 px-4 bg-white">
         <div class="max-w-6xl mx-auto">
