@@ -23,12 +23,12 @@ This directory contains official Thinkport GmbH logos in various formats, organi
 
 | File | Format | Use |
 |------|--------|-----|
-| `thinkport-horizontal-dark.svg` | SVG | Dark backgrounds |
+| `thinkport-horizontal-dark.svg` | SVG | Dark logo (e.g. light backgrounds); also used in email footers as inline attachment (Content-ID `thinkport-logo`) – PNG recommended for email |
 | `thinkport-horizontal-light.svg` | SVG | Light backgrounds |
 | `thinkport-horizontal-light-200x50.png` | PNG | Fixed size (e.g. 200×50) |
 | `thinkport-horizontal-light-hr.png` | PNG | High resolution |
 
-Use **dark** on dark backgrounds and **light** on light backgrounds.
+Use **dark** on dark backgrounds and **light** on light backgrounds. For email footers, attach the dark logo as an inline attachment with Content-ID `thinkport-logo`; use PNG for best compatibility (export from the SVG if needed).
 
 ### Solo / icon (`solo/`)
 
