@@ -282,6 +282,43 @@
             </div>
           </div>
 
+          <!-- Various backgrounds -->
+          <div class="mb-6">
+            <h3 class="font-heading text-xl font-bold text-navy mb-3">
+              Beispielavatare mit verschiedenen Hintergrundbildern
+            </h3>
+            <p class="font-body text-sm text-gray-700 mb-4 text-center max-w-3xl mx-auto">
+              Avatare können mit verschiedenen Abstract-Hintergründen erzeugt werden.
+              Hier dieselbe Person mit Abstract 3, Abstract 5 (Standard) und Abstract 7.
+            </p>
+            <div class="flex flex-wrap justify-center items-end gap-6">
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256-abstract-3.png"
+                  alt="Avatar mit Abstract-3-Hintergrund (256x256px)"
+                  class="w-24 h-24 rounded-lg object-cover"
+                />
+                <p class="avatar-example-label">Abstract 3</p>
+              </div>
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256.png"
+                  alt="Avatar mit Abstract-5-Hintergrund (256x256px)"
+                  class="w-24 h-24 rounded-lg object-cover"
+                />
+                <p class="avatar-example-label">Abstract 5</p>
+              </div>
+              <div class="avatar-example">
+                <img
+                  src="{{basePath}}examples/avatars/avatar-thinkport-avatar-alademann-256-abstract-7.png"
+                  alt="Avatar mit Abstract-7-Hintergrund (256x256px)"
+                  class="w-24 h-24 rounded-lg object-cover"
+                />
+                <p class="avatar-example-label">Abstract 7</p>
+              </div>
+            </div>
+          </div>
+
           <!-- Grayscale Variants -->
           <div class="mb-6">
             <h3 class="font-heading text-xl font-bold text-navy mb-3">
@@ -491,6 +528,11 @@ pnpm run generate:avatar</code></pre>
                 <strong>--output &lt;path&gt;</strong>: Ausgabedatei-Pfad
                 [erforderlich im CLI-Modus, Standard: output/avatars/]
               </li>
+              <li>
+                <strong>--background &lt;path&gt;</strong>: Optionaler Pfad zum Hintergrund-SVG
+                (z. B. <code class="bg-gray-200 px-1 rounded">assets/backgrounds/3.svg</code>);
+                Standard ist Abstract 5.
+              </li>
             </ul>
           </div>
 
@@ -513,7 +555,7 @@ pnpm run generate:avatar</code></pre>
               Beispiel-Avatare generieren
             </h3>
             <p class="font-body text-gray-700 mb-4">
-              Um Beispiel-Avatare mit Abstract-5-Hintergrund automatisch zu generieren,
+              Um Beispiel-Avatare (Abstract 3, 5, 7 und Graustufen für Abstract 5) automatisch zu generieren,
               verwenden Sie das Beispiel-Generator-Skript:
             </p>
             <div class="code-example mb-4">
@@ -526,9 +568,9 @@ pnpm run generate:avatar:samples</code></pre>
               Das Skript generiert automatisch Avatare mit:
             </p>
             <ul class="font-body text-sm text-gray-700 space-y-1 list-disc list-inside mb-4">
-              <li>Hintergrund: Abstract 5</li>
+              <li>Hintergründe: Abstract 3, Abstract 5 (Standard), Abstract 7</li>
               <li>Zwei Standard-Größen (256px, 512px)</li>
-              <li>Farbige Avatare + Graustufen-Varianten (Portrait Grau, Hintergrund Farbe)</li>
+              <li>Farbige Avatare; Graustufen-Portrait (Person Grau, Hintergrund Farbe) nur bei Abstract 5</li>
             </ul>
             <p class="font-body text-sm text-gray-600">
               Die generierten Avatare werden im Verzeichnis <code class="bg-gray-200 px-2 py-1 rounded">examples/avatars</code> gespeichert.

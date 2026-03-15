@@ -120,6 +120,7 @@ function parseArgs() {
     portrait: null,
     size: AVATAR_CONFIG.defaults.size,
     output: null,
+    background: null,
   };
 
   for (let i = 0; i < args.length; i++) {
@@ -130,6 +131,8 @@ function parseArgs() {
       parsed.size = parseInt(args[++i], 10);
     } else if (arg === '--output' && i + 1 < args.length) {
       parsed.output = args[++i];
+    } else if (arg === '--background' && i + 1 < args.length) {
+      parsed.background = args[++i];
     } else if (arg === '--help' || arg === '-h') {
       return { help: true };
     }
@@ -339,15 +342,16 @@ function showHelp() {
 ${header('Avatar Generator', 'Einfach besser aussehen')}
 
 Usage:
-  node scripts/generate-avatar.mjs [--portrait <path>] [--size <pixels>] [--output <path>]
+  node scripts/generate-avatar.mjs [--portrait <path>] [--size <pixels>] [--output <path>] [--background <path>]
 
 Options:
   --portrait <path>    Path to cut-out portrait image (PNG with transparency)
   --size <pixels>      Output size in pixels (square, default: 512)
   --output <path>      Output file path
+  --background <path>  Optional: path to background SVG (e.g. assets/backgrounds/3.svg); default: Abstract 5
   --help, -h           Show this help message
 
-Background: Abstract 5 (assets/backgrounds/5.svg) is used as the avatar background.
+Background: Abstract 5 (assets/backgrounds/5.svg) is used by default. Use --background to use another SVG (e.g. assets/backgrounds/7.svg).
 The portrait is composited centered on top.
 
 If no arguments are provided, an interactive prompt will guide you through the process.
@@ -361,6 +365,9 @@ Examples:
 
   # Generate 256x256px avatar
   node scripts/generate-avatar.mjs --portrait path/to/portrait.png --size 256 --output output/avatar-256.png
+
+  # Use a different background (e.g. Abstract 3)
+  node scripts/generate-avatar.mjs --portrait path/to/portrait.png --size 512 --output output/avatar-512.png --background assets/backgrounds/3.svg
 `);
 }
 
@@ -380,7 +387,8 @@ async function main() {
 
     // If all required arguments are provided, use CLI mode
     if (args.portrait && args.output) {
-      await generateAvatar(args.portrait, args.size, args.output);
+      const options = args.background ? { backgroundPath: args.background } : {};
+      await generateAvatar(args.portrait, args.size, args.output, options);
       success('Avatar generation completed!');
       return;
     }

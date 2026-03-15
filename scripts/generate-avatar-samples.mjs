@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Generate sample avatars
- * Creates example avatars with Abstract 5 background (one variant per portrait and size)
+ * Creates example avatars with Abstract 5 (default) and optional other backgrounds (Abstract 3, 7)
  */
 
 import { join, resolve, basename, extname } from 'path';
@@ -15,12 +15,24 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = resolve(__dirname, '..');
 
+/** Background variants for sample avatars: default (Abstract 5) + extra for "various backgrounds" section */
+const BACKGROUND_VARIANTS = [
+  { path: 'assets/backgrounds/5.svg', fileSuffix: '', generateGrayscale: true },
+  { path: 'assets/backgrounds/3.svg', fileSuffix: '-abstract-3', generateGrayscale: false },
+  { path: 'assets/backgrounds/7.svg', fileSuffix: '-abstract-7', generateGrayscale: false },
+];
+
 /**
- * Generate all sample avatars (one per portrait and size)
+ * Generate all sample avatars (one per portrait, size, and background variant)
  */
 async function generateSampleAvatars() {
   const sourceDir = join(projectRoot, 'source', 'avatars');
   const outputDir = join(projectRoot, 'examples', 'avatars');
+
+  if (!existsSync(sourceDir)) {
+    error(`Quellverzeichnis nicht gefunden: ${sourceDir}`);
+    process.exit(1);
+  }
 
   if (!existsSync(outputDir)) {
     mkdirSync(outputDir, { recursive: true });
@@ -54,28 +66,35 @@ async function generateSampleAvatars() {
     for (const size of sizes) {
       const fileNameSlug = portraitName;
 
-      // Full color
-      const outputFileName = `avatar-${fileNameSlug}-${size}.png`;
-      const outputPath = join(outputDir, outputFileName);
-      try {
-        info(`  Generiere: ${outputFileName}`);
-        await generateAvatar(portraitPath, size, outputPath);
-        generatedAvatars.push(outputFileName);
-        totalAvatars++;
-      } catch (err) {
-        error(`  Fehler bei ${outputFileName}: ${err.message}`);
-      }
+      for (const variant of BACKGROUND_VARIANTS) {
+        const options = { backgroundPath: variant.path };
+        const baseName = `avatar-${fileNameSlug}-${size}${variant.fileSuffix}`;
 
-      // Grayscale portrait, color background
-      const grayscaleFileName = `avatar-${fileNameSlug}-${size}-grayscale.png`;
-      const grayscalePath = join(outputDir, grayscaleFileName);
-      try {
-        info(`  Generiere: ${grayscaleFileName}`);
-        await generateAvatar(portraitPath, size, grayscalePath, { grayscalePortrait: true });
-        generatedAvatars.push(grayscaleFileName);
-        totalAvatars++;
-      } catch (err) {
-        error(`  Fehler bei ${grayscaleFileName}: ${err.message}`);
+        // Full color
+        const outputFileName = `${baseName}.png`;
+        const outputPath = join(outputDir, outputFileName);
+        try {
+          info(`  Generiere: ${outputFileName}`);
+          await generateAvatar(portraitPath, size, outputPath, options);
+          generatedAvatars.push(outputFileName);
+          totalAvatars++;
+        } catch (err) {
+          error(`  Fehler bei ${outputFileName}: ${err.message}`);
+        }
+
+        // Grayscale (only for default Abstract 5)
+        if (variant.generateGrayscale) {
+          const grayscaleFileName = `${baseName}-grayscale.png`;
+          const grayscalePath = join(outputDir, grayscaleFileName);
+          try {
+            info(`  Generiere: ${grayscaleFileName}`);
+            await generateAvatar(portraitPath, size, grayscalePath, { ...options, grayscalePortrait: true });
+            generatedAvatars.push(grayscaleFileName);
+            totalAvatars++;
+          } catch (err) {
+            error(`  Fehler bei ${grayscaleFileName}: ${err.message}`);
+          }
+        }
       }
     }
   }
@@ -88,11 +107,11 @@ async function generateSampleAvatars() {
  */
 async function main() {
   try {
-    header('Sample Avatars Generator', 'Generiere Beispiel-Avatare mit Abstract-5-Hintergrund', 'bgCyan');
+    header('Sample Avatars Generator', 'Generiere Beispiel-Avatare mit verschiedenen Hintergründen', 'bgCyan');
 
     info('Generiere Beispiel-Avatare:');
-    info('  - Hintergrund: Abstract 5 (immer in Farbe)');
-    info('  - Varianten: Farbe + Graustufen-Portrait (Person Grau, Hintergrund Farbe)');
+    info('  - Hintergründe: Abstract 3, Abstract 5 (Standard + Graustufen), Abstract 7');
+    info('  - Varianten: Farbe + Graustufen-Portrait nur bei Abstract 5');
     info('  - Größen: 256px, 512px');
     info('');
 
