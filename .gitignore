@@ -120,6 +120,10 @@ puppeteer-core-*.log
 # qrcode
 qrcode.png
 
+# Playwright E2E
+playwright-report/
+test-results/
+
 # playwrite mcp
 .playwright-mcp/
 

@@ -180,6 +180,11 @@ The generator creates PDFs compliant with print shop specifications:
 
 For more details, see [Business Card Templates documentation](assets/templates/README.md).
 
+### Testing
+
+- **Unit/script tests:** `pnpm test` runs the Node-based tests in `tests/scripts/`.
+- **E2E tests:** `pnpm run test:e2e` runs Playwright end-to-end tests (requires `pnpm install` and `pnpm exec playwright install` for browsers). Tests ensure all app pages load, same-origin assets display, the Impressum page is present, and that no cookies are set when analytics requests are blocked. Use `pnpm run test:e2e:headed` to run tests with a visible browser, or `pnpm run test:e2e:ui` for the interactive UI mode.
+
 ## Contributing
 
 To propose changes to corporate identity materials:
