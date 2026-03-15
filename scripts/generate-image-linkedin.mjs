@@ -72,8 +72,10 @@ function deriveBackgroundVariants(colorHex) {
 /** LinkedIn background palette: Thinkport primary colors only (config.linkedin.colors). */
 function getLinkedInColors() {
   const c = CONFIG.linkedin?.colors || CONFIG.brand.colors;
+  const darkBlue = c.darkBlue ?? c.aqua ?? '#0B2649';
   return {
-    darkBlue: c.darkBlue ?? c.aqua ?? '#0B2649',
+    darkBlue,
+    darkBlueBlur: c.darkBlueBlur ?? darkBlue,
     orange: c.orange ?? '#FF5722',
     turquoise: c.turquoise ?? '#00BCD4',
   };
@@ -117,7 +119,7 @@ function getLogoContrastColor(backgroundHex) {
   const brand = CONFIG.brand.colors;
   const linkedin = getLinkedInColors();
   const whiteRatio = getContrastRatio(backgroundHex, brand.white);
-  const darkRatio = getContrastRatio(backgroundHex, linkedin.darkBlue);
+  const darkRatio = getContrastRatio(backgroundHex, linkedin.darkBlue ?? linkedin.darkBlueBlur);
   const useWhite = whiteRatio >= darkRatio;
   const ratio = useWhite ? whiteRatio : darkRatio;
   if (ratio < MIN_LOGO_CONTRAST) {
@@ -128,17 +130,10 @@ function getLogoContrastColor(backgroundHex) {
 
 /**
  * Modify SVG logo colors based on background (Thinkport brand, contrast-safe).
- * Solo logo uses #0B2649 (dark blue) – replace with high-contrast color.
+ * Solo logo: lighthouse (Leuchtturm) stays dark blue (#0B2649) on all backgrounds; other elements unchanged.
  */
-function modifySoloLogoColors(svgContent, backgroundColor) {
-  const linkedin = getLinkedInColors();
-  const backgroundHex = linkedin[backgroundColor] || linkedin.darkBlue;
-  const contrastColor = getLogoContrastColor(backgroundHex);
-  const darkFillHex = '#0B2649';
-  return svgContent.replace(
-    new RegExp(`fill="${darkFillHex}"`, 'gi'),
-    `fill="${contrastColor}"`
-  );
+function modifySoloLogoColors(svgContent, _backgroundColor) {
+  return svgContent;
 }
 
 /**
@@ -199,12 +194,14 @@ async function svgToPng(svgPath, width, height, backgroundColor = null, isHorizo
  * @param {number} width - Target width
  * @param {number} height - Target height
  * @param {string} colorHex - Brand color for the background base
+ * @param {string|null} [pathOverride] - Optional path relative to project root (e.g. for darkBlueBlur variant)
  * @returns {Promise<sharp.Sharp>} Sharp instance (background layer)
  */
-async function getBackgroundLayer(width, height, colorHex) {
-  const backgroundPath = CONFIG.linkedin?.backgroundPath
-    ? join(projectRoot, CONFIG.linkedin.backgroundPath)
-    : DEFAULT_BACKGROUND_PATH;
+async function getBackgroundLayer(width, height, colorHex, pathOverride = null) {
+  const resolvedPath = pathOverride
+    ? join(projectRoot, pathOverride)
+    : (CONFIG.linkedin?.backgroundPath ? join(projectRoot, CONFIG.linkedin.backgroundPath) : DEFAULT_BACKGROUND_PATH);
+  const backgroundPath = resolvedPath;
 
   if (!existsSync(backgroundPath)) {
     warn(`Background graphic not found: ${backgroundPath}, using solid color`);
@@ -341,7 +338,7 @@ async function generateLinkedInImage(type, options) {
     const colorKey = Object.keys(linkedinColors).find((k) => k.toLowerCase() === String(color).toLowerCase());
     const colorHex = colorKey ? linkedinColors[colorKey] : null;
     if (!colorHex) {
-      throw new Error(`Invalid color: ${color}. Must be one of: darkBlue, orange, turquoise`);
+      throw new Error(`Invalid color: ${color}. Must be one of: darkBlue, darkBlueBlur, orange, turquoise`);
     }
 
     // Determine output format
@@ -364,7 +361,9 @@ async function generateLinkedInImage(type, options) {
     }
 
     // Use background graphic from assets/backgrounds (brand color as base); no text in banners
-    const background = await getBackgroundLayer(width, height, colorHex);
+    const darkBlueBlurBackground = CONFIG.linkedin?.backgroundPathDarkBlueBlur ?? 'assets/backgrounds/16.svg';
+    const backgroundPathOverride = color === 'darkBlueBlur' ? darkBlueBlurBackground : null;
+    const background = await getBackgroundLayer(width, height, colorHex, backgroundPathOverride);
     const compositeLayers = [];
 
     // Add logo if provided or use default (Thinkport brand)
@@ -723,9 +722,10 @@ Examples:
     --output output/linkedin-logo-orange.png
 
 Brand Colors:
-  - darkBlue:  #0B2649
-  - orange:    #FF5722
-  - turquoise: #00BCD4
+  - darkBlue:      #0B2649 (default background graphic)
+  - darkBlueBlur: Eigenständiger Hintergrund „Motiv 16“ (hellere Variante 16.svg), Farbe #0B2649
+  - orange:       #FF5722
+  - turquoise:    #00BCD4
 `);
 }
 
@@ -752,7 +752,7 @@ async function main() {
       }
 
       // Validate color
-      const validColors = ['darkBlue', 'orange', 'turquoise'];
+      const validColors = ['darkBlue', 'darkBlueBlur', 'orange', 'turquoise'];
       if (!validColors.includes(args.color)) {
         error(`Invalid color: ${args.color}. Must be one of: ${validColors.join(', ')}`);
         process.exit(1);

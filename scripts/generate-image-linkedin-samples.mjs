@@ -30,8 +30,8 @@ async function generateSampleLinkedInImages() {
     mkdirSync(outputDir, { recursive: true });
   }
   
-  // Define variants to generate
-  const colors = ['darkBlue', 'orange', 'turquoise'];
+  // Define variants to generate (darkBlue, darkBlueBlur, orange, turquoise)
+  const colors = ['darkBlue', 'darkBlueBlur', 'orange', 'turquoise'];
   const imageTypes = Object.keys(LINKEDIN_SPECS);
   
   // No text in banners; background graphic + logo only
@@ -77,7 +77,7 @@ async function main() {
     
     info('Generiere Beispiel-LinkedIn-Bilder mit verschiedenen Varianten:');
     info('  - Bildtypen: logo, title, culture-main, culture-module, photo, post');
-    info('  - Farben: Dark Blue, Orange, Turquoise (Thinkport-Palette)');
+    info('  - Hintergründe: Dark Blue, Motiv 16 (eigenständig), Orange, Turquoise (Thinkport-Palette)');
     info('  - Empfohlene Größen');
     info('');
     
@@ -100,4 +100,7 @@ async function main() {
   }
 }
 
-main();
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

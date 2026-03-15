@@ -29,8 +29,10 @@
   },
   "linkedin": {
     "backgroundPath": "assets/backgrounds/5-dark.svg",
+    "backgroundPathDarkBlueBlur": "assets/backgrounds/16.svg",
     "colors": {
       "darkBlue": "#0B2649",
+      "darkBlueBlur": "#0B2649",
       "orange": "#FF5722",
       "turquoise": "#00BCD4"
     },
