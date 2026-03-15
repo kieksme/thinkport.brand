@@ -61,9 +61,9 @@ jobs:
 
       - name: Build
         env:
-          # Use root base path so the site works when served from custom domain (e.g. brand.thinkport.digital).
-          # GitHub Pages with custom domain serves dist at the domain root, not under /repo-name/.
-          VITE_BASE_PATH: '/'
+          # GitHub Pages project sites are served at /<repo-name>/ (e.g. kieksme.github.io/thinkport.brand/).
+          # Vite uses this base for all asset URLs (JS, CSS). Use root only when using a custom domain.
+          VITE_BASE_PATH: '/thinkport.brand/'
         run: pnpm build
 
       - name: Setup Pages
