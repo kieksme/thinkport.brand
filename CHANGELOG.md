@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.13.0](https://github.com/kieksme/thinkport.brand/compare/v0.12.1...v0.13.0) (2026-03-15)
+
+
+### Features
+
+* **assets:** add clip paths and update logos in SVG files for improved design consistency across examples ([8d79b38](https://github.com/kieksme/thinkport.brand/commit/8d79b38fc773b1a28130f5464b499eb73dbc0cf7))
+* **linkedin:** update LinkedIn image generation to include darkBlueBlur variant and adjust asset paths for consistency ([634623c](https://github.com/kieksme/thinkport.brand/commit/634623c58936ca17502d8ae7e37d17e6321b9ae6))
+* **tests:** add Playwright E2E testing support and update README with testing instructions ([8fb6160](https://github.com/kieksme/thinkport.brand/commit/8fb616044e268a53787e93824859a89ffb316c1f))
+
+
+### Bug Fixes
+
+* **portfolio-pdf:** update asset paths in portfolio PDF links to use basePath for consistency ([16a847b](https://github.com/kieksme/thinkport.brand/commit/16a847b6634585e1de1a7805614f9a8b421d888c))
+
 ## [0.12.1](https://github.com/kieksme/thinkport.brand/compare/v0.12.0...v0.12.1) (2026-03-15)
 
 
