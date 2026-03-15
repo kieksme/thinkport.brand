@@ -116,7 +116,10 @@ export default defineConfig({
   base: APP_BASE_PATH,
   root: resolve(__dirname, 'app'),
   plugins: [
-    htmlInclude({ repoBaseUrl: REPO_BASE_URL }),
+    htmlInclude({
+      repoBaseUrl: REPO_BASE_URL,
+      swetrixProjectId: process.env.VITE_SWETRIX_PROJECT_ID || 'MU8JYS8kagYf',
+    }),
     serveExamplesPlugin(),
     tailwindcss(),
     copyRootFilesPlugin({ repoBaseUrl: REPO_BASE_URL }),

@@ -13,6 +13,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  */
 export function htmlInclude(options = {}) {
   const repoBaseUrl = options.repoBaseUrl ?? ''
+  const swetrixProjectId = options.swetrixProjectId ?? ''
   const navigationPath = resolve(__dirname, 'app/components/navigation.html');
   const footerPath = resolve(__dirname, 'app/components/footer.html');
   const heroPath = resolve(__dirname, 'app/components/hero.html');
@@ -161,7 +162,8 @@ export function htmlInclude(options = {}) {
 
       // Replace analytics include if present
       if (hasAnalytics) {
-        html = html.replace('<!-- include: analytics -->', analyticsTemplate);
+        const analytics = analyticsTemplate.replace(/\{\{swetrixProjectId\}\}/g, swetrixProjectId);
+        html = html.replace('<!-- include: analytics -->', analytics);
       }
       
       // Replace fundamentals-grid include if present
