@@ -104,13 +104,13 @@ jobs:
           fi
           cd ..
 
-          # Create staff assets ZIP (only: avatars, business-cards, email-footers, email-footers-text)
+          # Create staff assets ZIP (avatars, business-cards, email-footers, email-footers-text, portfolios, ios-posters)
           if [ -d release-assets/staff ] && find release-assets/staff -type f -print -quit | grep -q .; then
             cd release-assets/staff
-            zip -r ../../thinkport-staff-assets-v${VERSION}.zip avatars business-cards email-footers email-footers-text 2>/dev/null || true
+            zip -r ../../thinkport-staff-assets-v${VERSION}.zip avatars business-cards email-footers email-footers-text portfolios ios-posters 2>/dev/null || true
             cd ../..
 
-            # Per-person staff ZIPs (same four folders only)
+            # Per-person staff ZIPs (same six folders when present)
             cd release-assets
             if [ -d staff/email-footers ]; then
               cd staff
@@ -146,6 +146,18 @@ jobs:
                 if [ -f "email-footers-text/email-footer-${slug}.txt" ]; then
                   mkdir -p "$tmpdir/email-footers-text"
                   cp "email-footers-text/email-footer-${slug}.txt" "$tmpdir/email-footers-text"/
+                fi
+
+                # Portfolio PDF for this person
+                if [ -f "portfolios/portfolio-${slug}.pdf" ]; then
+                  mkdir -p "$tmpdir/portfolios"
+                  cp "portfolios/portfolio-${slug}.pdf" "$tmpdir/portfolios"/
+                fi
+
+                # iOS poster for this person
+                if [ -f "ios-posters/poster-${slug}.png" ]; then
+                  mkdir -p "$tmpdir/ios-posters"
+                  cp "ios-posters/poster-${slug}.png" "$tmpdir/ios-posters"/
                 fi
 
                 # Only create ZIP if this person actually has files
