@@ -207,4 +207,4 @@ This repository is licensed under the GNU General Public License v3.0 - see the 
 
 ### Font Licenses
 
-The fonts used in this project (Hanken Grotesk and Source Sans 3) are licensed under the SIL Open Font License 1.1. For detailed font license information, see [FONT_LICENSES.md](FONT_LICENSES.md).
+The primary brand font is **Montserrat**; this project also uses Hanken Grotesk and Source Sans 3 in some generators and assets. All are licensed under the SIL Open Font License 1.1. For detailed font license information, see [FONT_LICENSES.md](FONT_LICENSES.md).

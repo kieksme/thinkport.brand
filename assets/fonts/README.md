@@ -20,25 +20,32 @@ assets/fonts/
 
 ### Primary Brand Font (Hausschrift)
 
-**Hanken Grotesk** is the official brand font (Hausschrift) for Thinkport GmbH.
+**Montserrat** is the official brand font (Hausschrift) for Thinkport GmbH. It is used on the main website (thinkport.digital) and in official brand materials.
+
+- **Font Family**: Montserrat
+- **Usage**: Headings, UI elements, CTAs, and brand-specific typography
+- **Style**: Sans-serif
+- **Source**: [Google Fonts](https://fonts.google.com/specimen/Montserrat)
+- **License**: SIL Open Font License 1.1 (OFL)
+- **License URL**: [Montserrat License](https://fonts.google.com/specimen/Montserrat/license)
+
+### Implementation Fonts (this repository)
+
+The following fonts are used by **generators and generated assets** in this repository (social previews, README headers, Open Graph banners, portfolio PDFs, business card generator). They are not the primary brand font; Montserrat is.
+
+**Hanken Grotesk** – used for headings in generated assets:
 
 - **Font Family**: Hanken Grotesk
-- **Usage**: Headings, UI elements, and brand-specific typography
-- **Style**: Sans-serif
+- **Usage**: Headings in generated images/PDFs (e.g. social preview, README header, iOS poster job title)
 - **Source**: [Google Fonts](https://fonts.google.com/specimen/Hanken+Grotesk)
 - **License**: SIL Open Font License 1.1 (OFL)
-- **License URL**: [Hanken Grotesk License](https://fonts.google.com/specimen/Hanken+Grotesk/license)
 
-### Body Text Font (Fließtext)
-
-**Source Sans 3** is used for body text and long-form content.
+**Source Sans 3** – used for body text in generated assets:
 
 - **Font Family**: Source Sans 3
-- **Usage**: Body text, paragraphs, and readable content
-- **Style**: Sans-serif
+- **Usage**: Body text in generated assets (e.g. social preview, README header, portfolio PDF)
 - **Source**: [Google Fonts](https://fonts.google.com/specimen/Source+Sans+3)
 - **License**: SIL Open Font License 1.1 (OFL)
-- **License URL**: [Source Sans 3 License](https://fonts.google.com/specimen/Source+Sans+3/license)
 
 ### Font Organization
 
@@ -86,6 +93,7 @@ The business card generator (`scripts/generate-card.mjs`) embeds custom fonts on
 WOFF2 is not supported by pdf-lib. If these files are missing, the generator falls back to Helvetica.
 
 **Getting the fonts:** You can download TTF from the [Google Fonts GitHub](https://github.com/google/fonts) repo (OFL license) and place them in the structure above. For example:
+
 - Hanken Grotesk: `ofl/hankengrotesk/HankenGrotesk[wght].ttf` → `hanken-grotesk/500/regular.ttf`, `HankenGrotesk-Italic[wght].ttf` → `italic.ttf`
 - Source Sans 3: `ofl/sourcesans3/SourceSans3[wght].ttf` → `source-sans-3/400/regular.ttf`, `SourceSans3-Italic[wght].ttf` → `italic.ttf`
 
@@ -94,6 +102,8 @@ These are variable fonts; if the generator reports "Unknown font format", try st
 ## Usage
 
 ### For Developers
+
+For **official brand projects** (e.g. websites, apps), use **Montserrat** as the primary font (e.g. from Google Fonts or self-hosted). The examples below reference the **implementation fonts** (Hanken Grotesk, Source Sans 3) used by this repo’s generators; directory layout and script behaviour remain unchanged.
 
 **CSS Example** (using fonts.css):
 
@@ -242,10 +252,10 @@ Brand fonts should be documented with:
 
 ## Font Usage Guidelines
 
-- **Primary Font (Hanken Grotesk)** - Brand font for headings, UI elements, and brand-specific typography
-- **Body Text Font (Source Sans 3)** - Main font for body text, paragraphs, and readable content
-- **Monospace Font** - For code blocks and technical content (to be defined)
-- **Accessibility** - Ensure fonts meet readability requirements (minimum 16px for body text)
+- **Primary Brand Font (Montserrat)** – Use for official brand materials, the website (thinkport.digital), headings, and CTAs.
+- **Implementation Fonts (Hanken Grotesk, Source Sans 3)** – Used by this repo’s generators; when creating new brand materials, prefer Montserrat.
+- **Monospace Font** – For code blocks and technical content (to be defined)
+- **Accessibility** – Ensure fonts meet readability requirements (minimum 16px for body text)
 
 ## Adding New Fonts
 

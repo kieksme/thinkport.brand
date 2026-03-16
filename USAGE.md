@@ -166,7 +166,7 @@ The script always keeps the **entire portrait visible** on the poster (no croppi
   - Follow the global [Logo Usage](guidelines/LOGO_USAGE.md) and [Color Palette](guidelines/COLOR_PALETTE.md) rules
 
 - **Typography**
-  - Job titles use the brand heading typeface (**Hanken Grotesk**) in a light weight
+  - Job titles use the implementation heading font (Hanken Grotesk, light weight) in the generator; the primary brand typeface is Montserrat (see [Typography](guidelines/TYPOGRAPHY.md))
   - Do not switch to other fonts or add additional text blocks elsewhere on the poster
   - Keep job titles short and generic (e.g. “Operations”, “Consulting”, “Development”) rather than full sentences
 

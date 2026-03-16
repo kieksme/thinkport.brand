@@ -4,41 +4,39 @@
 
 Typography is a key component of our visual identity. Consistent use of typefaces helps maintain brand recognition and readability.
 
-### Note on official guideline
+### Primary brand typeface
 
-Some internal Thinkport guidelines reference **Montserrat** (Google Fonts, weight 400/600, line height 1.4) as the brand typeface. This repository uses **Hanken Grotesk** (headings) and **Source Sans 3** (body) as the current implementation. If you need to align with a specific channel (e.g. legacy templates or partner material), confirm with the brand owner whether Montserrat or Hanken Grotesk + Source Sans 3 is the current standard before changing fonts.
+**Montserrat** is the official brand typeface (Hausschrift) for Thinkport GmbH. It is used on the main website (thinkport.digital) and in official brand materials. Use Montserrat for headings and, where appropriate, body text in new designs and channels (weight 400/600, line height 1.4).
 
 ## Primary Typeface
 
-### Heading Font
+### Brand font: Montserrat
 
-**Hanken Grotesk** is the primary typeface for all headings and headlines.
-
-```
-Font Family: Hanken Grotesk
-Weights Available: Light (300), Regular (400), Medium (500), Bold (700)
-License: SIL Open Font License 1.1 (OFL)
-License URL: https://fonts.google.com/specimen/Hanken+Grotesk/license
-```
-
-**Usage**: Headlines, page titles, major headings
-
-**Character Set**: Latin, Extended Latin
-
-### Body Font
-
-**Source Sans 3** is used for body text and long-form content.
+**Montserrat** is the primary typeface for all headings and headlines in official brand materials.
 
 ```text
-Font Family: Source Sans 3
-Weights Available: Regular (400), Semi-Bold (600)
+Font Family: Montserrat
+Weights Available: Regular (400), Semi-Bold (600), Bold (700)
 License: SIL Open Font License 1.1 (OFL)
-License URL: https://fonts.google.com/specimen/Source+Sans+3/license
+License URL: https://fonts.google.com/specimen/Montserrat/license
 ```
 
-**Usage**: Body text, paragraphs, descriptions
+**Usage**: Headlines, page titles, major headings, CTAs, and brand-specific typography
 
 **Character Set**: Latin, Extended Latin
+
+### Body font (brand context)
+
+For body text in official materials, **Montserrat** (Regular 400) can be used, or a secondary body font as defined by the brand team. Line height 1.4–1.5 is recommended for readability.
+
+## Implementation fonts (this repository)
+
+Some scripts and generated assets in this repository use **Hanken Grotesk** (headings) and **Source Sans 3** (body) for technical reasons (e.g. social previews, README headers, Open Graph banners, portfolio PDFs). These are implementation details; new brand materials and external channels should follow **Montserrat** as the primary brand font.
+
+- **Hanken Grotesk**: Used in generated assets (social preview images, README headers, OG banners, iOS poster job titles). Weights: Light (300), Regular (400), Medium (500), Bold (700).
+- **Source Sans 3**: Used for body text in those same generated assets. Weights: Regular (400), Semi-Bold (600).
+
+See [FONT_LICENSES.md](../FONT_LICENSES.md) for license information for all fonts.
 
 ## Type Scale
 
@@ -93,17 +91,17 @@ All Caps: 0.05em - 0.1em
 
 ### Web Fallback Stack
 
-**Headings**:
+**Brand (Montserrat) – for official sites and new materials**:
 
 ```css
-font-family: 'Hanken Grotesk', -apple-system, BlinkMacSystemFont, 
+font-family: 'Montserrat', -apple-system, BlinkMacSystemFont,
              'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 ```
 
-**Body**:
+**Implementation fonts** (used in this repo’s generators; fallback when using Hanken Grotesk or Source Sans 3):
 
 ```css
-font-family: '[Body Font]', -apple-system, BlinkMacSystemFont, 
+font-family: 'Hanken Grotesk', 'Source Sans 3', -apple-system, BlinkMacSystemFont,
              'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
 ```
 
@@ -141,14 +139,14 @@ font-family: '[Body Font]', -apple-system, BlinkMacSystemFont,
 
 ### Quotes
 
-```
+```text
 "Use proper quotation marks"
 — Attribution (if applicable)
 ```
 
 ### Code
 
-```
+```text
 Use monospace font for code snippets
 Font: Monaco, 'Courier New', monospace
 ```
@@ -163,13 +161,9 @@ Font: Monaco, 'Courier New', monospace
 
 ### Application to generated assets
 
-The same type system (Hanken Grotesk for headings, Source Sans 3 for body text) is used consistently across all **generated assets** in this repository:
+Generated assets in this repository (social preview images, README headers, Open Graph banners, iOS posters, portfolio PDFs) currently use **implementation fonts** (Hanken Grotesk for headings, Source Sans 3 for body) for technical reasons. New brand materials and external channels should use **Montserrat** as the primary brand typeface.
 
-- **Social preview images**, **README headers**, and **Open Graph banners** embed Hanken Grotesk and Source Sans 3 via `@font-face`.
-- **iOS posters** render job titles using a light weight of Hanken Grotesk.
-- **Portfolio PDFs** follow the brand typography in their header and new sections and will fully migrate to Hanken Grotesk / Source Sans 3 over time.
-
-When designing new templates, align font choices with this guideline and avoid adding additional typefaces without explicit approval.
+When designing new templates or materials, prefer Montserrat and avoid adding additional typefaces without explicit approval.
 
 ## Print Typography
 
