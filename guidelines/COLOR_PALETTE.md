@@ -151,6 +151,16 @@ CMYK: C:0 M:0 Y:0 K:20
 - **Hover States**: Use shading variants (e.g. #E64C1E for Orange, #00A4BA for Turquoise)
 - **Disabled State**: Light gray with reduced opacity
 
+### Application to generated assets (posters, portfolios, social images)
+
+Generated assets in this repository – such as **iOS posters** (`release-assets/staff/ios-posters/`), **portfolio PDFs** (`release-assets/staff/portfolios/`), social preview images, and README headers – are all built from the same brand colors documented here:
+
+- Backgrounds use Dark Blue or navy tones as defined in this palette.
+- Accent elements (e.g. lines, tags) use Orange or Turquoise.
+- Text colors follow the neutral palette (Dark Gray, White) and WCAG contrast rules.
+
+When creating new templates or generators, always reuse these colors instead of introducing new ad-hoc values.
+
 ## Accessibility
 
 All color combinations must meet WCAG 2.1 Level AA standards for accessibility:

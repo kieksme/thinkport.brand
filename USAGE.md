@@ -81,6 +81,107 @@ pnpm generate:portfolio:pdf
 pnpm generate:portfolio:pdf -- --slug <substring>
 ```
 
+## Staff assets generated from the Thinkport API
+
+The CLI tooling in this repository can generate a complete set of **staff-related brand assets** from the Thinkport People API. These assets are written to `release-assets/staff/` and packaged into ZIP files in the GitHub release workflow.
+
+### Overview of generated staff assets
+
+Running:
+
+```bash
+pnpm generate:staff:assets
+```
+
+creates the following asset types for active Thinkport staff:
+
+- **Avatars** (`release-assets/staff/avatars/`)
+  - Square PNG avatars in multiple sizes (256px, 512px), including grayscale variants
+  - Additional variants with branded abstract backgrounds from `assets/backgrounds/`
+  - Used for internal docs, slides, websites, and the `implementations/avatars` example page
+
+- **iOS posters** (`release-assets/staff/ios-posters/`)
+  - Device-style poster PNGs built from a shared template plus a staff portrait and job title overlay
+  - Intended for internal use (e.g. iOS wallpapers, onboarding visuals, campaigns)
+  - See **“iOS Poster Guidelines”** below for details
+
+- **Business cards** (`release-assets/staff/business-cards/`)
+  - Print-ready PDF business cards (front + back) per person, matching the templates in `assets/templates/`
+  - Respect print specs (bleed, safe area, CMYK profile) from the business card templates guide
+
+- **vCards** (`release-assets/staff/vcards/`)
+  - Individual `.vcf` files per staff member with contact data
+  - Where available, embeds a **base64 staff photo**; when an iOS poster exists, its image is preferred
+
+- **Portfolio PDFs** (`release-assets/staff/portfolios/`)
+  - One-page portfolio PDFs per person with skill graphs, description, and certificates
+  - Use the same brand background as `assets/backgrounds/5.svg` and the Thinkport dark logo
+  - A sample portfolio is also stored in `examples/portfolios/`
+
+- **Email footers** (`release-assets/staff/email-footers/` and `release-assets/staff/email-footers-text/`)
+  - HTML and plain-text email footers generated from templates in `assets/templates/`
+  - HTML footers embed the Thinkport horizontal logo via `src="cid:thinkport-logo"`; attach the logo as inline image when sending
+
+> Note: The public **Staff ZIP** uploaded on each GitHub release contains `avatars`, `business-cards`, `email-footers`, `email-footers-text`, `portfolios`, and `ios-posters`. vCards are generated as well but are not included in the release ZIP.
+
+## iOS poster guidelines
+
+iOS posters are **device-style wallpapers** generated for each active Thinkport employee. They combine a shared background template (`assets/ios/poster.png`), a staff portrait, and a job title overlay.
+
+### Intended usage
+
+- **Internal use only**
+  - Personal iOS wallpapers or lock-screen images for Thinkport devices
+  - Internal slides, onboarding decks, and event communication
+- **Do not**
+  - Use iOS posters as generic marketing banners or external advertisements
+  - Edit or remix the posters outside the constraints below without approval from the brand team
+
+### Technical specifications
+
+- **Template**: `assets/ios/poster.png`
+- **Output**: PNG
+- **Output directory**: `release-assets/staff/ios-posters/`
+- **File naming**: `poster-<slug>.png` (e.g. `poster-andre-lademann.png`)
+- **Generation**
+  - Per-person via the staff assets generator:
+
+```bash
+pnpm generate:staff:assets
+```
+
+  - Single poster via the iOS poster generator:
+
+```bash
+pnpm generate:ios:poster -- --portrait path/to/portrait.png --job-title "Operations" --output output/ios-posters/poster.png
+```
+
+The script always keeps the **entire portrait visible** on the poster (no cropping) and centers it at the bottom of the template. The job title is drawn below the logo area using the brand typeface.
+
+### Brand & design rules
+
+- **Logo and background**
+  - Do not replace or move the background template (`assets/ios/poster.png`) without brand team approval
+  - Do not add extra logos, icons, or visual effects on top of the template
+  - Follow the global [Logo Usage](guidelines/LOGO_USAGE.md) and [Color Palette](guidelines/COLOR_PALETTE.md) rules
+
+- **Typography**
+  - Job titles use the brand heading typeface (**Hanken Grotesk**) in a light weight
+  - Do not switch to other fonts or add additional text blocks elsewhere on the poster
+  - Keep job titles short and generic (e.g. “Operations”, “Consulting”, “Development”) rather than full sentences
+
+- **Content rules**
+  - Job titles are automatically normalized (company suffixes like `| Thinkport` or `bei Thinkport GmbH` are stripped)
+  - Use professional job titles only; no emojis or informal nicknames
+  - Portraits must be high quality, neutral, and on-brand (no filters, no extreme crops)
+
+### Privacy & distribution
+
+- Treat iOS posters as **personal data**:
+  - Do not share posters publicly without explicit consent from the person
+  - Do not upload posters to public repositories or social platforms by default
+  - When in doubt, prefer internal channels (e.g. company devices, intranet, protected slide decks)
+
 1. **Keep Materials Updated**
    - Periodically check for updates to brand materials
    - Replace outdated assets with current versions

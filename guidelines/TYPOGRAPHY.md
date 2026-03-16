@@ -29,7 +29,7 @@ License URL: https://fonts.google.com/specimen/Hanken+Grotesk/license
 
 **Source Sans 3** is used for body text and long-form content.
 
-```plaintext
+```text
 Font Family: Source Sans 3
 Weights Available: Regular (400), Semi-Bold (600)
 License: SIL Open Font License 1.1 (OFL)
@@ -44,7 +44,7 @@ License URL: https://fonts.google.com/specimen/Source+Sans+3/license
 
 ### Desktop/Web
 
-```plaintext
+```text
 H1: 48px / 3rem (Bold)
 H2: 40px / 2.5rem (Bold)
 H3: 32px / 2rem (Medium)
@@ -60,7 +60,7 @@ Caption: 12px / 0.75rem (Regular)
 
 ### Mobile
 
-```plaintext
+```text
 H1: 36px / 2.25rem (Bold)
 H2: 32px / 2rem (Bold)
 H3: 28px / 1.75rem (Medium)
@@ -71,7 +71,7 @@ H6: 16px / 1rem (Medium)
 Body: 16px / 1rem (Regular)
 Body Small: 14px / 0.875rem (Regular)
 Caption: 12px / 0.75rem (Regular)
-```
+```‬‬
 
 ## Line Height
 
@@ -160,6 +160,16 @@ Font: Monaco, 'Courier New', monospace
 - Use relative units (rem, em) for better scaling
 - Test readability with screen readers
 - Maintain clear visual hierarchy
+
+### Application to generated assets
+
+The same type system (Hanken Grotesk for headings, Source Sans 3 for body text) is used consistently across all **generated assets** in this repository:
+
+- **Social preview images**, **README headers**, and **Open Graph banners** embed Hanken Grotesk and Source Sans 3 via `@font-face`.
+- **iOS posters** render job titles using a light weight of Hanken Grotesk.
+- **Portfolio PDFs** follow the brand typography in their header and new sections and will fully migrate to Hanken Grotesk / Source Sans 3 over time.
+
+When designing new templates, align font choices with this guideline and avoid adding additional typefaces without explicit approval.
 
 ## Print Typography
 

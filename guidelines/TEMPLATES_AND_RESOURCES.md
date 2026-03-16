@@ -21,3 +21,4 @@ For document templates, email footers, and other branded materials in this repos
 
 - [assets/templates/](../assets/templates/) – Templates included in this repo.
 - Brand team or intranet – For the latest Slide Master, company intro, and letterhead.
+- For **staff-specific assets** (avatars, business cards, iOS posters, vCards, portfolio PDFs, email footers) generated from the Thinkport People API, see the CLI workflow and usage description in [`USAGE.md`](../USAGE.md) (`pnpm generate:staff:assets` and related scripts).

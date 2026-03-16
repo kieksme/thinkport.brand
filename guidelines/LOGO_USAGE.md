@@ -89,6 +89,18 @@ These correspond to the horizontal, solo, and venitus variants in this repositor
 
 See [COLOR_PALETTE.md](COLOR_PALETTE.md) for color specifications relevant to logo usage.
 
+## Logo usage on staff assets and iOS posters
+
+The same logo rules described in this document also apply to all **generated staff assets** (avatars, iOS posters, business cards, portfolio PDFs, email footers):
+
+- iOS posters use a shared branded template and must not be edited to:
+  - change logo colors,
+  - add alternative logos,
+  - distort, crop, or rotate the logo.
+- Business cards, portfolios, and email footers all reference the official logo files from `assets/logos/` and must not introduce new, unapproved variants.
+
+When you are unsure whether a new staff-related format (e.g. a new poster size) requires a different logo treatment, contact the brand team before making changes.
+
 ## Logo history
 
 - **End of 2021:** The bottom left part of the logo was updated to remove the sharp peak of the lighthouse base. Use only current logo files from this repository or the official OneDrive source.
