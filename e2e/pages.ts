@@ -20,6 +20,7 @@ export const APP_PAGES: string[] = [
   '/implementations/ios-posters.html',
   '/implementations/portfolio-pdf.html',
   '/implementations/teams.html',
+  '/implementations/powerpoint-templates.html',
   '/impressum.html',
   '/google920fd9ad773da353.html',
 ];

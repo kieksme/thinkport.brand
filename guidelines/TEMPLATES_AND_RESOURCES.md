@@ -5,7 +5,7 @@ Links and references to official Thinkport templates and resources. Access may r
 ## Presentations
 
 - **Slide Master for PowerPoint** – Official MasterTemplate for presentations. Obtain the current MasterTemplate from the brand team or the company’s shared drive (e.g. OneDrive/SharePoint).
-- **Company introduction (Kurze Firmenvorstellung)** – Short company intro deck or one-pager. Available via the same channels as the Slide Master; ask the brand team for the latest version.
+- **Company introduction (Kurze Firmenvorstellung)** – Short company intro deck or one-pager. An updated deck aligned with the current Corporate Design is available in this repository under `examples/powerpoint/thinkport-company-intro.pptx` and is showcased on the implementations page at `implementations/powerpoint-templates.html`. For the latest internal version, you can still obtain the MasterTemplate from the brand team or the company’s shared drive.
 
 ## Business letter (Geschäftsbrief DIN 5008)
 

@@ -132,3 +132,6 @@ test-results/
 
 # release assets
 release-assets/
+
+# PowerPoint CD script venv
+.venv-pptx/

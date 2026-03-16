@@ -185,6 +185,17 @@
       <image:loc>{{repoBaseUrl}}/assets/banner/opengraph/implementations.svg</image:loc>
     </image:image>
   </url>
+
+  <!-- PowerPoint Templates Page -->
+  <url>
+    <loc>https://brand.thinkport.digital/implementations/powerpoint-templates.html</loc>
+    <lastmod>2026-01-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>{{repoBaseUrl}}/assets/banner/opengraph/implementations.svg</image:loc>
+    </image:image>
+  </url>
   
   <!-- Impressum Page -->
   <url>

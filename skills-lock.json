@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "powerpoint": {
+      "source": "microsoft/hve-core",
+      "sourceType": "github",
+      "computedHash": "9c34e4525d1e2a1bb08403379dc288890fef2e24682e3771ef796c4f6d4f6b30"
+    }
+  }
+}

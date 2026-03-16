@@ -1,0 +1,2 @@
+# Optional deps for apply-cd-to-pptx.py (PowerPoint CD application)
+python-pptx>=0.6.21

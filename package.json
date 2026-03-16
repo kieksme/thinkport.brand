@@ -22,6 +22,7 @@
     "generate:ios:poster": "node scripts/generate-ios-poster.mjs",
     "generate:ios:poster:samples": "node scripts/generate-ios-poster-samples.mjs",
     "generate:portfolio:pdf": "node scripts/generate-portfolio-pdf.mjs",
+    "generate:powerpoint": "node scripts/run-apply-cd-pptx.mjs",
     "test": "node tests/scripts/run-all-tests.mjs",
     "test:e2e": "playwright test",
     "test:e2e:headed": "playwright test --headed",
