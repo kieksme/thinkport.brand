@@ -119,16 +119,17 @@ For private repositories, you need to use a Personal Access Token (PAT) instead 
 The `Release Please` workflow now rewrites generated release notes for non-technical readers before publishing them to GitHub Releases.
 
 - Source: raw Release Please release body
-- Rewrite tool: `@github/copilot-cli` in GitHub Actions
+- Rewrite tool: `@github/copilot` in GitHub Actions
 - Result: plain-language markdown focused on value and impact
 - Fallback: if Copilot rewrite fails, original Release Please notes remain in place
 
 ### Token Behavior
 
-Copilot CLI uses the same token chain as Release Please in this repository:
+Copilot CLI in GitHub Actions requires:
 
-- `RELEASE_PLEASE_TOKEN` when set
-- otherwise the default `github.token`
+- `COPILOT_GITHUB_TOKEN` (recommended as repository secret)
+
+If this secret is missing, the workflow skips rewriting and keeps the original Release Please notes as fallback.
 
 ### Release Notes Source Of Truth
 
