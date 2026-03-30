@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.17.1](https://github.com/kieksme/thinkport.brand/compare/v0.17.0...v0.17.1) (2026-03-30)
+
+
+### Bug Fixes
+
+* **release:** update Copilot CLI usage in release workflow and improve token handling for rewriting release notes ([a7980a6](https://github.com/kieksme/thinkport.brand/commit/a7980a6774536f9d5ed39d7cd03240e719413f07))
+
 ## [0.17.0](https://github.com/kieksme/thinkport.brand/compare/v0.16.0...v0.17.0) (2026-03-30)
 
 
