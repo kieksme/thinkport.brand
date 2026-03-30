@@ -76,6 +76,25 @@
       z-index: 2;
     }
 
+    .edge-barcode {
+      position: absolute;
+      right: 0.8mm;
+      top: 200mm;
+      width: 66mm;
+      height: 7mm;
+      transform-origin: bottom right;
+      transform: rotate(-90deg);
+      z-index: 2;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .edge-barcode svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
     .content {
       position: absolute;
       left: 28mm;
@@ -257,6 +276,9 @@
     <div class="print-mark fold-mark-top" aria-hidden="true"></div>
     <div class="print-mark fold-mark-bottom" aria-hidden="true"></div>
     <div class="hole-mark" aria-hidden="true"></div>
+    <div class="edge-barcode" aria-hidden="true">
+      <svg id="edge-barcode-svg" viewBox="0 0 240 64" preserveAspectRatio="none"></svg>
+    </div>
 
     <section class="content">
       <div class="top-row">
@@ -332,5 +354,34 @@ PLZ Ort</div>
       </div>
     </footer>
   </main>
+  <script>
+    (function() {
+      var barcodeValue = 'https://thinkport.digital';
+      var barcodeSvg = document.getElementById('edge-barcode-svg');
+      if (!barcodeSvg) return;
+
+      // Deterministic 1D barcode-like encoding from URL bytes.
+      var bits = '101011110';
+      for (var i = 0; i < barcodeValue.length; i += 1) {
+        var byteBits = barcodeValue.charCodeAt(i).toString(2).padStart(8, '0');
+        bits += byteBits;
+        if (i < barcodeValue.length - 1) bits += '0';
+      }
+      bits += '1110101';
+
+      var ns = 'http://www.w3.org/2000/svg';
+      for (var x = 0; x < bits.length; x += 1) {
+        if (bits.charAt(x) !== '1') continue;
+        var rect = document.createElementNS(ns, 'rect');
+        rect.setAttribute('x', String(x));
+        rect.setAttribute('y', '0');
+        rect.setAttribute('width', '1');
+        rect.setAttribute('height', '64');
+        rect.setAttribute('fill', '#0B2649');
+        barcodeSvg.appendChild(rect);
+      }
+      barcodeSvg.setAttribute('viewBox', '0 0 ' + bits.length + ' 64');
+    })();
+  </script>
 </body>
 </html>
