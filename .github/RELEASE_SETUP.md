@@ -106,9 +106,34 @@ For private repositories, you need to use a Personal Access Token (PAT) instead 
    - Click "Add secret"
 
 3. **Update the workflow** to use the PAT:
+
    ```yaml
    - uses: googleapis/release-please-action@v4
      with:
        config-file: release-please-config.json
        token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
    ```
+
+## Non-Technical Release Notes With Copilot CLI
+
+The `Release Please` workflow now rewrites generated release notes for non-technical readers before publishing them to GitHub Releases.
+
+- Source: raw Release Please release body
+- Rewrite tool: `@github/copilot-cli` in GitHub Actions
+- Result: plain-language markdown focused on value and impact
+- Fallback: if Copilot rewrite fails, original Release Please notes remain in place
+
+### Token Behavior
+
+Copilot CLI uses the same token chain as Release Please in this repository:
+
+- `RELEASE_PLEASE_TOKEN` when set
+- otherwise the default `github.token`
+
+### Release Notes Source Of Truth
+
+`release.yml` keeps updating release assets and README-based notes, but it now skips note overwrites when it detects the Copilot marker:
+
+`<!-- rewritten-by-copilot-cli -->`
+
+This ensures rewritten non-technical notes are not replaced later in the release pipeline.

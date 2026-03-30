@@ -328,8 +328,19 @@ jobs:
 
       - name: Update Release Notes
         run: |
-          gh release edit ${{ github.event.release.tag_name }} \
-            --repo ${{ github.repository }} \
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          CURRENT_BODY=$(gh release view "${TAG_NAME}" \
+            --repo "${{ github.repository }}" \
+            --json body \
+            --jq '.body // ""')
+
+          if printf '%s' "${CURRENT_BODY}" | rg -q '^<!-- rewritten-by-copilot-cli -->'; then
+            echo "Copilot-rewritten release notes detected. Skipping template overwrite."
+            exit 0
+          fi
+
+          gh release edit "${TAG_NAME}" \
+            --repo "${{ github.repository }}" \
             --notes-file RELEASE_README.md
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
