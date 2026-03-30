@@ -49,12 +49,21 @@ You can generate the CD-aligned PPTX from a source deck (e.g. the original Firme
    ```bash
    pnpm run generate:powerpoint
    ```
-   This creates a Python venv (`.venv-pptx`) if needed, installs `python-pptx`, and runs `scripts/apply-cd-to-pptx.py`, which:
+   This creates a Python venv (`.venv-pptx`) if needed, installs `python-pptx` and `cairosvg`, and runs `scripts/apply-cd-to-pptx.py`, which:
    - Sets theme colors to the Thinkport palette (Dark Blue, Orange, Turquoise, neutrals).
    - Sets all slide text to Montserrat.
-3. Export a PDF for the site preview:
-   - Open `examples/powerpoint/thinkport-company-intro.pptx` in PowerPoint or LibreOffice.
-   - Export as PDF to `examples/powerpoint/thinkport-company-intro-preview.pdf`.
+   - Adds the background from `assets/backgrounds/5.svg` (as PNG) and the Venitus logo to every slide.
+   - Appends five extra example slides: Agenda, Über uns, Leistungen & Schwerpunkte, Referenzen, Kontakt & nächste Schritte.
+3. Export a PDF for the site preview (with LibreOffice installed):
+   ```bash
+   pnpm run generate:powerpoint:pdf
+   ```
+   Or manually with LibreOffice headless:
+   ```bash
+   libreoffice --headless --convert-to pdf --outdir examples/powerpoint examples/powerpoint/thinkport-company-intro.pptx
+   mv examples/powerpoint/thinkport-company-intro.pdf examples/powerpoint/thinkport-company-intro-preview.pdf
+   ```
+   You can also open the PPTX in PowerPoint or LibreOffice and export as PDF to `thinkport-company-intro-preview.pdf`.
 
 Manual alternative (without pnpm script):
 

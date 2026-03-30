@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thinkport A4 Letterhead</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --tp-dark-blue: #0b2649;
+      --tp-orange: #ff5722;
+      --tp-turquoise: #00bcd4;
+      --tp-dark-gray: #333333;
+      --tp-medium-gray: #666666;
+      --tp-light-gray: #cccccc;
+      --page-w: 210mm;
+      --page-h: 297mm;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      font-family: "Montserrat", sans-serif;
+      font-size: 10pt;
+      color: var(--tp-dark-gray);
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    .page {
+      width: var(--page-w);
+      height: var(--page-h);
+      background: #ffffff;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .print-mark {
+      position: absolute;
+      left: 0;
+      width: 8mm;
+      border-top: 0.25mm solid #7a7a7a;
+      z-index: 2;
+    }
+
+    .fold-mark-top {
+      top: 105mm;
+    }
+
+    .fold-mark-bottom {
+      top: 210mm;
+    }
+
+    .hole-mark {
+      position: absolute;
+      left: 3.3mm;
+      top: 148.5mm;
+      width: 1.6mm;
+      height: 1.6mm;
+      border: 0.25mm solid #7a7a7a;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      z-index: 2;
+    }
+
+    .content {
+      position: absolute;
+      left: 28mm;
+      right: 28mm;
+      top: 20mm;
+      bottom: 42mm;
+    }
+
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      min-height: 28mm;
+    }
+
+    .claim {
+      color: var(--tp-dark-gray);
+      font-size: 10pt;
+      line-height: 1.18;
+      font-weight: 400;
+      margin-top: 0.5mm;
+    }
+
+    .logo img {
+      width: 64mm;
+      height: auto;
+      display: block;
+      margin-top: -0.5mm;
+    }
+
+    .address-grid {
+      margin-top: 11mm;
+      display: grid;
+      grid-template-columns: 1fr 62mm;
+      column-gap: 12mm;
+    }
+
+    .sender-line {
+      font-size: 7pt;
+      letter-spacing: -0.08pt;
+      white-space: nowrap;
+      color: var(--tp-dark-blue);
+      margin-bottom: 3.2mm;
+    }
+
+    .recipient {
+      font-size: 10pt;
+      line-height: 1.22;
+      color: var(--tp-dark-blue);
+      font-weight: 500;
+      white-space: pre-line;
+    }
+
+    .contact-box {
+      font-size: 10pt;
+      color: var(--tp-dark-blue);
+      line-height: 1.24;
+      margin-top: 8mm;
+    }
+
+    .contact-title {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 3.5mm;
+    }
+
+    .contact-name {
+      font-weight: 700;
+      text-align: left;
+      white-space: pre-line;
+    }
+
+    .contact-role {
+      white-space: nowrap;
+    }
+
+    .contact-value {
+      margin-top: 1.5mm;
+      display: block;
+      white-space: nowrap;
+    }
+
+    .contact-line {
+      display: flex;
+      gap: 2.5mm;
+      align-items: center;
+      margin: 1mm 0;
+      color: var(--tp-dark-gray);
+      font-weight: 500;
+    }
+
+    .contact-line .icon {
+      width: 4.2mm;
+      text-align: center;
+      color: var(--tp-dark-blue);
+      font-size: 9pt;
+    }
+
+    .date {
+      margin-top: 20mm;
+      text-align: right;
+      color: var(--tp-dark-gray);
+      font-size: 10pt;
+      font-weight: 500;
+    }
+
+    .subject {
+      margin-top: 8.5mm;
+      color: var(--tp-dark-blue);
+      font-size: 11pt;
+      font-weight: 700;
+    }
+
+    .letter {
+      margin-top: 7.5mm;
+      color: var(--tp-dark-gray);
+      font-size: 10pt;
+      line-height: 1.45;
+    }
+
+    .letter p {
+      margin: 0 0 5.5mm 0;
+    }
+
+    .signature {
+      margin-top: 10mm;
+      color: var(--tp-dark-gray);
+      font-size: 10pt;
+      font-weight: 500;
+    }
+
+    .attachment {
+      margin-top: 4mm;
+      color: var(--tp-dark-blue);
+      font-size: 10pt;
+      font-weight: 700;
+    }
+
+    .page-number {
+      position: absolute;
+      right: 28mm;
+      bottom: 32mm;
+      font-size: 9pt;
+      color: var(--tp-dark-gray);
+      font-weight: 500;
+    }
+
+    .footer {
+      position: absolute;
+      left: 28mm;
+      right: 28mm;
+      bottom: 8mm;
+      border-top: 0.35mm solid #d6d6d6;
+      padding-top: 3.5mm;
+      font-size: 7.5pt;
+      color: var(--tp-dark-blue);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr 1.2fr;
+      gap: 5mm;
+      line-height: 1.2;
+    }
+
+    .footer-title {
+      color: var(--tp-dark-blue);
+      font-weight: 600;
+    }
+
+    .footer a {
+      color: var(--tp-dark-blue);
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="print-mark fold-mark-top" aria-hidden="true"></div>
+    <div class="print-mark fold-mark-bottom" aria-hidden="true"></div>
+    <div class="hole-mark" aria-hidden="true"></div>
+
+    <section class="content">
+      <div class="top-row">
+        <div class="claim"></div>
+        <div class="logo">
+          <img src="../logos/venitus/thinkport-venitus-light.svg" alt="Thinkport - A Venitus Company" />
+        </div>
+      </div>
+
+      <div class="address-grid">
+        <div>
+          <div class="sender-line">Thinkport GmbH – Arnsburger Straße 74 – 60385 Frankfurt</div>
+          <div class="recipient">Empfänger Firma
+Ansprechpartner
+Gebäude
+Abteilung
+Postfach
+PLZ Ort</div>
+        </div>
+        <div class="contact-box">
+          <div class="contact-title">
+            <div><span class="contact-role">Ansprechpartner/-in</span><br />Abteilung</div>
+            <div class="contact-name contact-value">Vorname Name<br />Circle</div>
+          </div>
+          <div class="contact-line"><span class="icon">☎</span><span>Mobil: +49 XXX XXXXXXXX</span></div>
+          <div class="contact-line"><span class="icon">✉</span><span>E-Mail: E-Mail Adresse</span></div>
+          <div class="date">01.06.2026</div>
+        </div>
+      </div>
+
+      <div class="subject">Betreff: Super wichtige Angelegenheit</div>
+
+      <div class="letter">
+        <p>Guten Tag,</p>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.<br />
+          Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.
+          Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.</p>
+        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+          Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.</p>
+        <p>Mit freundlichen Grüßen und vielen Dank.</p>
+      </div>
+
+      <div class="signature">i.A. Vorname Name für Thinkport GmbH</div>
+      <div class="attachment">Anlage(n)</div>
+    </section>
+
+    <div class="page-number">Seite 1 von 1</div>
+
+    <footer class="footer">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">Thinkport GmbH</div>
+          Arnsburger Straße 74<br />
+          60385 Frankfurt
+        </div>
+        <div>
+          <div class="footer-title">www.thinkport.digital</div>
+          Telefon +49 151 63417156<br />
+          kontakt@th.inkport.digital
+        </div>
+        <div>
+          <div class="footer-title">Geschäftsführung</div>
+          Tobias Drechsler<br />
+          Dominik Fries<br />
+          Henning Breyer
+        </div>
+        <div>
+          <div class="footer-title">Handelsregister</div>
+          Amtsgericht Frankfurt am<br />
+          Main HRB 129804<br />
+          <span style="text-decoration: underline;">USt-IDNr:</span> DE510746560
+        </div>
+      </div>
+    </footer>
+  </main>
+</body>
+</html>

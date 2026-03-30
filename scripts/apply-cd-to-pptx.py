@@ -3,6 +3,10 @@
 
 - Sets theme colors to Thinkport palette (Dark Blue, Orange, Turquoise, neutrals).
 - Sets all text runs to Montserrat where possible.
+- Adds background from assets/backgrounds/5.svg with a dark navy overlay (like the OpenGraph banners) and the Thinkport Venitus logo to every slide.
+- Typography: Montserrat is applied to all text for consistency with the brand and OG style.
+- Appends five extra example slides: Agenda, Über uns, Leistungen & Schwerpunkte,
+  Referenzen, Kontakt & nächste Schritte.
 
 Usage:
   pip install -r scripts/requirements-pptx.txt   # or: uv pip install python-pptx
@@ -108,6 +112,183 @@ def apply_font_to_slides(prs, font_name: str) -> None:
             set_font_on_shape(shape, font_name)
 
 
+def _ensure_background_png(root: Path, svg_path: Path, out_path: Path, width_px: int = 1920, height_px: int = 1080) -> Path:
+    """Convert SVG to PNG; use cache if present and newer than SVG."""
+    if out_path.exists() and out_path.stat().st_mtime >= svg_path.stat().st_mtime:
+        return out_path
+    try:
+        import cairosvg
+        cairosvg.svg2png(
+            url=str(svg_path),
+            write_to=str(out_path),
+            output_width=width_px,
+            output_height=height_px,
+        )
+        return out_path
+    except Exception as e:
+        if out_path.exists():
+            return out_path
+        raise SystemExit(f"Could not convert {svg_path} to PNG (install cairosvg?). {e}")
+
+
+def _background_with_navy_overlay(raw_bg_path: Path, out_path: Path, overlay_opacity: float = 0.65) -> Path:
+    """Composite a dark navy overlay on the background PNG (like OpenGraph banners).
+    OG uses #0B2649 at ~0.72/0.5/0 so text and logo stay readable."""
+    try:
+        from PIL import Image
+    except ImportError:
+        return raw_bg_path
+    if not raw_bg_path.exists():
+        return raw_bg_path
+    img = Image.open(raw_bg_path).convert("RGBA")
+    w, h = img.size
+    overlay = Image.new("RGBA", (w, h), (11, 38, 73, int(255 * overlay_opacity)))
+    out = Image.alpha_composite(img, overlay)
+    out.convert("RGB").save(out_path, "PNG")
+    return out_path
+
+
+def _resolve_logo_path(root: Path, ppt_dir: Path) -> Path | None:
+    """Return path to Venitus logo PNG (light variant for dark background)."""
+    assets_dir = root / "assets"
+    logo_path = assets_dir / "logos" / "venitus" / "thinkport-venitus-light.png"
+    if logo_path.exists():
+        return logo_path
+    svg_path = assets_dir / "logos" / "venitus" / "thinkport-venitus-light.svg"
+    if svg_path.exists():
+        logo_png = ppt_dir / "thinkport-venitus-light.png"
+        try:
+            import cairosvg
+            cairosvg.svg2png(url=str(svg_path), write_to=str(logo_png), output_width=400)
+            return logo_png
+        except Exception:
+            pass
+    return None
+
+
+def apply_background_and_logo_to_slides(prs, root: Path) -> None:
+    """Add assets/backgrounds/5.svg (as PNG) and Venitus logo to every slide.
+    python-pptx MasterShapes does not support add_picture, so we add to each slide."""
+    assets_dir = root / "assets"
+    ppt_dir = root / "examples" / "powerpoint"
+    ppt_dir.mkdir(parents=True, exist_ok=True)
+
+    # Background: 5.svg → PNG, then add navy overlay (like OpenGraph banners) for readable text
+    svg_bg = assets_dir / "backgrounds" / "5.svg"
+    raw_bg = ppt_dir / "background-5.png"
+    bg_png = ppt_dir / "background-5-overlay.png"
+    if not svg_bg.exists():
+        bg_png = None
+    else:
+        _ensure_background_png(root, svg_bg, raw_bg)
+        _background_with_navy_overlay(raw_bg, bg_png, overlay_opacity=0.65)
+
+    logo_path = _resolve_logo_path(root, ppt_dir)
+
+    emu_per_inch = 914400
+    logo_w_emu = int(2.2 * emu_per_inch)
+    logo_h_emu = int(0.55 * emu_per_inch)
+    margin_emu = int(0.35 * emu_per_inch)
+    logo_left = prs.slide_width - logo_w_emu - margin_emu
+    logo_top = prs.slide_height - logo_h_emu - margin_emu
+
+    for slide in prs.slides:
+        sp_tree = slide.shapes._spTree
+        if bg_png and bg_png.exists():
+            bg_pic = slide.shapes.add_picture(
+                str(bg_png),
+                0,
+                0,
+                width=prs.slide_width,
+                height=prs.slide_height,
+            )
+            sp_tree.remove(bg_pic._element)
+            sp_tree.insert(0, bg_pic._element)
+        if logo_path and logo_path.exists():
+            slide.shapes.add_picture(
+                str(logo_path),
+                logo_left,
+                logo_top,
+                width=logo_w_emu,
+                height=logo_h_emu,
+            )
+
+
+# Extra example slides (German content)
+EXTRA_SLIDES = [
+    ("Agenda", ["• Über Thinkport", "• Leistungen & Schwerpunkte", "• Referenzen", "• Kontakt & nächste Schritte"]),
+    ("Über uns", [
+        "Thinkport ist spezialisiert auf Cloud, Data und KI – von der Strategie bis zur Umsetzung.",
+        "",
+        "• Fokus auf Microsoft Azure und moderne Datenplattformen",
+        "• Starke Kombination aus Beratung und Implementierung",
+        "• Langfristige Partnerschaften mit unseren Kund:innen",
+    ]),
+    ("Leistungen & Schwerpunkte", [
+        "Cloud & Infrastruktur",
+        "• Azure-Architekturen, Migration, Betrieb",
+        "",
+        "Daten & Analytics",
+        "• Data Lakes, BI, KI/ML Use Cases",
+        "",
+        "Enablement & Co-Creation",
+        "• Workshops, Trainings, gemeinsame Umsetzung",
+    ]),
+    ("Referenzen", [
+        "Ausgewählte Projekte (anonymisiert):",
+        "",
+        "• Branchenübergreifende Cloud- und Data-Transformationen",
+        "• KI-Pilotprojekte und Skalierung in die Produktion",
+        "• Moderne Arbeitsweisen und Plattformen für Daten-Teams",
+    ]),
+    ("Kontakt & nächste Schritte", [
+        "Wir freuen uns auf den Austausch.",
+        "",
+        "• Website: thinkport.digital",
+        "• E-Mail und Ansprechpartner:innen über die Website",
+        "• Nächster Schritt: kurzes Kennenlerngespräch oder Workshop",
+    ]),
+]
+
+
+def add_example_slides(prs) -> None:
+    """Append extra example slides (Agenda, Über uns, Leistungen, Referenzen, Kontakt)."""
+    from pptx.util import Inches, Pt
+
+    blank_layout = prs.slide_layouts[6] if len(prs.slide_layouts) > 6 else prs.slide_layouts[0]
+    for title, bullets in EXTRA_SLIDES:
+        slide = prs.slides.add_slide(blank_layout)
+        # Title
+        title_box = slide.shapes.add_textbox(Inches(0.5), Inches(0.4), Inches(12), Inches(0.8))
+        tf = title_box.text_frame
+        tf.word_wrap = True
+        p = tf.paragraphs[0]
+        p.text = title
+        p.font.size = Pt(28)
+        p.font.bold = True
+        p.font.name = BRAND_FONT
+        p.font.color.rgb = __rgb(0x0B, 0x26, 0x49)
+        # Body
+        body_box = slide.shapes.add_textbox(Inches(0.5), Inches(1.35), Inches(12), Inches(5.5))
+        tf = body_box.text_frame
+        tf.word_wrap = True
+        for i, line in enumerate(bullets):
+            if i:
+                p = tf.add_paragraph()
+            else:
+                p = tf.paragraphs[0]
+            p.text = line
+            p.font.size = Pt(12)
+            p.font.name = BRAND_FONT
+            p.font.color.rgb = __rgb(0x33, 0x33, 0x33)
+    return
+
+
+def __rgb(r: int, g: int, b: int):
+    from pptx.dml.color import RGBColor
+    return RGBColor(r, g, b)
+
+
 def main() -> None:
     root = Path(__file__).resolve().parent.parent
     default_source = root / "examples" / "powerpoint" / "content" / "Thinkport_Firmenvorstellung.pptx"
@@ -144,7 +325,12 @@ def main() -> None:
         shutil.copy2(source, output)
 
     prs = Presentation(str(output))
+    root = Path(__file__).resolve().parent.parent
     set_theme_colors(prs, THINKPORT_THEME)
+    apply_font_to_slides(prs, BRAND_FONT)
+    add_example_slides(prs)
+    apply_background_and_logo_to_slides(prs, root)
+    # Apply Montserrat again so all text (including placeholders) uses brand font (OG-style typography)
     apply_font_to_slides(prs, BRAND_FONT)
     prs.save(str(output))
     print(f"Saved: {output}")

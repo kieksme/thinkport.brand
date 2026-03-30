@@ -12,8 +12,16 @@ Links and references to official Thinkport templates and resources. Access may r
 Official business letter template compliant with DIN 5008:
 
 - **Template (SharePoint):** [Thinkport Geschäftsbrief DIN 5008](https://futureconsultant.sharepoint.com/:w:/s/thinkport_company/IQAYj02PuUcTSYse_biuOxQBAazK3IIh8c1dofsB7UiOStc?e=Itd78H)
+- **Repo static A4 letterhead PDF:** `assets/templates/letterhead-a4.pdf`
+- **Repo source template (HTML):** `assets/templates/letterhead-a4.html`
 
 Use this template for formal company correspondence. Log in with your company account if required.
+
+To regenerate the repository PDF from the HTML template:
+
+```bash
+pnpm run generate:letterhead:pdf
+```
 
 ## Other templates
 

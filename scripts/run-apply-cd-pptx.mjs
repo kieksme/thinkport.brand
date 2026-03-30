@@ -27,10 +27,11 @@ function run(cmd, opts = {}) {
 
 try {
 if (!existsSync(venvDir)) {
-  console.log('Creating .venv-pptx and installing python-pptx…');
+  console.log('Creating .venv-pptx…');
   run('python3 -m venv .venv-pptx');
-  run(`${pip} install -r scripts/requirements-pptx.txt`);
 }
+console.log('Installing dependencies (python-pptx, cairosvg)…');
+run(`${pip} install -r scripts/requirements-pptx.txt`);
 
 const source = process.env.SOURCE_PPTX || join(process.env.HOME || '', 'Downloads', 'Thinkport_Firmenvorstellung.pptx');
 console.log('Applying Thinkport CD to PowerPoint…');
