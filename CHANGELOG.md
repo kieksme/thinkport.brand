@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.17.0](https://github.com/kieksme/thinkport.brand/compare/v0.16.0...v0.17.0) (2026-03-30)
+
+
+### Features
+
+* **assets:** add new Thinkport team logos in PNG format for branding consistency ([b5433bd](https://github.com/kieksme/thinkport.brand/commit/b5433bd4bcfd2a959e51cc71a7d3ca89f27e3881))
+* **assets:** add new Thinkport Venitus dark logo SVG file for branding consistency ([e9519a2](https://github.com/kieksme/thinkport.brand/commit/e9519a20470b70b819f6b9328d1a17bfdcec8dcc))
+* **implementations:** add PowerPoint templates page and update navigation, sitemap, and related resources ([365cb8c](https://github.com/kieksme/thinkport.brand/commit/365cb8c9b141a3df94a2a02235617b7ca02de232))
+* **letterhead:** add A4 letterhead generation script, update navigation and sitemap, and enhance PowerPoint export capabilities ([8b6a0cc](https://github.com/kieksme/thinkport.brand/commit/8b6a0cc0a0f2aa2df3c81bf0cd3b3df1f6d555b7))
+* **letterhead:** implement edge barcode feature in A4 letterhead template and add corresponding SVG generation script ([2544cac](https://github.com/kieksme/thinkport.brand/commit/2544cac64a453e4ee85d35f21485fef4ca4a5f46))
+* **release:** enhance release process with Copilot CLI for non-technical notes and update workflow for release note management ([b6d09cf](https://github.com/kieksme/thinkport.brand/commit/b6d09cff58983c5abdfcc2aaf062b8f391844244))
+
 ## [0.16.0](https://github.com/kieksme/thinkport.brand/compare/v0.15.0...v0.16.0) (2026-03-15)
 
 
