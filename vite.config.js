@@ -149,6 +149,7 @@ export default defineConfig({
         'implementations/avatars': resolve(__dirname, 'app/implementations/avatars.html'),
         'implementations/github': resolve(__dirname, 'app/implementations/github.html'),
         'implementations/linkedin': resolve(__dirname, 'app/implementations/linkedin.html'),
+        'implementations/letterhead': resolve(__dirname, 'app/implementations/letterhead.html'),
         'implementations/ios-posters': resolve(__dirname, 'app/implementations/ios-posters.html'),
         'implementations/portfolio-pdf': resolve(__dirname, 'app/implementations/portfolio-pdf.html'),
         'implementations/teams': resolve(__dirname, 'app/implementations/teams.html'),
