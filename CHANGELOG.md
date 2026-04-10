@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.1](https://github.com/kieksme/thinkport.brand/compare/v0.20.0...v0.20.1) (2026-04-10)
+
+
+### Bug Fixes
+
+* **deploy.yml:** add check for NETLIFY_BUILD_HOOK_URL before triggering build to prevent errors when the URL is not set ([3debf7c](https://github.com/kieksme/thinkport.brand/commit/3debf7caf9aede6efb493000cf17f873b5584ffc))
+
 ## [0.20.0](https://github.com/kieksme/thinkport.brand/compare/v0.19.0...v0.20.0) (2026-04-10)
 
 
