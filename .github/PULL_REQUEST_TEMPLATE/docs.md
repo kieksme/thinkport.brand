@@ -11,7 +11,7 @@ about: Documentation only (docs:)
 
 Use **`docs:`** or **`docs(scope):`**, e.g. `docs: clarify Netlify env vars`.
 
-**Note:** With Release Please `simple` config, plain `docs:` commits may not trigger a release. For a release that includes doc-only work, use **`feat(docs):`** or a **`Release-As:`** empty commit (see `.github/RELEASE_SETUP.md`).
+Release Please lists these under **Documentation** in `CHANGELOG.md` (see `changelog-sections` in `release-please-config.json`). They contribute to a **patch** version bump with other non-`feat` work. Use **`feat(docs):`** if you want a **minor** bump for a docs-only change, or **`Release-As:`** to force a version (see `.github/RELEASE_SETUP.md`).
 
 ## Checklist
 

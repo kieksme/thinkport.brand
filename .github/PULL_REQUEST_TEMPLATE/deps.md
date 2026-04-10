@@ -11,7 +11,7 @@ about: Dependency updates (deps:)
 
 Use **`deps:`** or **`deps(scope):`**, e.g. `deps: bump puppeteer-core`.
 
-Release Please `simple` type treats **`deps:`** as a releasable unit alongside `feat:` and `fix:`.
+Release Please lists **`deps:`** commits under **Dependencies** in `CHANGELOG.md` (see `changelog-sections` in `release-please-config.json`); they follow the usual **patch** bump unless a `feat:` / breaking commit is also in the release.
 
 ## Checklist
 

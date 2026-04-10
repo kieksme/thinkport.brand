@@ -39,15 +39,23 @@ Once the initial release is set up, release-please will:
 
 ## Commit Message Format
 
-The `simple` release-type is flexible and works with any commit messages. However, for better release notes and automatic version bumping, consider using Conventional Commits format:
+Use [Conventional Commits](https://www.conventionalcommits.org/) so Release Please can group changes in `CHANGELOG.md`. Changelog sections are configured in [`release-please-config.json`](../release-please-config.json) (`changelog-sections`) and match the PR templates under [`.github/PULL_REQUEST_TEMPLATE/`](PULL_REQUEST_TEMPLATE/) (e.g. `feat`, `fix`, `docs`, `test`, `deps`).
 
-- `feat: Add new logo variant` - Creates a minor version bump
-- `feat(docs): Update guidelines` - Creates a minor version bump (use `feat(docs):` instead of `docs:` to trigger a release)
-- `fix: Update color palette` - Creates a patch version bump
-- `docs: Update guidelines` - No version bump (documentation only, ignored by release-please)
-- `feat!: Breaking change` - Creates a major version bump
+Default **semver** bumps with Release Please’s default versioning strategy:
 
-**Important:** The `simple` release-type only recognizes `feat:`, `fix:`, and `deps:` commits as releasable units. To trigger a minor release for documentation changes, use `feat(docs):` instead of `docs:`.
+- **Breaking** (`feat!:`, `fix!:`, or `BREAKING CHANGE` footer) → major (or minor while pre-1.0 if `bump-minor-pre-major` were set)
+- **`feat:`** (and `feature:`) → minor (patch while pre-1.0 if `bump-patch-for-minor-pre-major` is set)
+- **All other conventional types** in use here (`fix:`, `docs:`, `test:`, `deps:`, `chore:`, `ci:`, `build:`, `refactor:`, `perf:`, `style:`, `revert:`) → **patch**
+
+Use **`feat(docs):`** when you intentionally want a **minor** bump for a documentation-only change (same as any `feat:`).
+
+Examples:
+
+- `feat: Add new logo variant` — minor bump; listed under Features
+- `fix: Update color palette` — patch bump; listed under Bug Fixes
+- `docs: Clarify Netlify env vars` — patch bump; listed under Documentation
+- `deps: Bump puppeteer-core` — patch bump; listed under Dependencies
+- `feat!: Remove deprecated export` — major bump (subject to pre-1.0 rules above)
 
 ### Forcing a Release for Existing `docs:` Commits
 
