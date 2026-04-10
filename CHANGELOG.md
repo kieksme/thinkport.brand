@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.2](https://github.com/kieksme/thinkport.brand/compare/v0.20.1...v0.20.2) (2026-04-10)
+
+
+### Bug Fixes
+
+* **references-pdf.mjs:** remove unnecessary blank line for cleaner code ([be34fa1](https://github.com/kieksme/thinkport.brand/commit/be34fa11b5f68970f0c6624ab96a5423d36161bd))
+
 ## [0.20.1](https://github.com/kieksme/thinkport.brand/compare/v0.20.0...v0.20.1) (2026-04-10)
 
 
