@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.19.0](https://github.com/kieksme/thinkport.brand/compare/v0.18.0...v0.19.0) (2026-04-10)
+
+
+### Features
+
+* **dependencies:** update package.json and pnpm-lock.yaml to include new dependencies for PDF generation and Chromium support; modify Vite configuration for API proxy and enhance PDF export functionality ([2c60497](https://github.com/kieksme/thinkport.brand/commit/2c60497ecd3eb84e67078980a890183e2d024489))
+
 ## [0.18.0](https://github.com/kieksme/thinkport.brand/compare/v0.17.2...v0.18.0) (2026-04-10)
 
 
