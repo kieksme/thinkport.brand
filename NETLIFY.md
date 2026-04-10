@@ -13,10 +13,11 @@ Set **`VITE_BASE_PATH`** in the Netlify UI to match how the site is served (e.g.
 
 ## Environment variables (site)
 
+The browser **always** requests Thinkport data via same-origin **`/api/thinkport/…`** (rewritten to the `thinkport-api-proxy` function). No `VITE_*` flag is required for that behavior.
+
 | Variable                                            | Required    | Purpose                                                                                                                     |
 |-----------------------------------------------------|-------------|-----------------------------------------------------------------------------------------------------------------------------|
 | `THINKPORT_API_USERNAME` / `THINKPORT_API_PASSWORD` | Yes (proxy) | Basic Auth for `thinkportapi.netlify.app` — same as [`scripts/thinkport-api-client.mjs`](scripts/thinkport-api-client.mjs). |
-| `VITE_THINKPORT_API_PROXY`                          | Recommended | Set to `true` so the browser uses `/api/thinkport/…` instead of calling the API host directly.                              |
 | `VITE_THINKPORT_SERVER_PDF`                         | Optional    | Set to `true` for server-side PDF generation (`POST /api/references-pdf`).                                                  |
 
 Do **not** expose credentials as `VITE_*` variables; only the flags above are safe for the client bundle.
@@ -60,7 +61,7 @@ If the secret is unset, the `netlify-build-hook` job is skipped. Do not put the 
 
 ## GitHub Pages
 
-The default GitHub Actions deploy remains static: **no** Netlify Functions. Pages that talk to Thinkport keep using the public API URL plus manual Basic Auth unless you add your own proxy.
+The default GitHub Actions deploy remains static: **no** Netlify Functions. The **Reference PDF** implementation always calls **`/api/thinkport/…`** in the browser bundle, so that page **does not load API data on GitHub Pages** unless you add a compatible edge/proxy. Use Netlify (or `pnpm dev` locally) for that feature.
 
 ## Node / CLI scripts
 

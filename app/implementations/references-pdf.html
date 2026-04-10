@@ -575,14 +575,13 @@
                 Dieses Tool lädt Referenzen (Case Studies) aus der Thinkport <a href="https://thinkportapi.netlify.app" class="text-aqua-700 hover:underline font-semibold" rel="noopener noreferrer" target="_blank">GraphQL References API</a> und erzeugt daraus eine mehrseitige PDF im gleichen A4-Briefpapier-Raster wie <a href="letterhead.html" class="text-aqua-700 hover:underline font-semibold">A4 Letterhead</a>. Filter nach Kategorien und Tags, wähle einzelne Referenzen aus und exportiere als PDF (im Browser mit jsPDF + html2canvas, oder auf einer Netlify-Deployment-Variante serverseitig).
             </p>
             <p id="refs-netlify-mode-hint" class="hidden font-body text-sm text-gray-600 mb-6 p-3 rounded-lg bg-slate-50 border border-slate-200" role="note">
-                <strong>Netlify-Modus:</strong> Basic Auth für die Thinkport-API liegt in <code class="text-xs bg-white px-1 rounded">THINKPORT_API_USERNAME</code> / <code class="text-xs bg-white px-1 rounded">THINKPORT_API_PASSWORD</code>. Aufrufe laufen über <code class="text-xs bg-white px-1 rounded">/api/thinkport/…</code>. Die Felder unten sind ausgeblendet. Siehe <a href="{{basePath}}NETLIFY.md" class="text-aqua-700 hover:underline font-semibold">NETLIFY.md</a>.
+                <strong>Production:</strong> Die App ruft immer <code class="text-xs bg-white px-1 rounded">/api/thinkport/…</code> auf; Basic Auth für die Thinkport-API kommt aus <code class="text-xs bg-white px-1 rounded">THINKPORT_API_USERNAME</code> / <code class="text-xs bg-white px-1 rounded">THINKPORT_API_PASSWORD</code> (Netlify Functions). Die Felder unten sind ausgeblendet. Siehe <a href="{{basePath}}NETLIFY.md" class="text-aqua-700 hover:underline font-semibold">NETLIFY.md</a>.
             </p>
             <div class="grid md:grid-cols-2 gap-8 mb-8">
                 <div class="card">
                     <h3 class="font-heading text-xl font-bold text-navy mb-4">Ablauf</h3>
                     <ol class="font-body text-gray-700 space-y-2 list-decimal list-inside">
-                        <li>Zugangsdaten eingeben (Basic Auth, wie im API-Playground)</li>
-                        <li>„Referenzen laden“</li>
+                        <li>„Referenzen laden“ (lokal ohne <code class="text-sm bg-gray-100 px-1 rounded">.env</code>: Basic Auth unten eingeben)</li>
                         <li>Kategorien/Tags einschränken (leer = alle)</li>
                         <li>Referenzen auswählen, „PDF generieren“</li>
                     </ol>
@@ -591,7 +590,7 @@
                     <h3 class="font-heading text-xl font-bold text-navy mb-4">Hinweise</h3>
                     <ul class="font-body text-gray-700 space-y-2 list-disc list-inside">
                         <li>Lokal: <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_API_USERNAME</code> / <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_API_PASSWORD</code> in <code class="text-sm bg-gray-100 px-1 rounded">.env</code> für den Vite-Proxy (<code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code>). Netlify: siehe <a href="{{basePath}}NETLIFY.md" class="text-aqua-700 hover:underline font-semibold">NETLIFY.md</a>.</li>
-                        <li>Motive liegen auf dem API-Host, z. B. <code class="text-sm bg-gray-100 px-1 rounded break-all">https://thinkportapi.netlify.app/images/references/reference-simpl.png</code> (Feld <code class="text-sm bg-gray-100 px-1 rounded">image</code>). Ohne CORS blockiert der Browser <code class="text-sm bg-gray-100 px-1 rounded">fetch</code> von einer anderen Origin; lokal mappt <code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code> auf <code class="text-sm bg-gray-100 px-1 rounded">/api/thinkport/…</code>. Auf Netlify mit <code class="text-sm bg-gray-100 px-1 rounded">VITE_THINKPORT_API_PROXY=true</code> dasselbe. Auf rein statischem Hosting ohne Proxy: CORS oder eigener Proxy nötig.</li>
+                        <li>Motive liegen auf dem API-Host; im Browser werden sie über <code class="text-sm bg-gray-100 px-1 rounded">/api/thinkport/…</code> geladen (Vite-Proxy lokal, Netlify Function in Production). Reines statisches Hosting ohne diese Route unterstützt die Referenzen-Ansicht nicht — siehe <a href="{{basePath}}NETLIFY.md" class="text-aqua-700 hover:underline font-semibold">NETLIFY.md</a>.</li>
                         <li>Export: <strong>Karten-Listing</strong> (Orientierung <a href="https://thinkport.digital/referenzen" class="text-aqua-700 hover:underline font-semibold" rel="noopener noreferrer" target="_blank">thinkport.digital/referenzen</a>), bis zu <strong>3 Referenzen pro PDF-Seite</strong> mit Motiv, Teaser und Tags. Bilder und Logo werden vor dem Rendern verkleinert, damit der Browser weniger Pixel verarbeiten muss.</li>
                     </ul>
                 </div>

@@ -1,13 +1,12 @@
 /**
  * Reference PDF generator: load Thinkport references via GraphQL, filter, export A4 pages (letterhead layout) with jsPDF + html2canvas.
- * With VITE_THINKPORT_API_PROXY, calls go through /api/thinkport/…; optional server PDF via VITE_THINKPORT_SERVER_PDF.
+ * Always calls same-origin `/api/thinkport/…` (Vite dev proxy or Netlify function); optional server PDF via VITE_THINKPORT_SERVER_PDF.
  * @see https://thinkportapi.netlify.app (Thinkport API, Basic Auth)
  */
 
 import {
   REFERENCES_QUERY,
   THINKPORT_API_ORIGIN,
-  THINKPORT_GRAPHQL_CASE_STUDIES_URL,
   REFS_PER_PAGE,
   splitIntoChunks,
   uniqueSorted,
@@ -17,7 +16,6 @@ import {
   PDF_EXPORT_BROKEN_IMG_PLACEHOLDER,
 } from '../../lib/references-pdf-shared.mjs'
 
-const USE_SITE_API_PROXY = import.meta.env.VITE_THINKPORT_API_PROXY === 'true'
 const USE_SERVER_PDF = import.meta.env.VITE_THINKPORT_SERVER_PDF === 'true'
 
 /**
@@ -32,8 +30,7 @@ function apiUrl(path) {
 
 function getEndpoint() {
   if (import.meta.env.DEV) return '/api/thinkport/.netlify/functions/references'
-  if (USE_SITE_API_PROXY) return apiUrl('/api/thinkport/.netlify/functions/references')
-  return THINKPORT_GRAPHQL_CASE_STUDIES_URL
+  return apiUrl('/api/thinkport/.netlify/functions/references')
 }
 
 /**
@@ -54,9 +51,7 @@ function rewriteThinkportApiMedia(url) {
       if (import.meta.env.DEV) {
         return `/api/thinkport${u.pathname}${u.search}`
       }
-      if (USE_SITE_API_PROXY) {
-        return `${apiUrl('/api/thinkport')}${u.pathname}${u.search}`
-      }
+      return `${apiUrl('/api/thinkport')}${u.pathname}${u.search}`
     }
   } catch {
     // ignore invalid URL
@@ -333,7 +328,7 @@ async function buildReferenceListingPage(cardsWithHeroes, ctx) {
 
 async function fetchReferences(user, pass) {
   const headers = { 'Content-Type': 'application/json' }
-  if (!USE_SITE_API_PROXY) {
+  if (import.meta.env.DEV) {
     const auth = authHeader(user, pass)
     if (auth) headers.Authorization = auth
   }
@@ -433,7 +428,7 @@ export function bootReferencesPdf(basePath) {
   const authFieldsEl = document.getElementById('refs-api-auth-fields')
   const netlifyHintEl = document.getElementById('refs-netlify-mode-hint')
 
-  if (USE_SITE_API_PROXY) {
+  if (!import.meta.env.DEV) {
     if (authFieldsEl) {
       authFieldsEl.hidden = true
       authFieldsEl.setAttribute('aria-hidden', 'true')
@@ -441,6 +436,7 @@ export function bootReferencesPdf(basePath) {
     if (netlifyHintEl) {
       netlifyHintEl.hidden = false
       netlifyHintEl.removeAttribute('hidden')
+      netlifyHintEl.classList.remove('hidden')
     }
   }
   const loadBtn = document.getElementById('refs-load-btn')
@@ -706,7 +702,13 @@ export function bootReferencesPdf(basePath) {
       renderFilterSection()
     } catch (e) {
       console.error(e)
-      setStatus(e.message || 'Laden fehlgeschlagen', true)
+      const err = e instanceof Error ? e : null
+      let msg = err?.message || 'Laden fehlgeschlagen'
+      if (!import.meta.env.DEV && msg === 'Failed to fetch') {
+        msg =
+          'Netzwerkfehler: `/api/thinkport/…` ist nicht erreichbar (z. B. statisches Hosting ohne Netlify Functions). Siehe NETLIFY.md.'
+      }
+      setStatus(msg, true)
       allReferences = []
       if (catContainer) catContainer.innerHTML = ''
       if (tagContainer) tagContainer.innerHTML = ''
@@ -726,7 +728,7 @@ export function bootReferencesPdf(basePath) {
       return
     }
 
-    if (USE_SERVER_PDF && USE_SITE_API_PROXY) {
+    if (USE_SERVER_PDF) {
       genBtn.disabled = true
       setGenerateUiLoading(true, { page: 0, total: 1, progress: 5 })
       setStatus('PDF wird auf dem Server erzeugt (kann etwas dauern)…', false)
@@ -778,7 +780,7 @@ export function bootReferencesPdf(basePath) {
       setStatus('PDF-Bibliotheken fehlen (jsPDF / html2canvas).', true)
       return
     }
-    const pdfAuth = USE_SITE_API_PROXY ? null : authHeader(userEl?.value || '', passEl?.value ?? '')
+    const pdfAuth = import.meta.env.DEV ? authHeader(userEl?.value || '', passEl?.value ?? '') : null
 
     genBtn.disabled = true
     const refTotal = toExport.length
@@ -857,10 +859,11 @@ export function bootReferencesPdf(basePath) {
   updateExportCountPreview()
 
   if (import.meta.env.DEV) {
-    setStatus('Dev: .env mit THINKPORT_API_USERNAME / THINKPORT_API_PASSWORD für den Proxy.', false)
-  } else if (USE_SITE_API_PROXY) {
-    setStatus('„Referenzen laden“ nutzt den Site-Proxy (Basic Auth serverseitig).', false)
+    setStatus(
+      'Dev: Zugangsdaten in .env für den Vite-Proxy, oder unten eingeben — dann „Referenzen laden“.',
+      false,
+    )
   } else {
-    setStatus('Basic-Auth-Zugang eingeben und „Referenzen laden“.', false)
+    setStatus('„Referenzen laden“ nutzt `/api/thinkport/…` (Basic Auth serverseitig auf Netlify).', false)
   }
 }

@@ -1,7 +1,6 @@
 # Netlify deploy for thinkport.brand (Thinkport API proxy + server-side reference PDF).
 # Credentials: THINKPORT_API_USERNAME / THINKPORT_API_PASSWORD
 # Optional build env: VITE_BASE_PATH=/ (custom domain) or /thinkport.brand/ etc.
-#   VITE_THINKPORT_API_PROXY=true
 #   VITE_THINKPORT_SERVER_PDF=true (optional)
 
 [build]
