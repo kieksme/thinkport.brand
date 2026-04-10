@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.18.0](https://github.com/kieksme/thinkport.brand/compare/v0.17.2...v0.18.0) (2026-04-10)
+
+
+### Features
+
+* **assets:** add agent instructions and preview asset guidelines, enhance Vite configuration for API proxy, and implement smoke tests for PDF chunking ([bf7db20](https://github.com/kieksme/thinkport.brand/commit/bf7db20ef18d5d34350e03f81a0f9b9911d41c23))
+* **references:** add Reference PDF generator implementation and update navigation, sitemap, and Vite configuration ([4fb0c16](https://github.com/kieksme/thinkport.brand/commit/4fb0c161ed5753b2f7b9399174f535bd3216e59f))
+
+
+### Bug Fixes
+
+* remove incorrect assets/ prefix in PDF path references in letterhead.html ([#33](https://github.com/kieksme/thinkport.brand/issues/33)) ([0a6bcf5](https://github.com/kieksme/thinkport.brand/commit/0a6bcf567838c9b73068bda1604ef3a0c411cfd2))
+
 ## [0.17.2](https://github.com/kieksme/thinkport.brand/compare/v0.17.1...v0.17.2) (2026-03-30)
 
 
