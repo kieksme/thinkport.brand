@@ -57,7 +57,7 @@ const copyRootFilesPlugin = ({ repoBaseUrl, themeColor }) => {
     closeBundle() {
       const appFilesToCopy = ['manifest.json', 'sitemap.xml']
       const appFilesWithReplace = ['sitemap.xml', 'manifest.json']
-      const rootFilesToCopy = ['CHANGELOG.md']
+      const rootFilesToCopy = ['CHANGELOG.md', 'NETLIFY.md']
       const appDir = resolve(__dirname, 'app')
       const assetsDir = resolve(__dirname, 'assets')
       const rootDir = __dirname
@@ -117,8 +117,8 @@ const copyRootFilesPlugin = ({ repoBaseUrl, themeColor }) => {
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const refsUser = env.THINKPORT_REFERENCES_USER || ''
-  const refsPass = env.THINKPORT_REFERENCES_PASS || ''
+  const refsUser = env.THINKPORT_API_USERNAME || ''
+  const refsPass = env.THINKPORT_API_PASSWORD || ''
 
   /**
    * Dev proxy to Thinkport API: forward Basic Auth from the browser when set (e.g. reference images fetch);
@@ -139,19 +139,14 @@ export default defineConfig(({ mode }) => {
     root: resolve(__dirname, 'app'),
   server: {
     proxy: {
-      // Must be listed BEFORE `/api/thinkport-references` — otherwise the shorter prefix catches
-      // `/api/thinkport-references-media/...` and rewrites GETs to the GraphQL function (405).
-      '/api/thinkport-references-media': {
+      // Thinkport API (GraphQL: references, data, … + static assets under /images, …).
+      '/api/thinkport': {
         target: 'https://thinkportapi.netlify.app',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/thinkport-references-media/, '') || '/',
-        configure: configureThinkportApiProxy,
-      },
-      // Dev-only: forwards to Thinkport References API with Basic Auth from .env (not VITE_*).
-      '/api/thinkport-references': {
-        target: 'https://thinkportapi.netlify.app',
-        changeOrigin: true,
-        rewrite: () => '/.netlify/functions/references',
+        rewrite: (path) => {
+          const next = path.replace(/^\/api\/thinkport/, '') || '/'
+          return next.startsWith('/') ? next : `/${next}`
+        },
         configure: configureThinkportApiProxy,
       },
     },

@@ -572,7 +572,10 @@
         <div class="max-w-6xl mx-auto">
             <h2 class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8">Overview</h2>
             <p class="font-body text-lg text-gray-700 mb-8">
-                Dieses Tool lädt Referenzen (Case Studies) aus der Thinkport <a href="https://thinkportapi.netlify.app" class="text-aqua-700 hover:underline font-semibold" rel="noopener noreferrer" target="_blank">GraphQL References API</a> und erzeugt daraus eine mehrseitige PDF im gleichen A4-Briefpapier-Raster wie <a href="letterhead.html" class="text-aqua-700 hover:underline font-semibold">A4 Letterhead</a>. Filter nach Kategorien und Tags, wähle einzelne Referenzen aus und exportiere lokal im Browser (jsPDF + html2canvas).
+                Dieses Tool lädt Referenzen (Case Studies) aus der Thinkport <a href="https://thinkportapi.netlify.app" class="text-aqua-700 hover:underline font-semibold" rel="noopener noreferrer" target="_blank">GraphQL References API</a> und erzeugt daraus eine mehrseitige PDF im gleichen A4-Briefpapier-Raster wie <a href="letterhead.html" class="text-aqua-700 hover:underline font-semibold">A4 Letterhead</a>. Filter nach Kategorien und Tags, wähle einzelne Referenzen aus und exportiere als PDF (im Browser mit jsPDF + html2canvas, oder auf einer Netlify-Deployment-Variante serverseitig).
+            </p>
+            <p id="refs-netlify-mode-hint" class="hidden font-body text-sm text-gray-600 mb-6 p-3 rounded-lg bg-slate-50 border border-slate-200" role="note">
+                <strong>Netlify-Modus:</strong> Basic Auth für die Thinkport-API liegt in <code class="text-xs bg-white px-1 rounded">THINKPORT_API_USERNAME</code> / <code class="text-xs bg-white px-1 rounded">THINKPORT_API_PASSWORD</code>. Aufrufe laufen über <code class="text-xs bg-white px-1 rounded">/api/thinkport/…</code>. Die Felder unten sind ausgeblendet. Siehe <a href="{{basePath}}NETLIFY.md" class="text-aqua-700 hover:underline font-semibold">NETLIFY.md</a>.
             </p>
             <div class="grid md:grid-cols-2 gap-8 mb-8">
                 <div class="card">
@@ -587,8 +590,8 @@
                 <div class="card">
                     <h3 class="font-heading text-xl font-bold text-navy mb-4">Hinweise</h3>
                     <ul class="font-body text-gray-700 space-y-2 list-disc list-inside">
-                        <li>Lokal: optional <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_REFERENCES_USER</code> / <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_REFERENCES_PASS</code> in <code class="text-sm bg-gray-100 px-1 rounded">.env</code> für den Vite-Proxy (<code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code>).</li>
-                        <li>Motive liegen auf dem API-Host, z. B. <code class="text-sm bg-gray-100 px-1 rounded break-all">https://thinkportapi.netlify.app/images/references/reference-simpl.png</code> (Feld <code class="text-sm bg-gray-100 px-1 rounded">image</code>). Ohne CORS blockiert der Browser <code class="text-sm bg-gray-100 px-1 rounded">fetch</code> von einer anderen Origin; lokal mappt <code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code> dieselben URLs auf <code class="text-sm bg-gray-100 px-1 rounded">/api/thinkport-references-media/…</code>. Basic Auth: wie bei „Referenzen laden“ oder <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_REFERENCES_*</code> in <code class="text-sm bg-gray-100 px-1 rounded">.env</code>. Auf der statischen Live-Site: CORS auf den Bildern oder ein Proxy auf deiner Domain.</li>
+                        <li>Lokal: <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_API_USERNAME</code> / <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_API_PASSWORD</code> in <code class="text-sm bg-gray-100 px-1 rounded">.env</code> für den Vite-Proxy (<code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code>). Netlify: siehe <a href="{{basePath}}NETLIFY.md" class="text-aqua-700 hover:underline font-semibold">NETLIFY.md</a>.</li>
+                        <li>Motive liegen auf dem API-Host, z. B. <code class="text-sm bg-gray-100 px-1 rounded break-all">https://thinkportapi.netlify.app/images/references/reference-simpl.png</code> (Feld <code class="text-sm bg-gray-100 px-1 rounded">image</code>). Ohne CORS blockiert der Browser <code class="text-sm bg-gray-100 px-1 rounded">fetch</code> von einer anderen Origin; lokal mappt <code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code> auf <code class="text-sm bg-gray-100 px-1 rounded">/api/thinkport/…</code>. Auf Netlify mit <code class="text-sm bg-gray-100 px-1 rounded">VITE_THINKPORT_API_PROXY=true</code> dasselbe. Auf rein statischem Hosting ohne Proxy: CORS oder eigener Proxy nötig.</li>
                         <li>Export: <strong>Karten-Listing</strong> (Orientierung <a href="https://thinkport.digital/referenzen" class="text-aqua-700 hover:underline font-semibold" rel="noopener noreferrer" target="_blank">thinkport.digital/referenzen</a>), bis zu <strong>3 Referenzen pro PDF-Seite</strong> mit Motiv, Teaser und Tags. Bilder und Logo werden vor dem Rendern verkleinert, damit der Browser weniger Pixel verarbeiten muss.</li>
                     </ul>
                 </div>
@@ -596,7 +599,7 @@
 
             <div class="card-aqua mb-10">
                 <h3 class="font-heading text-xl font-bold text-navy mb-4">API &amp; Filter</h3>
-                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                <div id="refs-api-auth-fields" class="grid md:grid-cols-2 gap-4 mb-4">
                     <label class="block font-body text-sm text-gray-700">
                         <span class="font-semibold">User</span>
                         <input type="text" id="refs-api-user" autocomplete="username" class="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm" placeholder="Basic Auth user">

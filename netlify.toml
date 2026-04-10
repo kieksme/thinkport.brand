@@ -1,0 +1,44 @@
+# Netlify deploy for thinkport.brand (Thinkport API proxy + server-side reference PDF).
+# Credentials: THINKPORT_API_USERNAME / THINKPORT_API_PASSWORD
+# Optional build env: VITE_BASE_PATH=/ (custom domain) or /thinkport.brand/ etc.
+#   VITE_THINKPORT_API_PROXY=true
+#   VITE_THINKPORT_SERVER_PDF=true (optional)
+
+[build]
+  command = "pnpm install && pnpm build"
+  publish = "dist"
+
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
+# Unified Thinkport API proxy: append upstream path (GraphQL functions, static assets, …).
+# Examples:
+#   POST /api/thinkport/.netlify/functions/references
+#   POST /api/thinkport/.netlify/functions/data
+#   GET  /api/thinkport/images/references/…
+[[redirects]]
+  from = "/api/thinkport/*"
+  to = "/.netlify/functions/thinkport-api-proxy/:splat"
+  status = 200
+  force = true
+
+# Legacy aliases (same handler).
+[[redirects]]
+  from = "/api/thinkport-references"
+  to = "/.netlify/functions/thinkport-api-proxy/.netlify/functions/references"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/api/thinkport-references-media/*"
+  to = "/.netlify/functions/thinkport-api-proxy/:splat"
+  status = 200
+  force = true
+
+# Server-side reference listing PDF (POST JSON { referenceIds: string[] }).
+[[redirects]]
+  from = "/api/references-pdf"
+  to = "/.netlify/functions/references-pdf"
+  status = 200
+  force = true

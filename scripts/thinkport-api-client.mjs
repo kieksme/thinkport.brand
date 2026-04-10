@@ -5,18 +5,28 @@
  * Fetches people data from the Thinkport GraphQL API using HTTP Basic Auth
  * and exposes a normalized model that can be consumed by generators
  * (avatars, business cards, email footers, etc.).
+ *
+ * Optional: set THINKPORT_API_URL to your own site proxy, e.g.
+ * https://<brand-site>/api/thinkport/.netlify/functions/data (Netlify adds Basic Auth).
  */
 
 import { Buffer } from 'buffer';
 
-const DEFAULT_API_URL = 'https://thinkportapi.netlify.app/.netlify/functions/data';
+const DEFAULT_API_URL =
+  process.env.THINKPORT_API_URL || 'https://thinkportapi.netlify.app/.netlify/functions/data';
 
 /**
  * Build Basic Auth header from environment variables.
  * Expects THINKPORT_API_USERNAME and THINKPORT_API_PASSWORD to be set.
- * @returns {{ Authorization: string }}
+ * When THINKPORT_API_URL points at this repo’s `/api/thinkport/…` proxy, credentials are optional (the proxy adds server-side auth).
+ * @returns {{ Authorization?: string }}
  */
 function buildBasicAuthHeaderFromEnv() {
+  const apiUrl = process.env.THINKPORT_API_URL || '';
+  if (apiUrl.includes('/api/thinkport/')) {
+    return {};
+  }
+
   const username = process.env.THINKPORT_API_USERNAME;
   const password = process.env.THINKPORT_API_PASSWORD;
 

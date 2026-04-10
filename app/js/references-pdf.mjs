@@ -1,51 +1,62 @@
 /**
  * Reference PDF generator: load Thinkport references via GraphQL, filter, export A4 pages (letterhead layout) with jsPDF + html2canvas.
- * @see https://thinkportapi.netlify.app (References API, Basic Auth)
+ * With VITE_THINKPORT_API_PROXY, calls go through /api/thinkport/…; optional server PDF via VITE_THINKPORT_SERVER_PDF.
+ * @see https://thinkportapi.netlify.app (Thinkport API, Basic Auth)
  */
 
-const REFERENCES_QUERY = `
-  query ReferencesForPdf {
-    references {
-      id
-      title
-      customer
-      customerHidden
-      year
-      categories
-      tags
-      excerpt
-      image
-      disableDetail
-      body
-    }
-  }
-`
+import {
+  REFERENCES_QUERY,
+  THINKPORT_API_ORIGIN,
+  THINKPORT_GRAPHQL_CASE_STUDIES_URL,
+  REFS_PER_PAGE,
+  splitIntoChunks,
+  uniqueSorted,
+  escapeHtml,
+  buildListingMainHtml,
+  PDF_EXPORT_LOGO_PLACEHOLDER_DATA_URL,
+  PDF_EXPORT_BROKEN_IMG_PLACEHOLDER,
+} from '../../lib/references-pdf-shared.mjs'
 
-const PRODUCTION_ENDPOINT = 'https://thinkportapi.netlify.app/.netlify/functions/references'
+const USE_SITE_API_PROXY = import.meta.env.VITE_THINKPORT_API_PROXY === 'true'
+const USE_SERVER_PDF = import.meta.env.VITE_THINKPORT_SERVER_PDF === 'true'
 
 /**
- * Origin hosting GraphQL + static files. Reference hero images are public URLs such as
- * `https://thinkportapi.netlify.app/images/references/reference-simpl.png` (field `image` in the API).
+ * Absolute-path URL under Vite `base` (e.g. /thinkport.brand/api/... on GitHub Pages).
+ * @param {string} path must start with /
  */
-const THINKPORT_API_ORIGIN = new URL(PRODUCTION_ENDPOINT).origin
+function apiUrl(path) {
+  const base = (import.meta.env.BASE_URL || '/').replace(/\/$/, '')
+  const p = path.startsWith('/') ? path : `/${path}`
+  return `${base}${p}`
+}
 
 function getEndpoint() {
-  return import.meta.env.DEV ? '/api/thinkport-references' : PRODUCTION_ENDPOINT
+  if (import.meta.env.DEV) return '/api/thinkport/.netlify/functions/references'
+  if (USE_SITE_API_PROXY) return apiUrl('/api/thinkport/.netlify/functions/references')
+  return THINKPORT_GRAPHQL_CASE_STUDIES_URL
 }
 
 /**
- * In Vite dev, rewrites `https://thinkportapi.netlify.app/...` asset URLs to the local proxy so fetch/html2canvas are same-origin.
+ * Rewrites Thinkport API asset URLs to the local or Netlify media proxy (same-origin fetch/html2canvas).
  * @param {string} url
  * @returns {string}
  */
-function rewriteThinkportApiMediaForDev(url) {
+function rewriteThinkportApiMedia(url) {
   if (!url || typeof url !== 'string') return url
-  if (!import.meta.env.DEV) return url
-  if (url.startsWith('/api/thinkport-references-media')) return url
+  if (url.startsWith('/api/thinkport')) return url
+  // Legacy dev paths (older Vite proxy)
+  if (url.startsWith('/api/thinkport-references-media')) {
+    return url.replace(/^\/api\/thinkport-references-media/, '/api/thinkport')
+  }
   try {
     const u = new URL(url, window.location.href)
     if (u.origin === THINKPORT_API_ORIGIN) {
-      return `/api/thinkport-references-media${u.pathname}${u.search}`
+      if (import.meta.env.DEV) {
+        return `/api/thinkport${u.pathname}${u.search}`
+      }
+      if (USE_SITE_API_PROXY) {
+        return `${apiUrl('/api/thinkport')}${u.pathname}${u.search}`
+      }
     }
   } catch {
     // ignore invalid URL
@@ -63,12 +74,12 @@ function rewriteThinkportApiMediaForDev(url) {
 function resolveReferenceImageUrl(basePath, pathOrUrl) {
   if (!pathOrUrl || typeof pathOrUrl !== 'string') return ''
   if (/^https?:\/\//i.test(pathOrUrl) || pathOrUrl.startsWith('data:')) {
-    return rewriteThinkportApiMediaForDev(pathOrUrl)
+    return rewriteThinkportApiMedia(pathOrUrl)
   }
   if (pathOrUrl.startsWith('/')) {
-    return rewriteThinkportApiMediaForDev(`${THINKPORT_API_ORIGIN}${pathOrUrl}`)
+    return rewriteThinkportApiMedia(`${THINKPORT_API_ORIGIN}${pathOrUrl}`)
   }
-  return rewriteThinkportApiMediaForDev(toAbsoluteAssetUrl(basePath, pathOrUrl))
+  return rewriteThinkportApiMedia(toAbsoluteAssetUrl(basePath, pathOrUrl))
 }
 
 /** Filter DevTools console with this string to trace PDF export. */
@@ -101,42 +112,6 @@ function authHeader(user, pass) {
   return `Basic ${token}`
 }
 
-function initBarcode(svgEl, barcodeValue) {
-  if (!svgEl) return
-  svgEl.innerHTML = ''
-  let bits = '101011110'
-  for (let i = 0; i < barcodeValue.length; i += 1) {
-    const byteBits = barcodeValue.charCodeAt(i).toString(2).padStart(8, '0')
-    bits += byteBits
-    if (i < barcodeValue.length - 1) bits += '0'
-  }
-  bits += '1110101'
-  const ns = 'http://www.w3.org/2000/svg'
-  for (let x = 0; x < bits.length; x += 1) {
-    if (bits.charAt(x) !== '1') continue
-    const rect = document.createElementNS(ns, 'rect')
-    rect.setAttribute('x', String(x))
-    rect.setAttribute('y', '0')
-    rect.setAttribute('width', '1')
-    rect.setAttribute('height', '64')
-    rect.setAttribute('fill', '#0B2649')
-    svgEl.appendChild(rect)
-  }
-  svgEl.setAttribute('viewBox', `0 0 ${bits.length} 64`)
-}
-
-function escapeHtml(s) {
-  if (s == null || typeof s !== 'string') return ''
-  return s
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-}
-
-/** Max references per A4 page (listing cards, thinkport.digital/referenzen style). */
-const REFS_PER_PAGE = 3
-
 /** html2canvas scale: 1.5 keeps A4 text sharp while sampling ~44% fewer pixels than 2.0. */
 const PDF_EXPORT_CANVAS_SCALE = 1.5
 /** JPEG quality for page rasters and downscaled assets (lower = faster encode, smaller PDF). */
@@ -146,16 +121,6 @@ const PDF_EXPORT_CARD_HERO_MAX_W = 720
 const PDF_EXPORT_CARD_HERO_MAX_H = 405
 /** Header logo ~48 mm; cap raster width. */
 const PDF_EXPORT_LOGO_MAX_W = 380
-
-/** Empty SVG keeps logo slot size if fetch fails (html2canvas stays same-origin safe). */
-const PDF_EXPORT_LOGO_PLACEHOLDER_DATA_URL = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="380" height="84" viewBox="0 0 380 84"/>',
-)}`
-
-/** Minimal placeholder for any broken export <img> (card hero, logo, etc.). */
-const PDF_EXPORT_BROKEN_IMG_PLACEHOLDER = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" width="720" height="405" viewBox="0 0 720 405"/>',
-)}`
 
 /**
  * Replace images that did not decode so html2canvas does not reject the page.
@@ -303,53 +268,6 @@ async function waitForImages(root) {
 }
 
 /**
- * @param {string} str
- * @param {number} max
- */
-function truncateText(str, max) {
-  if (str == null || str === '') return '—'
-  const s = String(str)
-  if (s.length <= max) return s
-  return `${s.slice(0, Math.max(0, max - 1))}…`
-}
-
-/**
- * @template T
- * @param {T[]} arr
- * @param {number} size
- * @returns {T[][]}
- */
-function splitIntoChunks(arr, size) {
-  const chunks = []
-  for (let i = 0; i < arr.length; i += size) {
-    chunks.push(arr.slice(i, i + size))
-  }
-  return chunks
-}
-
-/** Listing card: title / excerpt max lengths (chars). */
-const PDF_CARD_TITLE_MAX = 140
-const PDF_CARD_EXCERPT_MAX = 420
-const PDF_CARD_META_CUSTOMER_MAX = 72
-
-/**
- * @param {object} ref
- * @returns {string} HTML fragment of .ref-tag spans
- */
-function buildTagPillsHtml(ref) {
-  const raw = [...(Array.isArray(ref.categories) ? ref.categories : []), ...(Array.isArray(ref.tags) ? ref.tags : [])]
-  const labels = uniqueSorted(
-    raw
-      .map((s) => (s == null ? '' : String(s).trim().replace(/\s+/g, ' ')))
-      .filter(Boolean),
-  )
-  if (labels.length === 0) return ''
-  return labels
-    .map((label) => `<span class="ref-tag">${escapeHtml(label)}</span>`)
-    .join('')
-}
-
-/**
  * @param {object[]} refs
  * @param {string} basePath
  * @param {string | null} [authorization] Basic Auth for Thinkport API images (dev proxy forwards this).
@@ -405,98 +323,20 @@ async function buildReferenceListingPage(cardsWithHeroes, ctx) {
     )
   }
 
-  const refStart = pageIndex * REFS_PER_PAGE + 1
-  const refEnd = refStart + cardsWithHeroes.length - 1
-
-  const cardsHtml = cardsWithHeroes
-    .map(({ ref, heroSrc }) => {
-      const title = escapeHtml(truncateText(ref.title || ref.id, PDF_CARD_TITLE_MAX))
-      const customerRaw = ref.customerHidden ? '—' : ref.customer || '—'
-      const customer = escapeHtml(truncateText(customerRaw, PDF_CARD_META_CUSTOMER_MAX))
-      const year = escapeHtml(truncateText(ref.year || '—', 24))
-      const metaLine = `${customer} • ${year}`
-      const excerpt = escapeHtml(truncateText(ref.excerpt || '', PDF_CARD_EXCERPT_MAX))
-      const tagsHtml = buildTagPillsHtml(ref)
-      const heroInner = heroSrc
-        ? `<img src="${escapeHtml(heroSrc)}" alt="" />`
-        : '<span class="ref-card__noimg">—</span>'
-      return `<article class="ref-card">
-        <div class="ref-card__row">
-          <div class="ref-card__hero">${heroInner}</div>
-          <div class="ref-card__body">
-            <h3 class="ref-card__title">${title}</h3>
-            <p class="ref-card__meta">${metaLine}</p>
-            <p class="ref-card__excerpt">${excerpt}</p>
-            ${tagsHtml ? `<div class="ref-card__tags">${tagsHtml}</div>` : ''}
-          </div>
-        </div>
-      </article>`
-    })
-    .join('')
-
+  const html = buildListingMainHtml(cardsWithHeroes, { pageIndex, totalPages, totalRefCount }, logoSrc)
   const wrap = document.createElement('div')
-  wrap.innerHTML = `
-  <main class="tp-ref-page tp-ref-page--listing">
-    <div class="print-mark fold-mark-top" aria-hidden="true"></div>
-    <div class="print-mark fold-mark-bottom" aria-hidden="true"></div>
-    <div class="hole-mark" aria-hidden="true"></div>
-    <div class="edge-barcode" aria-hidden="true">
-      <svg class="edge-barcode-svg" viewBox="0 0 240 64" preserveAspectRatio="none"></svg>
-    </div>
-    <section class="content content--listing">
-      <div class="top-row">
-        <div class="claim"></div>
-        <div class="logo">
-          <img src="${escapeHtml(logoSrc)}" alt="Thinkport - A Venitus Company" />
-        </div>
-      </div>
-      <div class="sender-line">Thinkport GmbH – Referenzübersicht</div>
-      <p class="ref-listing-subject">Ausgewählte Referenzen</p>
-      <p class="ref-listing-meta">${totalRefCount} ${totalRefCount === 1 ? 'Eintrag' : 'Einträge'} gesamt · Referenzen ${refStart}–${refEnd} · PDF-Seite ${pageIndex + 1} / ${totalPages}</p>
-      <div class="ref-listing-stack">
-        ${cardsHtml}
-      </div>
-    </section>
-    <div class="page-number">Seite ${pageIndex + 1} von ${totalPages}</div>
-    <footer class="footer">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-title">Thinkport GmbH</div>
-          Arnsburger Straße 74<br />
-          60385 Frankfurt
-        </div>
-        <div>
-          <div class="footer-title">www.thinkport.digital</div>
-          Telefon +49 151 63417156<br />
-          kontakt@th.inkport.digital
-        </div>
-        <div>
-          <div class="footer-title">Geschäftsführung</div>
-          Tobias Drechsler<br />
-          Dominik Fries<br />
-          Henning Breyer
-        </div>
-        <div>
-          <div class="footer-title">Handelsregister</div>
-          Amtsgericht Frankfurt am<br />
-          Main HRB 129804<br />
-          <span style="text-decoration: underline;">USt-IDNr:</span> DE510746560
-        </div>
-      </div>
-    </footer>
-  </main>`
-
+  wrap.innerHTML = html
   const main = /** @type {HTMLElement} */ (wrap.firstElementChild)
-  const svg = main.querySelector('.edge-barcode-svg')
-  initBarcode(svg, 'https://thinkport.digital')
   pdfLog('buildPage DOM ready', `page ${pageIndex + 1}/${totalPages}`)
   return main
 }
 
 async function fetchReferences(user, pass) {
   const headers = { 'Content-Type': 'application/json' }
-  const auth = authHeader(user, pass)
-  if (auth) headers.Authorization = auth
+  if (!USE_SITE_API_PROXY) {
+    const auth = authHeader(user, pass)
+    if (auth) headers.Authorization = auth
+  }
 
   const res = await fetch(getEndpoint(), {
     method: 'POST',
@@ -520,10 +360,6 @@ async function fetchReferences(user, pass) {
     throw new Error('Unexpected API response')
   }
   return json.data.references
-}
-
-function uniqueSorted(arr) {
-  return [...new Set(arr.filter(Boolean))].sort((a, b) => a.localeCompare(b, 'de'))
 }
 
 function refMatchesFilters(ref, selectedCategories, selectedTags) {
@@ -594,6 +430,19 @@ export function bootReferencesPdf(basePath) {
   const statusEl = document.getElementById('refs-load-status')
   const userEl = document.getElementById('refs-api-user')
   const passEl = document.getElementById('refs-api-pass')
+  const authFieldsEl = document.getElementById('refs-api-auth-fields')
+  const netlifyHintEl = document.getElementById('refs-netlify-mode-hint')
+
+  if (USE_SITE_API_PROXY) {
+    if (authFieldsEl) {
+      authFieldsEl.hidden = true
+      authFieldsEl.setAttribute('aria-hidden', 'true')
+    }
+    if (netlifyHintEl) {
+      netlifyHintEl.hidden = false
+      netlifyHintEl.removeAttribute('hidden')
+    }
+  }
   const loadBtn = document.getElementById('refs-load-btn')
   const loadBtnLabel = loadBtn?.querySelector('.refs-load-btn__label')
   const LOAD_LABEL_DEFAULT = 'Referenzen laden'
@@ -869,14 +718,6 @@ export function bootReferencesPdf(basePath) {
   })
 
   genBtn?.addEventListener('click', async () => {
-    const jspdf = globalThis.jspdf
-    const html2canvas = globalThis.html2canvas
-    if (!jspdf?.jsPDF || !html2canvas) {
-      shakeGenerateBtn()
-      setStatus('PDF-Bibliotheken fehlen (jsPDF / html2canvas).', true)
-      return
-    }
-    const pdfAuth = authHeader(userEl?.value || '', passEl?.value ?? '')
     const filtered = getFilteredReferences()
     const toExport = filtered.filter((r) => selectedRefIds.has(r.id))
     if (toExport.length === 0) {
@@ -884,6 +725,60 @@ export function bootReferencesPdf(basePath) {
       setStatus('Keine Referenzen zum Export ausgewählt.', true)
       return
     }
+
+    if (USE_SERVER_PDF && USE_SITE_API_PROXY) {
+      genBtn.disabled = true
+      setGenerateUiLoading(true, { page: 0, total: 1, progress: 5 })
+      setStatus('PDF wird auf dem Server erzeugt (kann etwas dauern)…', false)
+      await flushUi()
+      try {
+        const res = await fetch(apiUrl('/api/references-pdf'), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ referenceIds: toExport.map((r) => r.id) }),
+        })
+        if (!res.ok) {
+          const text = await res.text()
+          let msg = text || res.statusText || 'PDF-Anfrage fehlgeschlagen'
+          try {
+            const j = JSON.parse(text)
+            if (j?.error) msg = j.error
+          } catch {
+            /* plain text body */
+          }
+          throw new Error(msg)
+        }
+        const blob = await res.blob()
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'thinkport-referenzen.pdf'
+        a.rel = 'noopener'
+        document.body.appendChild(a)
+        a.click()
+        a.remove()
+        URL.revokeObjectURL(url)
+        setGenerateUiLoading(true, { page: 0, total: 1, progress: 100 })
+        setStatus(`PDF fertig (${toExport.length} Referenz(en)).`, false)
+        pdfLog('export success', `server PDF · ${toExport.length} refs`)
+      } catch (e) {
+        console.error(e)
+        setStatus(e.message || 'Server-PDF fehlgeschlagen.', true)
+      } finally {
+        setGenerateUiLoading(false)
+        genBtn.disabled = false
+      }
+      return
+    }
+
+    const jspdf = globalThis.jspdf
+    const html2canvas = globalThis.html2canvas
+    if (!jspdf?.jsPDF || !html2canvas) {
+      shakeGenerateBtn()
+      setStatus('PDF-Bibliotheken fehlen (jsPDF / html2canvas).', true)
+      return
+    }
+    const pdfAuth = USE_SITE_API_PROXY ? null : authHeader(userEl?.value || '', passEl?.value ?? '')
 
     genBtn.disabled = true
     const refTotal = toExport.length
@@ -962,7 +857,9 @@ export function bootReferencesPdf(basePath) {
   updateExportCountPreview()
 
   if (import.meta.env.DEV) {
-    setStatus('Dev: optional .env mit THINKPORT_REFERENCES_USER / THINKPORT_REFERENCES_PASS für den Proxy.', false)
+    setStatus('Dev: .env mit THINKPORT_API_USERNAME / THINKPORT_API_PASSWORD für den Proxy.', false)
+  } else if (USE_SITE_API_PROXY) {
+    setStatus('„Referenzen laden“ nutzt den Site-Proxy (Basic Auth serverseitig).', false)
   } else {
     setStatus('Basic-Auth-Zugang eingeben und „Referenzen laden“.', false)
   }
