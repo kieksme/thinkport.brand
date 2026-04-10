@@ -81,3 +81,15 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Optional: keep a Netlify site in sync when the same workflow builds for GitHub Pages.
+  # Repository secret NETLIFY_BUILD_HOOK_URL = full URL from Netlify → Build hooks (do not commit).
+  netlify-build-hook:
+    runs-on: ubuntu-latest
+    needs: build
+    if: secrets.NETLIFY_BUILD_HOOK_URL != ''
+    steps:
+      - name: Trigger Netlify build
+        env:
+          NETLIFY_BUILD_HOOK_URL: ${{ secrets.NETLIFY_BUILD_HOOK_URL }}
+        run: curl -fsS -X POST -d '' "$NETLIFY_BUILD_HOOK_URL"

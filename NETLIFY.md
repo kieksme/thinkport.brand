@@ -47,6 +47,15 @@ After pulling these changes, run **`pnpm install`** so `pnpm-lock.yaml` includes
 
 Redirects target **`/api/...`** from the site root. If you serve the built app under a subpath without rewriting, adjust [`netlify.toml`](netlify.toml) redirects (or keep the site at domain root with `VITE_BASE_PATH=/`).
 
+## GitHub Actions → Netlify (optional)
+
+The [`Deploy to GitHub Pages`](.github/workflows/deploy.yml) workflow can **also** ping a [Netlify build hook](https://docs.netlify.com/configure-builds/build-hooks/) after a successful `build` job (same triggers as Pages: merged PRs to `main`, successful release workflow, manual dispatch).
+
+1. In Netlify: **Site configuration → Build & deploy → Continuous deployment → Build hooks** → create a hook (e.g. branch `main`).
+2. In GitHub: **Repository → Settings → Secrets and variables → Actions** → add **`NETLIFY_BUILD_HOOK_URL`** with the full hook URL.
+
+If the secret is unset, the `netlify-build-hook` job is skipped. Do not put the hook URL in the repo or in logs.
+
 ## GitHub Pages
 
 The default GitHub Actions deploy remains static: **no** Netlify Functions. Pages that talk to Thinkport keep using the public API URL plus manual Basic Auth unless you add your own proxy.
