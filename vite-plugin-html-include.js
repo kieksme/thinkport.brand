@@ -210,6 +210,10 @@ function determineActiveStates(filePath) {
     activeGithub: false,
     activeLinkedin: false,
     activePortfolioPdf: false,
+    activeLetterhead: false,
+    activeTeamsBackgrounds: false,
+    activePowerpointTemplates: false,
+    activeReferencesPdf: false,
     activeImpressum: false
   };
 
@@ -267,6 +271,14 @@ function determineActiveStates(filePath) {
       states.activeLinkedin = true;
     } else if (normalizedPath.includes('portfolio-pdf.html')) {
       states.activePortfolioPdf = true;
+    } else if (normalizedPath.includes('letterhead.html')) {
+      states.activeLetterhead = true;
+    } else if (normalizedPath.includes('teams.html')) {
+      states.activeTeamsBackgrounds = true;
+    } else if (normalizedPath.includes('powerpoint-templates.html')) {
+      states.activePowerpointTemplates = true;
+    } else if (normalizedPath.includes('references-pdf.html')) {
+      states.activeReferencesPdf = true;
     }
 
     return states;
@@ -388,6 +400,11 @@ const HERO_CONTENT_MAP = {
     heroTitle: 'Web Applications',
     heroSubtitle: 'Tailwind CSS und Vite Anleitungen für moderne Webanwendungen',
     heroExtras: heroExtrasTags('<span class="text-aqua">Tailwind CSS</span> • <span class="text-fuchsia">Vite</span> • <span class="text-aqua">Components</span>'),
+  },
+  'implementations/references-pdf.html': {
+    heroTitle: 'Reference PDF Generator',
+    heroSubtitle: 'Case Studies aus der GraphQL API als A4-PDF im Briefpapier-Layout',
+    heroExtras: heroExtrasTags('<span class="text-fuchsia">GraphQL</span> • <span class="text-aqua">Briefpapier</span> • <span class="text-fuchsia">Filter</span>'),
   },
 };
 

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Thinkport – Sample Reference PDF</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --tp-dark-blue: #0b2649;
+      --tp-dark-gray: #333333;
+      --page-w: 210mm;
+      --page-h: 297mm;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #f4f4f4;
+      font-family: "Montserrat", sans-serif;
+      font-size: 10pt;
+      color: var(--tp-dark-gray);
+    }
+    .tp-ref-page {
+      width: var(--page-w);
+      height: var(--page-h);
+      background: #ffffff;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .print-mark {
+      position: absolute;
+      left: 0;
+      width: 8mm;
+      border-top: 0.25mm solid #7a7a7a;
+      z-index: 2;
+    }
+    .fold-mark-top { top: 105mm; }
+    .fold-mark-bottom { top: 210mm; }
+    .hole-mark {
+      position: absolute;
+      left: 3.3mm;
+      top: 148.5mm;
+      width: 1.6mm;
+      height: 1.6mm;
+      border: 0.25mm solid #7a7a7a;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      z-index: 2;
+    }
+    .edge-barcode {
+      position: absolute;
+      right: 0.8mm;
+      top: 200mm;
+      width: 66mm;
+      height: 7mm;
+      transform-origin: bottom right;
+      transform: rotate(-90deg);
+      z-index: 2;
+      overflow: hidden;
+      background: #fff;
+    }
+    .edge-barcode svg { width: 100%; height: 100%; display: block; }
+    .content {
+      position: absolute;
+      left: 28mm;
+      right: 28mm;
+      top: 20mm;
+      bottom: 42mm;
+    }
+    .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      min-height: 28mm;
+    }
+    .logo img {
+      width: 64mm;
+      height: auto;
+      display: block;
+      margin-top: -0.5mm;
+    }
+    .sender-line {
+      font-size: 7pt;
+      letter-spacing: -0.08pt;
+      white-space: nowrap;
+      color: var(--tp-dark-blue);
+      margin-bottom: 3.2mm;
+    }
+    .ref-block { margin-top: 8mm; }
+    .ref-meta {
+      font-size: 9pt;
+      line-height: 1.35;
+      color: var(--tp-dark-blue);
+    }
+    .ref-meta div { margin-bottom: 2mm; }
+    .subject {
+      margin-top: 6mm;
+      color: var(--tp-dark-blue);
+      font-size: 11pt;
+      font-weight: 700;
+    }
+    .letter {
+      margin-top: 5mm;
+      color: var(--tp-dark-gray);
+      font-size: 9.5pt;
+      line-height: 1.42;
+    }
+    .letter p { margin: 0 0 4mm 0; }
+    .ref-excerpt { font-weight: 600; }
+    .page-number {
+      position: absolute;
+      right: 28mm;
+      bottom: 32mm;
+      font-size: 9pt;
+      color: var(--tp-dark-gray);
+      font-weight: 500;
+    }
+    .footer {
+      position: absolute;
+      left: 28mm;
+      right: 28mm;
+      bottom: 8mm;
+      border-top: 0.35mm solid #d6d6d6;
+      padding-top: 3.5mm;
+      font-size: 7.5pt;
+      color: var(--tp-dark-blue);
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr 1.2fr;
+      gap: 5mm;
+      line-height: 1.2;
+    }
+    .footer-title { color: var(--tp-dark-blue); font-weight: 600; }
+  </style>
+</head>
+<body>
+  <main class="tp-ref-page">
+    <div class="print-mark fold-mark-top" aria-hidden="true"></div>
+    <div class="print-mark fold-mark-bottom" aria-hidden="true"></div>
+    <div class="hole-mark" aria-hidden="true"></div>
+    <div class="edge-barcode" aria-hidden="true">
+      <svg id="edge-barcode-svg" viewBox="0 0 240 64" preserveAspectRatio="none"></svg>
+    </div>
+    <section class="content">
+      <div class="top-row">
+        <div class="claim"></div>
+        <div class="logo">
+          <img src="../logos/venitus/thinkport-venitus-light.svg" alt="Thinkport - A Venitus Company" />
+        </div>
+      </div>
+      <div class="ref-block">
+        <div class="sender-line">Thinkport GmbH – Referenz / Case Study</div>
+        <div class="ref-meta">
+          <div><strong>Kunde</strong> Beispielkunde AG</div>
+          <div><strong>Jahr</strong> 2025</div>
+          <div><strong>Kategorien</strong> Retail, Cloud</div>
+          <div><strong>Tags</strong> Migration, Kubernetes</div>
+        </div>
+      </div>
+      <div class="subject">Digitale Plattform &amp; Cloud-Modernisierung</div>
+      <div class="letter">
+        <p class="ref-excerpt">Kurzer Teaser: Gemeinsam wurde eine skalierbare Referenzarchitektur umgesetzt und der Go-live im Kerngeschäft abgesichert.</p>
+        <p>Dies ist eine <strong>Beispiel-PDF</strong> für die Implementationsseite. Sie zeigt das gleiche A4-Raster wie das Briefpapier: Logo, Metadaten, Titel, Text und Footer. Der interaktive Generator nutzt Live-Daten aus der Thinkport References API.</p>
+        <p>Mit freundlichen Grüßen<br />Thinkport GmbH</p>
+      </div>
+    </section>
+    <div class="page-number">Seite 1 von 1</div>
+    <footer class="footer">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-title">Thinkport GmbH</div>
+          Arnsburger Straße 74<br />
+          60385 Frankfurt
+        </div>
+        <div>
+          <div class="footer-title">www.thinkport.digital</div>
+          Telefon +49 151 63417156<br />
+          kontakt@th.inkport.digital
+        </div>
+        <div>
+          <div class="footer-title">Geschäftsführung</div>
+          Tobias Drechsler<br />
+          Dominik Fries<br />
+          Henning Breyer
+        </div>
+        <div>
+          <div class="footer-title">Handelsregister</div>
+          Amtsgericht Frankfurt am<br />
+          Main HRB 129804<br />
+          <span style="text-decoration: underline;">USt-IDNr:</span> DE510746560
+        </div>
+      </div>
+    </footer>
+  </main>
+  <script>
+    (function() {
+      var barcodeValue = 'https://thinkport.digital';
+      var barcodeSvg = document.getElementById('edge-barcode-svg');
+      if (!barcodeSvg) return;
+      var bits = '101011110';
+      for (var i = 0; i < barcodeValue.length; i += 1) {
+        var byteBits = barcodeValue.charCodeAt(i).toString(2).padStart(8, '0');
+        bits += byteBits;
+        if (i < barcodeValue.length - 1) bits += '0';
+      }
+      bits += '1110101';
+      var ns = 'http://www.w3.org/2000/svg';
+      for (var x = 0; x < bits.length; x += 1) {
+        if (bits.charAt(x) !== '1') continue;
+        var rect = document.createElementNS(ns, 'rect');
+        rect.setAttribute('x', String(x));
+        rect.setAttribute('y', '0');
+        rect.setAttribute('width', '1');
+        rect.setAttribute('height', '64');
+        rect.setAttribute('fill', '#0B2649');
+        barcodeSvg.appendChild(rect);
+      }
+      barcodeSvg.setAttribute('viewBox', '0 0 ' + bits.length + ' 64');
+    })();
+  </script>
+</body>
+</html>

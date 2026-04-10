@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" type="image/svg+xml" href="{{basePath}}favicon.svg">
+    <link rel="alternate icon" href="{{basePath}}logos/solo/thinkport-solo-light.svg">
+    <link rel="apple-touch-icon" href="{{basePath}}logos/solo/thinkport-solo-light.svg">
+
+    <link rel="manifest" href="{{basePath}}manifest.json">
+    <meta name="theme-color" content="{{themeColor}}">
+
+    <meta name="description" content="Thinkport Referenz-PDF: Case Studies aus der GraphQL References API im A4-Briefpapier-Layout exportieren.">
+    <meta name="keywords" content="Thinkport, Referenzen, PDF, Case Study, GraphQL, Briefpapier">
+    <meta name="author" content="Thinkport GmbH">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="German">
+    <title>Reference PDF Generator - Thinkport GmbH</title>
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://brand.thinkport.digital/implementations/references-pdf.html">
+    <meta property="og:title" content="Reference PDF Generator - Thinkport GmbH">
+    <meta property="og:description" content="Referenzen filtern und als PDF im Thinkport Briefpapier-Layout erzeugen.">
+    <meta property="og:image" content="{{repoBaseUrl}}/assets/banner/opengraph/implementations.svg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/svg+xml">
+    <meta property="og:locale" content="de_DE">
+    <meta property="og:site_name" content="Thinkport GmbH">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://brand.thinkport.digital/implementations/references-pdf.html">
+    <meta name="twitter:title" content="Reference PDF Generator - Thinkport GmbH">
+    <meta name="twitter:description" content="Referenzen filtern und als PDF im Thinkport Briefpapier-Layout erzeugen.">
+    <meta name="twitter:image" content="{{repoBaseUrl}}/assets/banner/opengraph/implementations.svg">
+
+    <link rel="canonical" href="https://brand.thinkport.digital/implementations/references-pdf.html">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Reference PDF Generator - Thinkport GmbH",
+      "description": "Export Thinkport case studies as A4 PDF using corporate letterhead layout.",
+      "url": "https://brand.thinkport.digital/implementations/references-pdf.html",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "Thinkport Corporate Identity",
+        "url": "https://brand.thinkport.digital/"
+      }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+
+    <script type="module" src="../main.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+
+    <style>
+    /* Letterhead-aligned export surface (matches assets/templates/letterhead-a4.html, .page → .tp-ref-page) */
+    #refs-pdf-export-root {
+      position: fixed;
+      left: -9999px;
+      top: 0;
+      pointer-events: none;
+    }
+    #refs-pdf-export-root .tp-ref-page {
+      width: 210mm;
+      height: 297mm;
+      background: #ffffff;
+      margin: 0;
+      position: relative;
+      overflow: hidden;
+      font-family: "Montserrat", sans-serif;
+      font-size: 10pt;
+      color: #333333;
+      box-sizing: border-box;
+    }
+    #refs-pdf-export-root .tp-ref-page * {
+      box-sizing: border-box;
+    }
+    #refs-pdf-export-root .print-mark {
+      position: absolute;
+      left: 0;
+      width: 8mm;
+      border-top: 0.25mm solid #7a7a7a;
+      z-index: 2;
+    }
+    #refs-pdf-export-root .fold-mark-top { top: 105mm; }
+    #refs-pdf-export-root .fold-mark-bottom { top: 210mm; }
+    #refs-pdf-export-root .hole-mark {
+      position: absolute;
+      left: 3.3mm;
+      top: 148.5mm;
+      width: 1.6mm;
+      height: 1.6mm;
+      border: 0.25mm solid #7a7a7a;
+      border-radius: 50%;
+      transform: translateY(-50%);
+      background: transparent;
+      z-index: 2;
+    }
+    #refs-pdf-export-root .edge-barcode {
+      position: absolute;
+      right: 0.8mm;
+      top: 200mm;
+      width: 66mm;
+      height: 7mm;
+      transform-origin: bottom right;
+      transform: rotate(-90deg);
+      z-index: 2;
+      overflow: hidden;
+      background: #fff;
+    }
+    #refs-pdf-export-root .edge-barcode svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    #refs-pdf-export-root .content {
+      position: absolute;
+      left: 28mm;
+      right: 28mm;
+      top: 20mm;
+      bottom: 42mm;
+    }
+    #refs-pdf-export-root .top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      min-height: 28mm;
+    }
+    #refs-pdf-export-root .logo img {
+      width: 64mm;
+      height: auto;
+      display: block;
+      margin-top: -0.5mm;
+    }
+    #refs-pdf-export-root .sender-line {
+      font-size: 7pt;
+      letter-spacing: -0.08pt;
+      white-space: nowrap;
+      color: #0b2649;
+      margin-bottom: 3.2mm;
+    }
+    #refs-pdf-export-root .ref-block {
+      margin-top: 8mm;
+    }
+    #refs-pdf-export-root .ref-meta {
+      font-size: 9pt;
+      line-height: 1.35;
+      color: #0b2649;
+    }
+    #refs-pdf-export-root .ref-meta div { margin-bottom: 2mm; }
+    #refs-pdf-export-root .subject {
+      margin-top: 6mm;
+      color: #0b2649;
+      font-size: 11pt;
+      font-weight: 700;
+    }
+    #refs-pdf-export-root .ref-hero {
+      margin-top: 5mm;
+      max-height: 55mm;
+      overflow: hidden;
+    }
+    #refs-pdf-export-root .ref-hero img {
+      width: 100%;
+      max-height: 55mm;
+      object-fit: cover;
+      display: block;
+    }
+    #refs-pdf-export-root .letter {
+      margin-top: 5mm;
+      color: #333333;
+      font-size: 9.5pt;
+      line-height: 1.42;
+      max-height: 95mm;
+      overflow: hidden;
+    }
+    #refs-pdf-export-root .letter p {
+      margin: 0 0 4mm 0;
+    }
+    #refs-pdf-export-root .ref-excerpt {
+      font-weight: 600;
+    }
+    #refs-pdf-export-root .markdown-body ul,
+    #refs-pdf-export-root .markdown-body ol {
+      margin: 0 0 4mm 1.2em;
+      padding: 0;
+    }
+    #refs-pdf-export-root .markdown-body h1,
+    #refs-pdf-export-root .markdown-body h2,
+    #refs-pdf-export-root .markdown-body h3 {
+      font-size: 10pt;
+      color: #0b2649;
+      margin: 3mm 0 2mm 0;
+    }
+    #refs-pdf-export-root .page-number {
+      position: absolute;
+      right: 28mm;
+      bottom: 32mm;
+      font-size: 9pt;
+      color: #333333;
+      font-weight: 500;
+    }
+    #refs-pdf-export-root .footer {
+      position: absolute;
+      left: 28mm;
+      right: 28mm;
+      bottom: 8mm;
+      border-top: 0.35mm solid #d6d6d6;
+      padding-top: 3.5mm;
+      font-size: 7.5pt;
+      color: #0b2649;
+    }
+    #refs-pdf-export-root .footer-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr 1fr 1.2fr;
+      gap: 5mm;
+      line-height: 1.2;
+    }
+    #refs-pdf-export-root .footer-title {
+      color: #0b2649;
+      font-weight: 600;
+    }
+
+    .references-pdf-preview-frame {
+      width: 100%;
+        min-height: 540px;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 8px;
+        background: #f5f5f5;
+    }
+    @media (min-width: 768px) {
+        .references-pdf-preview-frame {
+            min-height: 760px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+    }
+
+    /* PDF generate button: hover pointer, loading shimmer + progress */
+    #refs-generate-btn {
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+    }
+    #refs-generate-btn:hover:not(:disabled) {
+      box-shadow: 0 4px 14px rgba(11, 38, 73, 0.25);
+    }
+    #refs-generate-btn:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+    #refs-generate-btn:disabled {
+      cursor: not-allowed;
+    }
+    #refs-generate-btn.is-generating {
+      cursor: wait;
+    }
+    #refs-generate-btn .refs-generate-btn__shimmer {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    #refs-generate-btn.is-generating .refs-generate-btn__shimmer {
+      opacity: 1;
+      background: linear-gradient(
+        105deg,
+        transparent 38%,
+        rgba(255, 255, 255, 0.14) 50%,
+        transparent 62%
+      );
+      background-size: 220% 100%;
+      animation: refs-generate-shimmer 1.15s ease-in-out infinite;
+    }
+    @keyframes refs-generate-shimmer {
+      0% { background-position: 120% 0; }
+      100% { background-position: -120% 0; }
+    }
+    #refs-generate-btn .refs-generate-btn__spinner {
+      display: none;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #fff;
+      border-radius: 9999px;
+      animation: refs-generate-spin 0.65s linear infinite;
+      flex-shrink: 0;
+    }
+    #refs-generate-btn.is-generating .refs-generate-btn__spinner {
+      display: inline-block;
+    }
+    @keyframes refs-generate-spin {
+      to { transform: rotate(360deg); }
+    }
+    #refs-generate-btn.refs-generate-btn--shake {
+      animation: refs-generate-shake 0.42s ease;
+    }
+    @keyframes refs-generate-shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+    </style>
+</head>
+<body>
+    <!-- include: navigation -->
+
+    <!-- include: hero -->
+
+    <main role="main">
+    <section class="py-16 px-4 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8">Overview</h2>
+            <p class="font-body text-lg text-gray-700 mb-8">
+                Dieses Tool lädt Referenzen (Case Studies) aus der Thinkport <a href="https://thinkportapi.netlify.app" class="text-aqua-700 hover:underline font-semibold" rel="noopener noreferrer" target="_blank">GraphQL References API</a> und erzeugt daraus eine mehrseitige PDF im gleichen A4-Briefpapier-Raster wie <a href="letterhead.html" class="text-aqua-700 hover:underline font-semibold">A4 Letterhead</a>. Filter nach Kategorien und Tags, wähle einzelne Referenzen aus und exportiere lokal im Browser (jsPDF + html2canvas).
+            </p>
+            <div class="grid md:grid-cols-2 gap-8 mb-8">
+                <div class="card">
+                    <h3 class="font-heading text-xl font-bold text-navy mb-4">Ablauf</h3>
+                    <ol class="font-body text-gray-700 space-y-2 list-decimal list-inside">
+                        <li>Zugangsdaten eingeben (Basic Auth, wie im API-Playground)</li>
+                        <li>„Referenzen laden“</li>
+                        <li>Kategorien/Tags einschränken (leer = alle)</li>
+                        <li>Referenzen auswählen, „PDF generieren“</li>
+                    </ol>
+                </div>
+                <div class="card">
+                    <h3 class="font-heading text-xl font-bold text-navy mb-4">Hinweise</h3>
+                    <ul class="font-body text-gray-700 space-y-2 list-disc list-inside">
+                        <li>Lokal: optional <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_REFERENCES_USER</code> / <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_REFERENCES_PASS</code> in <code class="text-sm bg-gray-100 px-1 rounded">.env</code> für den Vite-Proxy (<code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code>).</li>
+                        <li>Hero-Bilder brauchen CORS auf der Bild-URL, sonst kann der Export abbrechen.</li>
+                        <li>Langer Text wird auf einer Seite begrenzt (Overflow hidden), analog zur ersten Ausbaustufe.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card-aqua mb-10">
+                <h3 class="font-heading text-xl font-bold text-navy mb-4">API &amp; Filter</h3>
+                <div class="grid md:grid-cols-2 gap-4 mb-4">
+                    <label class="block font-body text-sm text-gray-700">
+                        <span class="font-semibold">User</span>
+                        <input type="text" id="refs-api-user" autocomplete="username" class="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm" placeholder="Basic Auth user">
+                    </label>
+                    <label class="block font-body text-sm text-gray-700">
+                        <span class="font-semibold">Passwort</span>
+                        <input type="password" id="refs-api-pass" autocomplete="current-password" class="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm" placeholder="Basic Auth password">
+                    </label>
+                </div>
+                <button type="button" id="refs-load-btn" class="rounded-lg bg-fuchsia-600 px-5 py-2.5 text-white font-body font-semibold hover:bg-fuchsia-500 transition-colors">
+                    Referenzen laden
+                </button>
+                <p id="refs-load-status" class="mt-3 font-body text-sm text-gray-700" role="status"></p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 mb-8">
+                <div class="card">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="font-heading text-lg font-bold text-navy">Kategorien</h3>
+                        <div class="flex gap-2">
+                            <button type="button" id="refs-cat-all" class="text-xs font-body text-aqua-700 hover:underline">Alle</button>
+                            <button type="button" id="refs-cat-none" class="text-xs font-body text-aqua-700 hover:underline">Keine</button>
+                        </div>
+                    </div>
+                    <p class="font-body text-xs text-gray-600 mb-2">Keine Auswahl = alle Kategorien.</p>
+                    <div id="refs-category-filters" class="flex flex-col gap-2 max-h-48 overflow-y-auto"></div>
+                </div>
+                <div class="card">
+                    <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                        <h3 class="font-heading text-lg font-bold text-navy">Tags</h3>
+                        <div class="flex gap-2">
+                            <button type="button" id="refs-tag-all" class="text-xs font-body text-aqua-700 hover:underline">Alle</button>
+                            <button type="button" id="refs-tag-none" class="text-xs font-body text-aqua-700 hover:underline">Keine</button>
+                        </div>
+                    </div>
+                    <p class="font-body text-xs text-gray-600 mb-2">Keine Auswahl = alle Tags.</p>
+                    <div id="refs-tag-filters" class="flex flex-col gap-2 max-h-48 overflow-y-auto"></div>
+                </div>
+            </div>
+
+            <div class="card mb-8">
+                <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <h3 class="font-heading text-lg font-bold text-navy">Referenzen exportieren</h3>
+                    <div class="flex gap-2">
+                        <button type="button" id="refs-ref-all" class="text-xs font-body text-aqua-700 hover:underline">Alle sichtbaren</button>
+                        <button type="button" id="refs-ref-none" class="text-xs font-body text-aqua-700 hover:underline">Keine</button>
+                    </div>
+                </div>
+                <div id="refs-reference-list" class="max-h-72 overflow-y-auto border border-gray-100 rounded-lg px-3"></div>
+                <button type="button" id="refs-generate-btn" class="refs-generate-btn group relative mt-6 inline-flex min-w-44 overflow-hidden rounded-lg bg-navy px-6 py-3 font-body font-semibold text-white hover:opacity-90" aria-live="polite">
+                    <span class="refs-generate-btn__shimmer pointer-events-none absolute inset-0 z-0" aria-hidden="true"></span>
+                    <span class="refs-generate-btn__fill pointer-events-none absolute bottom-0 left-0 z-1 h-0.5 bg-cyan-400 transition-[width] duration-300 ease-out" style="width: 0%"></span>
+                    <span class="relative z-2 inline-flex items-center justify-center gap-2.5">
+                        <span class="refs-generate-btn__spinner" aria-hidden="true"></span>
+                        <span class="refs-generate-btn__label">PDF generieren</span>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-4 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8 text-center">Beispiel</h2>
+            <p class="font-body text-lg text-gray-700 mb-12 text-center max-w-3xl mx-auto">
+                Eingebettete Vorschau der HTML-Vorlage <code class="text-sm bg-gray-100 px-1 rounded">assets/templates/references-sample-a4.html</code> (identisches Raster wie der PDF-Export). Aktualisiere die Datei <code class="text-sm bg-gray-100 px-1 rounded">examples/references/references-sample.pdf</code> bei Bedarf mit <code class="text-sm bg-gray-100 px-1 rounded">pnpm run generate:references:sample-pdf</code>.
+            </p>
+            <div class="card-aqua max-w-5xl mx-auto">
+                <h3 class="font-heading text-xl font-bold text-navy mb-4 text-center">Sample: Referenz-Layout</h3>
+                <div class="mb-4">
+                    <iframe
+                        id="references-pdf-sample-iframe"
+                        class="references-pdf-preview-frame"
+                        title="Beispiel Referenz-Layout (HTML)"
+                        src=""
+                    ></iframe>
+                </div>
+                <p class="text-center mt-2 font-body text-gray-700">
+                    <a href="{{basePath}}examples/references/references-sample.pdf"
+                       class="text-aqua-700 hover:underline font-semibold"
+                       download>
+                        Beispiel-PDF herunterladen
+                    </a>
+                </p>
+                <p class="text-center mt-2 font-body text-gray-700">
+                    <a href="{{basePath}}examples/references/references-sample.pdf"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="text-aqua-700 hover:underline font-semibold">
+                        PDF in neuem Tab
+                    </a>
+                </p>
+            </div>
+        </div>
+    </section>
+    </main>
+
+    <div id="refs-pdf-export-root" aria-hidden="true"></div>
+
+    <!-- include: implementations-grid -->
+
+    <!-- include: footer -->
+
+    <script type="module">
+      import { bootReferencesPdf } from '../js/references-pdf.mjs'
+      bootReferencesPdf('{{basePath}}')
+    </script>
+    <script>
+      (function () {
+        var previewUrl = '{{basePath}}templates/references-sample-a4.html';
+        var iframe = document.getElementById('references-pdf-sample-iframe')
+        if (iframe) iframe.src = previewUrl
+      })()
+      var mobileMenuToggle = document.getElementById('mobile-menu-toggle')
+      var mobileMenu = document.getElementById('mobile-menu')
+      if (mobileMenuToggle && mobileMenu) {
+        mobileMenuToggle.addEventListener('click', function () {
+          mobileMenu.classList.toggle('open')
+        })
+      }
+    </script>
+    <!-- include: analytics -->
+</body>
+</html>

@@ -186,6 +186,17 @@
     </image:image>
   </url>
 
+  <!-- Reference PDF Generator Page -->
+  <url>
+    <loc>https://brand.thinkport.digital/implementations/references-pdf.html</loc>
+    <lastmod>2026-04-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>{{repoBaseUrl}}/assets/banner/opengraph/implementations.svg</image:loc>
+    </image:image>
+  </url>
+
   <!-- PowerPoint Templates Page -->
   <url>
     <loc>https://brand.thinkport.digital/implementations/powerpoint-templates.html</loc>

@@ -23,6 +23,7 @@
     "generate:ios:poster:samples": "node scripts/generate-ios-poster-samples.mjs",
     "generate:portfolio:pdf": "node scripts/generate-portfolio-pdf.mjs",
     "generate:letterhead:pdf": "node scripts/generate-letterhead-pdf.mjs",
+    "generate:references:sample-pdf": "node scripts/generate-references-sample-pdf.mjs",
     "generate:powerpoint": "node scripts/run-apply-cd-pptx.mjs",
     "generate:powerpoint:pdf": "node scripts/export-pptx-to-pdf.mjs",
     "test": "node tests/scripts/run-all-tests.mjs",

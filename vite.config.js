@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import { resolve, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import { copyFileSync, cpSync, existsSync, createReadStream, readFileSync, statSync, writeFileSync } from 'fs'
@@ -115,9 +115,32 @@ const copyRootFilesPlugin = ({ repoBaseUrl, themeColor }) => {
   }
 }
 
-export default defineConfig({
-  base: APP_BASE_PATH,
-  root: resolve(__dirname, 'app'),
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  const refsUser = env.THINKPORT_REFERENCES_USER || ''
+  const refsPass = env.THINKPORT_REFERENCES_PASS || ''
+
+  return {
+    base: APP_BASE_PATH,
+    root: resolve(__dirname, 'app'),
+  server: {
+    proxy: {
+      // Dev-only: forwards to Thinkport References API with Basic Auth from .env (not VITE_*).
+      '/api/thinkport-references': {
+        target: 'https://thinkportapi.netlify.app',
+        changeOrigin: true,
+        rewrite: () => '/.netlify/functions/references',
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            if (refsUser && refsPass) {
+              const token = Buffer.from(`${refsUser}:${refsPass}`, 'utf8').toString('base64')
+              proxyReq.setHeader('Authorization', `Basic ${token}`)
+            }
+          })
+        },
+      },
+    },
+  },
   plugins: [
     htmlInclude({
       repoBaseUrl: REPO_BASE_URL,
@@ -156,8 +179,10 @@ export default defineConfig({
         'implementations/powerpoint-templates': resolve(__dirname, 'app/implementations/powerpoint-templates.html'),
         impressum: resolve(__dirname, 'app/impressum.html'),
         'google920fd9ad773da353': resolve(__dirname, 'app/google920fd9ad773da353.html'),
+        'implementations/references-pdf': resolve(__dirname, 'app/implementations/references-pdf.html'),
       },
     },
   },
   publicDir: resolve(__dirname, 'assets'),
+  }
 })
