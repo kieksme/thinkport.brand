@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.20.0](https://github.com/kieksme/thinkport.brand/compare/v0.19.0...v0.20.0) (2026-04-10)
+
+
+### Features
+
+* **netlify:** add optional GitHub Actions integration for triggering Netlify builds with a build hook; update documentation for setup instructions ([162063f](https://github.com/kieksme/thinkport.brand/commit/162063f378375e38f59c622ce939b33f8ab5a381))
+
 ## [0.19.0](https://github.com/kieksme/thinkport.brand/compare/v0.18.0...v0.19.0) (2026-04-10)
 
 
