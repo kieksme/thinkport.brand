@@ -120,24 +120,39 @@ export default defineConfig(({ mode }) => {
   const refsUser = env.THINKPORT_REFERENCES_USER || ''
   const refsPass = env.THINKPORT_REFERENCES_PASS || ''
 
+  /**
+   * Dev proxy to Thinkport API: forward Basic Auth from the browser when set (e.g. reference images fetch);
+   * otherwise inject credentials from .env so `<img>` to the proxy still works when only .env is configured.
+   */
+  const configureThinkportApiProxy = (proxy) => {
+    proxy.on('proxyReq', (proxyReq) => {
+      if (proxyReq.getHeader('authorization')) return
+      if (refsUser && refsPass) {
+        const token = Buffer.from(`${refsUser}:${refsPass}`, 'utf8').toString('base64')
+        proxyReq.setHeader('Authorization', `Basic ${token}`)
+      }
+    })
+  }
+
   return {
     base: APP_BASE_PATH,
     root: resolve(__dirname, 'app'),
   server: {
     proxy: {
+      // Must be listed BEFORE `/api/thinkport-references` — otherwise the shorter prefix catches
+      // `/api/thinkport-references-media/...` and rewrites GETs to the GraphQL function (405).
+      '/api/thinkport-references-media': {
+        target: 'https://thinkportapi.netlify.app',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/thinkport-references-media/, '') || '/',
+        configure: configureThinkportApiProxy,
+      },
       // Dev-only: forwards to Thinkport References API with Basic Auth from .env (not VITE_*).
       '/api/thinkport-references': {
         target: 'https://thinkportapi.netlify.app',
         changeOrigin: true,
         rewrite: () => '/.netlify/functions/references',
-        configure: (proxy) => {
-          proxy.on('proxyReq', (proxyReq) => {
-            if (refsUser && refsPass) {
-              const token = Buffer.from(`${refsUser}:${refsPass}`, 'utf8').toString('base64')
-              proxyReq.setHeader('Authorization', `Basic ${token}`)
-            }
-          })
-        },
+        configure: configureThinkportApiProxy,
       },
     },
   },

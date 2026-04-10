@@ -192,6 +192,13 @@
     #refs-pdf-export-root .ref-excerpt {
       font-weight: 600;
     }
+    #refs-pdf-export-root .markdown-body img {
+      max-width: 100%;
+      max-height: 42mm;
+      object-fit: contain;
+      display: block;
+      margin: 0 0 3mm 0;
+    }
     #refs-pdf-export-root .markdown-body ul,
     #refs-pdf-export-root .markdown-body ol {
       margin: 0 0 4mm 1.2em;
@@ -233,6 +240,183 @@
       font-weight: 600;
     }
 
+    /* Listing: up to three reference cards per A4 (thinkport.digital/referenzen style) */
+    #refs-pdf-export-root .tp-ref-page--listing .top-row {
+      min-height: 16mm;
+    }
+    #refs-pdf-export-root .tp-ref-page--listing .logo img {
+      width: 48mm;
+      height: auto;
+    }
+    #refs-pdf-export-root .content--listing {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #refs-pdf-export-root .ref-listing-subject {
+      margin-top: 1.5mm;
+      font-size: 9pt;
+      font-weight: 700;
+      color: #0b2649;
+      letter-spacing: -0.01em;
+    }
+    #refs-pdf-export-root .ref-listing-meta {
+      margin-top: 0.8mm;
+      font-size: 7pt;
+      color: #555;
+    }
+    #refs-pdf-export-root .ref-listing-stack {
+      margin-top: 2mm;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5mm;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+    #refs-pdf-export-root .ref-card {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      border: 0.15mm solid #e0e8f0;
+      border-radius: 1.2mm;
+      overflow: hidden;
+      background: #fff;
+    }
+    #refs-pdf-export-root .ref-card__row {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 3mm;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    #refs-pdf-export-root .ref-card__hero {
+      flex: 0 0 48mm;
+      width: 48mm;
+      min-width: 48mm;
+      min-height: 28mm;
+      align-self: stretch;
+      overflow: hidden;
+      background: #f0f4f8;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 0.8mm;
+      box-sizing: border-box;
+    }
+    #refs-pdf-export-root .ref-card__hero img {
+      max-width: 100%;
+      max-height: 28mm;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      object-position: left top;
+      display: block;
+    }
+    #refs-pdf-export-root .ref-card__noimg {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      min-height: 26mm;
+      padding: 1mm 0;
+      background: transparent;
+      color: #999;
+      font-size: 9pt;
+    }
+    #refs-pdf-export-root .ref-card__body {
+      padding: 1.2mm 1.8mm 1.2mm 0;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    #refs-pdf-export-root .ref-card__title {
+      margin: 0 0 0.6mm 0;
+      font-size: 10pt;
+      font-weight: 700;
+      color: #0b2649;
+      line-height: 1.25;
+    }
+    #refs-pdf-export-root .ref-card__meta {
+      margin: 0 0 0.8mm 0;
+      font-size: 8.5pt;
+      color: #5a6a7a;
+      line-height: 1.3;
+    }
+    #refs-pdf-export-root .ref-card__excerpt {
+      margin: 0;
+      font-size: 8pt;
+      line-height: 1.34;
+      color: #333;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+    }
+    #refs-pdf-export-root .ref-card__tags {
+      margin-top: 0.8mm;
+      padding-top: 0.7mm;
+      border-top: 0.12mm solid #e8edf3;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      align-content: flex-start;
+      gap: 0.9mm 1mm;
+    }
+    #refs-pdf-export-root .ref-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      min-height: 4.5mm;
+      padding: 0.35mm 1.5mm;
+      font-family: "Montserrat", sans-serif;
+      font-size: 6pt;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.03em;
+      color: #0b2649;
+      background: transparent;
+      border: none;
+      border-radius: 2.5mm;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    /* On-page export counter (live) */
+    .refs-pdf-count-strip {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.35rem 0.5rem;
+      padding: 0.65rem 1rem;
+      border-radius: 0.5rem;
+      background: linear-gradient(135deg, rgba(11, 38, 73, 0.06) 0%, rgba(0, 188, 212, 0.08) 100%);
+      border: 1px solid rgba(11, 38, 73, 0.12);
+    }
+    .refs-pdf-count-strip .refs-count-num {
+      display: inline-block;
+      font-family: "Montserrat", sans-serif;
+      font-weight: 700;
+      font-size: 1.35rem;
+      color: #0b2649;
+      min-width: 1.5ch;
+      font-variant-numeric: tabular-nums;
+    }
+    .refs-count-pop {
+      animation: refs-count-pop 0.38s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes refs-count-pop {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.12); color: #00bcd4; }
+      100% { transform: scale(1); }
+    }
+
     .references-pdf-preview-frame {
       width: 100%;
         min-height: 540px;
@@ -264,6 +448,12 @@
     }
     #refs-generate-btn.is-generating {
       cursor: wait;
+    }
+    /* Progress fill above shimmer so the bar stays visible */
+    #refs-generate-btn .refs-generate-btn__fill {
+      height: 0.28rem;
+      z-index: 5;
+      box-shadow: 0 0 10px rgba(34, 211, 238, 0.45);
     }
     #refs-generate-btn .refs-generate-btn__shimmer {
       opacity: 0;
@@ -310,6 +500,66 @@
       60% { transform: translateX(-4px); }
       80% { transform: translateX(4px); }
     }
+
+    .refs-pdf-progress-wrap[hidden] {
+      display: none !important;
+    }
+    .refs-pdf-progress-wrap:not([hidden]) {
+      display: block;
+    }
+    .refs-pdf-progress-wrap .refs-pdf-progress__track {
+      min-height: 0.5rem;
+    }
+    .refs-pdf-progress-wrap .refs-pdf-progress__bar {
+      min-width: 0;
+      box-shadow: 0 0 0 1px rgba(11, 38, 73, 0.06);
+    }
+
+    #refs-load-btn {
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+    #refs-load-btn:hover:not(:disabled):not(.is-loading) {
+      box-shadow: 0 4px 14px rgba(192, 38, 211, 0.35);
+    }
+    #refs-load-btn:active:not(:disabled):not(.is-loading) {
+      transform: scale(0.98);
+    }
+    #refs-load-btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
+    }
+    #refs-load-btn.is-loading {
+      cursor: wait;
+    }
+    #refs-load-btn .refs-load-btn__shimmer {
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    #refs-load-btn.is-loading .refs-load-btn__shimmer {
+      opacity: 1;
+      background: linear-gradient(
+        105deg,
+        transparent 38%,
+        rgba(255, 255, 255, 0.18) 50%,
+        transparent 62%
+      );
+      background-size: 220% 100%;
+      animation: refs-generate-shimmer 1.15s ease-in-out infinite;
+    }
+    #refs-load-btn .refs-load-btn__spinner {
+      display: none;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      border-top-color: #fff;
+      border-radius: 9999px;
+      animation: refs-generate-spin 0.65s linear infinite;
+      flex-shrink: 0;
+    }
+    #refs-load-btn.is-loading .refs-load-btn__spinner {
+      display: inline-block;
+    }
     </style>
 </head>
 <body>
@@ -338,8 +588,8 @@
                     <h3 class="font-heading text-xl font-bold text-navy mb-4">Hinweise</h3>
                     <ul class="font-body text-gray-700 space-y-2 list-disc list-inside">
                         <li>Lokal: optional <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_REFERENCES_USER</code> / <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_REFERENCES_PASS</code> in <code class="text-sm bg-gray-100 px-1 rounded">.env</code> für den Vite-Proxy (<code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code>).</li>
-                        <li>Hero-Bilder brauchen CORS auf der Bild-URL, sonst kann der Export abbrechen.</li>
-                        <li>Langer Text wird auf einer Seite begrenzt (Overflow hidden), analog zur ersten Ausbaustufe.</li>
+                        <li>Motive liegen auf dem API-Host, z. B. <code class="text-sm bg-gray-100 px-1 rounded break-all">https://thinkportapi.netlify.app/images/references/reference-simpl.png</code> (Feld <code class="text-sm bg-gray-100 px-1 rounded">image</code>). Ohne CORS blockiert der Browser <code class="text-sm bg-gray-100 px-1 rounded">fetch</code> von einer anderen Origin; lokal mappt <code class="text-sm bg-gray-100 px-1 rounded">pnpm dev</code> dieselben URLs auf <code class="text-sm bg-gray-100 px-1 rounded">/api/thinkport-references-media/…</code>. Basic Auth: wie bei „Referenzen laden“ oder <code class="text-sm bg-gray-100 px-1 rounded">THINKPORT_REFERENCES_*</code> in <code class="text-sm bg-gray-100 px-1 rounded">.env</code>. Auf der statischen Live-Site: CORS auf den Bildern oder ein Proxy auf deiner Domain.</li>
+                        <li>Export: <strong>Karten-Listing</strong> (Orientierung <a href="https://thinkport.digital/referenzen" class="text-aqua-700 hover:underline font-semibold" rel="noopener noreferrer" target="_blank">thinkport.digital/referenzen</a>), bis zu <strong>3 Referenzen pro PDF-Seite</strong> mit Motiv, Teaser und Tags. Bilder und Logo werden vor dem Rendern verkleinert, damit der Browser weniger Pixel verarbeiten muss.</li>
                     </ul>
                 </div>
             </div>
@@ -356,8 +606,12 @@
                         <input type="password" id="refs-api-pass" autocomplete="current-password" class="mt-1 w-full rounded border border-gray-300 px-3 py-2 text-sm" placeholder="Basic Auth password">
                     </label>
                 </div>
-                <button type="button" id="refs-load-btn" class="rounded-lg bg-fuchsia-600 px-5 py-2.5 text-white font-body font-semibold hover:bg-fuchsia-500 transition-colors">
-                    Referenzen laden
+                <button type="button" id="refs-load-btn" class="refs-load-btn group relative inline-flex min-w-48 items-center justify-center overflow-hidden rounded-lg bg-fuchsia-600 px-5 py-2.5 font-body font-semibold text-white transition-colors hover:bg-fuchsia-500" aria-live="polite">
+                    <span class="refs-load-btn__shimmer pointer-events-none absolute inset-0 z-0 rounded-lg" aria-hidden="true"></span>
+                    <span class="relative z-2 inline-flex items-center justify-center gap-2.5">
+                        <span class="refs-load-btn__spinner" aria-hidden="true"></span>
+                        <span class="refs-load-btn__label">Referenzen laden</span>
+                    </span>
                 </button>
                 <p id="refs-load-status" class="mt-3 font-body text-sm text-gray-700" role="status"></p>
             </div>
@@ -396,14 +650,33 @@
                     </div>
                 </div>
                 <div id="refs-reference-list" class="max-h-72 overflow-y-auto border border-gray-100 rounded-lg px-3"></div>
+                <p id="refs-pdf-count" class="refs-pdf-count-strip mt-4 font-body text-sm text-gray-700" role="status" aria-live="polite">
+                    <span class="text-gray-600">Im PDF enthalten:</span>
+                    <span class="refs-count-num-wrap inline-flex items-baseline gap-1">
+                        <span class="refs-count-num" data-refs-count>0</span>
+                        <span data-refs-label>Referenzen</span>
+                    </span>
+                    <span class="text-gray-600 text-xs">·</span>
+                    <span class="text-gray-700 text-xs font-medium">ca. <span data-pdf-pages class="tabular-nums">0 Seiten</span></span>
+                                       <span class="text-gray-500 text-xs w-full sm:w-auto">(nur angehakte Einträge · Listing, 3 pro Seite)</span>
+                </p>
                 <button type="button" id="refs-generate-btn" class="refs-generate-btn group relative mt-6 inline-flex min-w-44 overflow-hidden rounded-lg bg-navy px-6 py-3 font-body font-semibold text-white hover:opacity-90" aria-live="polite">
-                    <span class="refs-generate-btn__shimmer pointer-events-none absolute inset-0 z-0" aria-hidden="true"></span>
-                    <span class="refs-generate-btn__fill pointer-events-none absolute bottom-0 left-0 z-1 h-0.5 bg-cyan-400 transition-[width] duration-300 ease-out" style="width: 0%"></span>
-                    <span class="relative z-2 inline-flex items-center justify-center gap-2.5">
+                    <span class="refs-generate-btn__shimmer pointer-events-none absolute inset-0 z-1 rounded-lg" aria-hidden="true"></span>
+                    <span class="refs-generate-btn__fill pointer-events-none absolute bottom-0 left-0 z-5 bg-cyan-400 transition-[width] duration-300 ease-out" style="width: 0%"></span>
+                    <span class="relative z-10 inline-flex items-center justify-center gap-2.5">
                         <span class="refs-generate-btn__spinner" aria-hidden="true"></span>
                         <span class="refs-generate-btn__label">PDF generieren</span>
                     </span>
                 </button>
+                <div id="refs-pdf-progress-wrap" class="refs-pdf-progress-wrap mt-4 max-w-md" hidden>
+                    <div class="mb-1.5 flex flex-wrap items-center justify-between gap-2">
+                        <p id="refs-pdf-progress-text" class="font-body text-xs text-gray-600" aria-live="polite"></p>
+                        <span id="refs-pdf-progress-pct" class="font-body text-xs tabular-nums font-medium text-navy"></span>
+                    </div>
+                    <div class="refs-pdf-progress__track h-2.5 w-full overflow-hidden rounded-full bg-gray-200" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="PDF export progress">
+                        <div id="refs-pdf-progress-bar" class="refs-pdf-progress__bar h-full rounded-full bg-linear-to-r from-cyan-500 to-aqua-500 transition-[width] duration-300 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -412,7 +685,7 @@
         <div class="max-w-6xl mx-auto">
             <h2 class="font-heading text-3xl md:text-4xl font-bold text-navy mb-8 text-center">Beispiel</h2>
             <p class="font-body text-lg text-gray-700 mb-12 text-center max-w-3xl mx-auto">
-                Eingebettete Vorschau der HTML-Vorlage <code class="text-sm bg-gray-100 px-1 rounded">assets/templates/references-sample-a4.html</code> (identisches Raster wie der PDF-Export). Aktualisiere die Datei <code class="text-sm bg-gray-100 px-1 rounded">examples/references/references-sample.pdf</code> bei Bedarf mit <code class="text-sm bg-gray-100 px-1 rounded">pnpm run generate:references:sample-pdf</code>.
+                Eingebettete Vorschau der HTML-Vorlage <code class="text-sm bg-gray-100 px-1 rounded">assets/templates/references-sample-a4.html</code> (Listing wie der Export: drei Referenzen pro Seite, zweispaltige Karten). Die Datei <code class="text-sm bg-gray-100 px-1 rounded">examples/references/references-sample.pdf</code> erzeugst du mit <code class="text-sm bg-gray-100 px-1 rounded">pnpm run generate:references:sample-pdf</code>.
             </p>
             <div class="card-aqua max-w-5xl mx-auto">
                 <h3 class="font-heading text-xl font-bold text-navy mb-4 text-center">Sample: Referenz-Layout</h3>

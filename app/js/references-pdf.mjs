@@ -23,8 +23,75 @@ const REFERENCES_QUERY = `
 
 const PRODUCTION_ENDPOINT = 'https://thinkportapi.netlify.app/.netlify/functions/references'
 
+/**
+ * Origin hosting GraphQL + static files. Reference hero images are public URLs such as
+ * `https://thinkportapi.netlify.app/images/references/reference-simpl.png` (field `image` in the API).
+ */
+const THINKPORT_API_ORIGIN = new URL(PRODUCTION_ENDPOINT).origin
+
 function getEndpoint() {
   return import.meta.env.DEV ? '/api/thinkport-references' : PRODUCTION_ENDPOINT
+}
+
+/**
+ * In Vite dev, rewrites `https://thinkportapi.netlify.app/...` asset URLs to the local proxy so fetch/html2canvas are same-origin.
+ * @param {string} url
+ * @returns {string}
+ */
+function rewriteThinkportApiMediaForDev(url) {
+  if (!url || typeof url !== 'string') return url
+  if (!import.meta.env.DEV) return url
+  if (url.startsWith('/api/thinkport-references-media')) return url
+  try {
+    const u = new URL(url, window.location.href)
+    if (u.origin === THINKPORT_API_ORIGIN) {
+      return `/api/thinkport-references-media${u.pathname}${u.search}`
+    }
+  } catch {
+    // ignore invalid URL
+  }
+  return url
+}
+
+/**
+ * `image` from the API is typically an absolute URL under {@link THINKPORT_API_ORIGIN} (e.g. …/images/references/*.png)
+ * or a root-relative path such as `/images/references/...`.
+ * @param {string} basePath
+ * @param {string} pathOrUrl
+ * @returns {string}
+ */
+function resolveReferenceImageUrl(basePath, pathOrUrl) {
+  if (!pathOrUrl || typeof pathOrUrl !== 'string') return ''
+  if (/^https?:\/\//i.test(pathOrUrl) || pathOrUrl.startsWith('data:')) {
+    return rewriteThinkportApiMediaForDev(pathOrUrl)
+  }
+  if (pathOrUrl.startsWith('/')) {
+    return rewriteThinkportApiMediaForDev(`${THINKPORT_API_ORIGIN}${pathOrUrl}`)
+  }
+  return rewriteThinkportApiMediaForDev(toAbsoluteAssetUrl(basePath, pathOrUrl))
+}
+
+/** Filter DevTools console with this string to trace PDF export. */
+const PDF_LOG = '[refs-pdf]'
+
+/**
+ * @param {string} step
+ * @param {string} [detail]
+ */
+function pdfLog(step, detail = '') {
+  const t = typeof performance !== 'undefined' ? Math.round(performance.now()) : 0
+  if (detail) console.info(PDF_LOG, step, detail, `(t=${t}ms)`)
+  else console.info(PDF_LOG, step, `(t=${t}ms)`)
+}
+
+/**
+ * @param {string} url
+ * @param {number} [max]
+ */
+function pdfShortUrl(url, max = 72) {
+  if (url == null || typeof url !== 'string') return ''
+  if (url.startsWith('data:')) return `data:… (len=${url.length})`
+  return url.length <= max ? url : `${url.slice(0, max)}…`
 }
 
 function authHeader(user, pass) {
@@ -67,66 +134,330 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;')
 }
 
-function renderMarkdown(md) {
-  if (!md || typeof md !== 'string') return ''
-  const m = globalThis.marked
-  if (!m) return `<p>${escapeHtml(md)}</p>`
-  try {
-    if (typeof m.parse === 'function') return m.parse(md, { async: false })
-    if (typeof m === 'function') return m(md)
-  } catch {
-    /* fall through */
+/** Max references per A4 page (listing cards, thinkport.digital/referenzen style). */
+const REFS_PER_PAGE = 3
+
+/** html2canvas scale: 1.5 keeps A4 text sharp while sampling ~44% fewer pixels than 2.0. */
+const PDF_EXPORT_CANVAS_SCALE = 1.5
+/** JPEG quality for page rasters and downscaled assets (lower = faster encode, smaller PDF). */
+const PDF_EXPORT_JPEG_QUALITY = 0.88
+/** Card hero images (~full content width); cap bitmap size before DOM insert. */
+const PDF_EXPORT_CARD_HERO_MAX_W = 720
+const PDF_EXPORT_CARD_HERO_MAX_H = 405
+/** Header logo ~48 mm; cap raster width. */
+const PDF_EXPORT_LOGO_MAX_W = 380
+
+/** Empty SVG keeps logo slot size if fetch fails (html2canvas stays same-origin safe). */
+const PDF_EXPORT_LOGO_PLACEHOLDER_DATA_URL = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="380" height="84" viewBox="0 0 380 84"/>',
+)}`
+
+/** Minimal placeholder for any broken export <img> (card hero, logo, etc.). */
+const PDF_EXPORT_BROKEN_IMG_PLACEHOLDER = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" width="720" height="405" viewBox="0 0 720 405"/>',
+)}`
+
+/**
+ * Replace images that did not decode so html2canvas does not reject the page.
+ * @param {HTMLElement} root
+ */
+function applyPlaceholderForBrokenImages(root) {
+  const imgs = root.querySelectorAll('img')
+  for (const img of imgs) {
+    if (img.naturalWidth > 0 && img.naturalHeight > 0) continue
+    pdfLog('broken img → placeholder', pdfShortUrl(img.currentSrc || img.src, 48))
+    img.removeAttribute('srcset')
+    img.src = PDF_EXPORT_BROKEN_IMG_PLACEHOLDER
   }
-  return `<p>${escapeHtml(md)}</p>`
 }
 
 /**
- * @param {object} ref
- * @param {{ index: number, total: number, basePath: string }} ctx
+ * Resolve a site-relative path (e.g. ../logos/...) against the current page URL.
+ * @param {string} basePath
+ * @param {string} pathOrUrl
+ * @returns {string}
  */
-function buildReferencePageElement(ref, ctx) {
-  const title = ref.title || ref.id || 'Referenz'
-  const customer = ref.customer || '—'
-  const year = ref.year || '—'
-  const cats = Array.isArray(ref.categories) ? ref.categories.join(', ') : ''
-  const tags = Array.isArray(ref.tags) ? ref.tags.join(', ') : ''
-  const excerpt = ref.excerpt || ''
-  const bodyHtml = renderMarkdown(ref.body || '')
-  const logoSrc = `${ctx.basePath}logos/venitus/thinkport-venitus-light.svg`
+function toAbsoluteAssetUrl(basePath, pathOrUrl) {
+  if (!pathOrUrl || typeof pathOrUrl !== 'string') return ''
+  if (/^https?:\/\//i.test(pathOrUrl) || pathOrUrl.startsWith('data:')) return pathOrUrl
+  const rel = pathOrUrl.startsWith('/') ? pathOrUrl.slice(1) : `${basePath}${pathOrUrl}`.replace(/\/{2,}/g, '/')
+  try {
+    return new URL(rel, window.location.href).href
+  } catch {
+    return pathOrUrl
+  }
+}
+
+/**
+ * Fetch image as data URL when CORS allows (better for html2canvas + SVG/remote heroes).
+ * @param {string} url
+ * @param {string | null} [authorization] `Authorization` header (e.g. Basic …) for dev proxy + protected assets
+ * @returns {Promise<string|null>}
+ */
+async function tryFetchAsDataUrl(url, authorization = null) {
+  if (!url || typeof url !== 'string') return null
+  pdfLog('fetch start', `${pdfShortUrl(url)}${authorization ? ' +Authorization' : ''}`)
+  try {
+    /** @type {Record<string, string>} */
+    const headers = {}
+    if (authorization) headers.Authorization = authorization
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit', cache: 'force-cache', headers })
+    if (!res.ok) {
+      pdfLog('fetch HTTP', `${res.status} ${pdfShortUrl(url)}`)
+      return null
+    }
+    const blob = await res.blob()
+    const dataUrl = await new Promise((resolve, reject) => {
+      const fr = new FileReader()
+      fr.onload = () => resolve(/** @type {string} */ (fr.result))
+      fr.onerror = () => reject(fr.error)
+      fr.readAsDataURL(blob)
+    })
+    pdfLog('fetch ok', `${pdfShortUrl(url)} blob=${blob.size}b dataLen=${dataUrl.length}`)
+    return dataUrl
+  } catch (err) {
+    pdfLog('fetch error', `${pdfShortUrl(url)} ${err instanceof Error ? err.message : String(err)}`)
+    return null
+  }
+}
+
+/**
+ * Downscale large raster `data:image/...` URLs before DOM insert so html2canvas has less to sample.
+ * @param {string} dataUrl
+ * @param {number} maxW
+ * @param {number} maxH
+ * @returns {Promise<string>}
+ */
+async function downscaleRasterDataUrl(dataUrl, maxW, maxH) {
+  if (!dataUrl || typeof dataUrl !== 'string' || !dataUrl.startsWith('data:image')) return dataUrl
+  return new Promise((resolve) => {
+    const img = new Image()
+    img.onload = () => {
+      const w = img.naturalWidth
+      const h = img.naturalHeight
+      if (!w || !h) {
+        pdfLog('downscale skip', '0×0 natural size')
+        resolve(dataUrl)
+        return
+      }
+      if (w <= maxW && h <= maxH) {
+        pdfLog('downscale skip', `${w}×${h} within max ${maxW}×${maxH}`)
+        resolve(dataUrl)
+        return
+      }
+      const r = Math.min(maxW / w, maxH / h, 1)
+      const cw = Math.max(1, Math.round(w * r))
+      const ch = Math.max(1, Math.round(h * r))
+      pdfLog('downscale run', `${w}×${h} → ${cw}×${ch}`)
+      const canvas = document.createElement('canvas')
+      canvas.width = cw
+      canvas.height = ch
+      const ctx = canvas.getContext('2d')
+      if (!ctx) {
+        resolve(dataUrl)
+        return
+      }
+      ctx.drawImage(img, 0, 0, cw, ch)
+      try {
+        resolve(canvas.toDataURL('image/jpeg', PDF_EXPORT_JPEG_QUALITY))
+      } catch {
+        resolve(dataUrl)
+      }
+    }
+    img.onerror = () => {
+      pdfLog('downscale img error', 'decode failed, keep original')
+      resolve(dataUrl)
+    }
+    img.src = dataUrl
+  })
+}
+
+/**
+ * Wait until images in subtree have loaded (or errored).
+ * @param {HTMLElement} root
+ */
+async function waitForImages(root) {
+  const imgs = [...root.querySelectorAll('img')]
+  const needLoad = imgs.filter((img) => !(img.complete && img.naturalHeight > 0)).length
+  pdfLog('waitForImages', `${imgs.length} <img> · ${needLoad} await load/error`)
+  await Promise.all(
+    imgs.map(
+      (img, idx) =>
+        new Promise((resolve) => {
+          if (img.complete && img.naturalHeight > 0) {
+            resolve()
+            return
+          }
+          const done = () => {
+            pdfLog('waitForImages loaded', `#${idx} ${img.naturalWidth}×${img.naturalHeight} src=${pdfShortUrl(img.currentSrc || img.src, 48)}`)
+            resolve()
+          }
+          img.addEventListener('load', done, { once: true })
+          img.addEventListener('error', done, { once: true })
+        }),
+    ),
+  )
+  pdfLog('waitForImages', 'decode…')
+  await Promise.all(imgs.map((img) => (img.decode ? img.decode().catch(() => {}) : Promise.resolve())))
+  pdfLog('waitForImages', 'done')
+}
+
+/**
+ * @param {string} str
+ * @param {number} max
+ */
+function truncateText(str, max) {
+  if (str == null || str === '') return '—'
+  const s = String(str)
+  if (s.length <= max) return s
+  return `${s.slice(0, Math.max(0, max - 1))}…`
+}
+
+/**
+ * @template T
+ * @param {T[]} arr
+ * @param {number} size
+ * @returns {T[][]}
+ */
+function splitIntoChunks(arr, size) {
+  const chunks = []
+  for (let i = 0; i < arr.length; i += size) {
+    chunks.push(arr.slice(i, i + size))
+  }
+  return chunks
+}
+
+/** Listing card: title / excerpt max lengths (chars). */
+const PDF_CARD_TITLE_MAX = 140
+const PDF_CARD_EXCERPT_MAX = 420
+const PDF_CARD_META_CUSTOMER_MAX = 72
+
+/**
+ * @param {object} ref
+ * @returns {string} HTML fragment of .ref-tag spans
+ */
+function buildTagPillsHtml(ref) {
+  const raw = [...(Array.isArray(ref.categories) ? ref.categories : []), ...(Array.isArray(ref.tags) ? ref.tags : [])]
+  const labels = uniqueSorted(
+    raw
+      .map((s) => (s == null ? '' : String(s).trim().replace(/\s+/g, ' ')))
+      .filter(Boolean),
+  )
+  if (labels.length === 0) return ''
+  return labels
+    .map((label) => `<span class="ref-tag">${escapeHtml(label)}</span>`)
+    .join('')
+}
+
+/**
+ * @param {object[]} refs
+ * @param {string} basePath
+ * @param {string | null} [authorization] Basic Auth for Thinkport API images (dev proxy forwards this).
+ */
+async function preloadRefCardImages(refs, basePath, authorization = null) {
+  pdfLog('preloadRefCardImages', `${refs.length} card(s)`)
+  return Promise.all(
+    refs.map(async (ref) => {
+      let heroSrc = ''
+      if (ref.image) {
+        const rid = ref.id || ref.title || '?'
+        const abs = resolveReferenceImageUrl(basePath, ref.image)
+        pdfLog('preload hero', `${rid} ← ${pdfShortUrl(abs)}`)
+        const fetched = await tryFetchAsDataUrl(abs, authorization)
+        if (fetched && fetched.startsWith('data:image')) {
+          heroSrc = await downscaleRasterDataUrl(
+            fetched,
+            PDF_EXPORT_CARD_HERO_MAX_W,
+            PDF_EXPORT_CARD_HERO_MAX_H,
+          )
+          pdfLog('preload hero done', `${rid} dataURL`)
+        } else {
+          heroSrc = ''
+          pdfLog('preload hero skip', `${rid} (Motiv nicht ladbar — Platzhalter in PDF)`)
+        }
+      }
+      return { ref, heroSrc }
+    }),
+  )
+}
+
+/**
+ * @param {{ ref: object, heroSrc: string }[]} cardsWithHeroes
+ * @param {{ pageIndex: number, totalPages: number, basePath: string, totalRefCount: number }} ctx
+ */
+async function buildReferenceListingPage(cardsWithHeroes, ctx) {
+  const { pageIndex, totalPages, basePath, totalRefCount } = ctx
+  pdfLog(
+    'buildPage',
+    `PDF ${pageIndex + 1}/${totalPages} · ${cardsWithHeroes.length} card(s) · ${totalRefCount} total refs`,
+  )
+  const logoAbs = toAbsoluteAssetUrl(basePath, 'logos/venitus/thinkport-venitus-light.svg')
+  pdfLog('buildPage logo fetch', pdfShortUrl(logoAbs))
+  let logoSrc = await tryFetchAsDataUrl(logoAbs)
+  if (!logoSrc || !logoSrc.startsWith('data:image')) {
+    pdfLog('buildPage logo fallback', 'placeholder (Logo nicht ladbar)')
+    logoSrc = PDF_EXPORT_LOGO_PLACEHOLDER_DATA_URL
+  } else {
+    logoSrc = await downscaleRasterDataUrl(
+      logoSrc,
+      PDF_EXPORT_LOGO_MAX_W,
+      Math.round(PDF_EXPORT_LOGO_MAX_W * 0.22),
+    )
+  }
+
+  const refStart = pageIndex * REFS_PER_PAGE + 1
+  const refEnd = refStart + cardsWithHeroes.length - 1
+
+  const cardsHtml = cardsWithHeroes
+    .map(({ ref, heroSrc }) => {
+      const title = escapeHtml(truncateText(ref.title || ref.id, PDF_CARD_TITLE_MAX))
+      const customerRaw = ref.customerHidden ? '—' : ref.customer || '—'
+      const customer = escapeHtml(truncateText(customerRaw, PDF_CARD_META_CUSTOMER_MAX))
+      const year = escapeHtml(truncateText(ref.year || '—', 24))
+      const metaLine = `${customer} • ${year}`
+      const excerpt = escapeHtml(truncateText(ref.excerpt || '', PDF_CARD_EXCERPT_MAX))
+      const tagsHtml = buildTagPillsHtml(ref)
+      const heroInner = heroSrc
+        ? `<img src="${escapeHtml(heroSrc)}" alt="" />`
+        : '<span class="ref-card__noimg">—</span>'
+      return `<article class="ref-card">
+        <div class="ref-card__row">
+          <div class="ref-card__hero">${heroInner}</div>
+          <div class="ref-card__body">
+            <h3 class="ref-card__title">${title}</h3>
+            <p class="ref-card__meta">${metaLine}</p>
+            <p class="ref-card__excerpt">${excerpt}</p>
+            ${tagsHtml ? `<div class="ref-card__tags">${tagsHtml}</div>` : ''}
+          </div>
+        </div>
+      </article>`
+    })
+    .join('')
 
   const wrap = document.createElement('div')
   wrap.innerHTML = `
-  <main class="tp-ref-page">
+  <main class="tp-ref-page tp-ref-page--listing">
     <div class="print-mark fold-mark-top" aria-hidden="true"></div>
     <div class="print-mark fold-mark-bottom" aria-hidden="true"></div>
     <div class="hole-mark" aria-hidden="true"></div>
     <div class="edge-barcode" aria-hidden="true">
       <svg class="edge-barcode-svg" viewBox="0 0 240 64" preserveAspectRatio="none"></svg>
     </div>
-    <section class="content">
+    <section class="content content--listing">
       <div class="top-row">
         <div class="claim"></div>
         <div class="logo">
-          <img src="${escapeHtml(logoSrc)}" alt="Thinkport - A Venitus Company" crossorigin="anonymous" />
+          <img src="${escapeHtml(logoSrc)}" alt="Thinkport - A Venitus Company" />
         </div>
       </div>
-      <div class="ref-block">
-        <div class="sender-line">Thinkport GmbH – Referenz / Case Study</div>
-        <div class="ref-meta">
-          <div><strong>Kunde</strong> ${escapeHtml(customer)}</div>
-          <div><strong>Jahr</strong> ${escapeHtml(year)}</div>
-          ${cats ? `<div><strong>Kategorien</strong> ${escapeHtml(cats)}</div>` : ''}
-          ${tags ? `<div><strong>Tags</strong> ${escapeHtml(tags)}</div>` : ''}
-        </div>
-      </div>
-      <div class="subject">${escapeHtml(title)}</div>
-      ${ref.image ? `<div class="ref-hero"><img src="${escapeHtml(ref.image)}" alt="" crossorigin="anonymous" /></div>` : ''}
-      <div class="letter">
-        ${excerpt ? `<p class="ref-excerpt">${escapeHtml(excerpt)}</p>` : ''}
-        <div class="markdown-body">${bodyHtml}</div>
+      <div class="sender-line">Thinkport GmbH – Referenzübersicht</div>
+      <p class="ref-listing-subject">Ausgewählte Referenzen</p>
+      <p class="ref-listing-meta">${totalRefCount} ${totalRefCount === 1 ? 'Eintrag' : 'Einträge'} gesamt · Referenzen ${refStart}–${refEnd} · PDF-Seite ${pageIndex + 1} / ${totalPages}</p>
+      <div class="ref-listing-stack">
+        ${cardsHtml}
       </div>
     </section>
-    <div class="page-number">Seite ${ctx.index + 1} von ${ctx.total}</div>
+    <div class="page-number">Seite ${pageIndex + 1} von ${totalPages}</div>
     <footer class="footer">
       <div class="footer-grid">
         <div>
@@ -155,9 +486,10 @@ function buildReferencePageElement(ref, ctx) {
     </footer>
   </main>`
 
-  const main = wrap.firstElementChild
+  const main = /** @type {HTMLElement} */ (wrap.firstElementChild)
   const svg = main.querySelector('.edge-barcode-svg')
   initBarcode(svg, 'https://thinkport.digital')
+  pdfLog('buildPage DOM ready', `page ${pageIndex + 1}/${totalPages}`)
   return main
 }
 
@@ -208,15 +540,54 @@ function refMatchesFilters(ref, selectedCategories, selectedTags) {
   return true
 }
 
-async function pageToPdfImage(pageEl, html2canvas) {
-  const canvas = await html2canvas(pageEl, {
-    scale: 2,
-    useCORS: true,
-    allowTaint: false,
-    logging: false,
-    backgroundColor: '#ffffff',
+/** Lets the browser paint loading UI before heavy main-thread work (e.g. html2canvas). */
+function flushUi() {
+  return new Promise((resolve) => {
+    requestAnimationFrame(() => {
+      requestAnimationFrame(resolve)
+    })
   })
-  return canvas.toDataURL('image/jpeg', 0.92)
+}
+
+/**
+ * @param {HTMLElement} pageEl
+ * @param {typeof globalThis.html2canvas} html2canvas
+ * @param {boolean} [isRetry]
+ */
+async function pageToPdfImage(pageEl, html2canvas, isRetry = false) {
+  const t0 = typeof performance !== 'undefined' ? performance.now() : 0
+  pdfLog('html2canvas', `${isRetry ? 'retry ' : ''}start scale=${PDF_EXPORT_CANVAS_SCALE}`)
+  let canvas
+  try {
+    canvas = await html2canvas(pageEl, {
+      scale: PDF_EXPORT_CANVAS_SCALE,
+      useCORS: true,
+      allowTaint: false,
+      logging: import.meta.env.DEV,
+      backgroundColor: '#ffffff',
+      imageTimeout: 20000,
+      removeContainer: true,
+    })
+  } catch (err) {
+    pdfLog('html2canvas error', err instanceof Error ? err.message : String(err))
+    if (!isRetry) {
+      applyPlaceholderForBrokenImages(pageEl)
+      return pageToPdfImage(pageEl, html2canvas, true)
+    }
+    throw err
+  }
+  const ms = typeof performance !== 'undefined' ? Math.round(performance.now() - t0) : 0
+  pdfLog('html2canvas', `done ${ms}ms → JPEG`)
+  try {
+    return canvas.toDataURL('image/jpeg', PDF_EXPORT_JPEG_QUALITY)
+  } catch (err) {
+    pdfLog('toDataURL error', err instanceof Error ? err.message : String(err))
+    if (!isRetry) {
+      applyPlaceholderForBrokenImages(pageEl)
+      return pageToPdfImage(pageEl, html2canvas, true)
+    }
+    throw err
+  }
 }
 
 export function bootReferencesPdf(basePath) {
@@ -224,6 +595,8 @@ export function bootReferencesPdf(basePath) {
   const userEl = document.getElementById('refs-api-user')
   const passEl = document.getElementById('refs-api-pass')
   const loadBtn = document.getElementById('refs-load-btn')
+  const loadBtnLabel = loadBtn?.querySelector('.refs-load-btn__label')
+  const LOAD_LABEL_DEFAULT = 'Referenzen laden'
   const catContainer = document.getElementById('refs-category-filters')
   const tagContainer = document.getElementById('refs-tag-filters')
   const refListEl = document.getElementById('refs-reference-list')
@@ -238,6 +611,12 @@ export function bootReferencesPdf(basePath) {
   const refSelectAll = document.getElementById('refs-ref-all')
   const refSelectNone = document.getElementById('refs-ref-none')
   const exportRoot = document.getElementById('refs-pdf-export-root')
+  const exportCountEl = document.getElementById('refs-pdf-count')
+  const progressWrap = document.getElementById('refs-pdf-progress-wrap')
+  const progressBar = document.getElementById('refs-pdf-progress-bar')
+  const progressText = document.getElementById('refs-pdf-progress-text')
+  const progressPct = document.getElementById('refs-pdf-progress-pct')
+  const progressTrack = progressWrap?.querySelector('[role="progressbar"]')
 
   let allReferences = []
   let selectedRefIds = new Set()
@@ -257,27 +636,74 @@ export function bootReferencesPdf(basePath) {
 
   /**
    * @param {boolean} on
-   * @param {{ page?: number, total?: number, progress?: number }} [opts]
+   */
+  function setLoadUiLoading(on) {
+    if (!loadBtn) return
+    loadBtn.classList.toggle('is-loading', on)
+    loadBtn.setAttribute('aria-busy', on ? 'true' : 'false')
+    if (loadBtnLabel) {
+      loadBtnLabel.textContent = on ? 'Lade Referenzen…' : LOAD_LABEL_DEFAULT
+    }
+  }
+
+  /**
+   * @param {boolean} on
+   * @param {{ page?: number, total?: number, progress?: number, phase?: 'prepare' | 'render' }} [opts]
    */
   function setGenerateUiLoading(on, opts = {}) {
     if (!genBtn) return
     genBtn.classList.toggle('is-generating', on)
     genBtn.setAttribute('aria-busy', on ? 'true' : 'false')
+    const pct = typeof opts.progress === 'number' ? Math.min(100, Math.max(0, opts.progress)) : null
     if (genBtnFill) {
       if (!on) {
         genBtnFill.style.width = '0%'
-      } else if (typeof opts.progress === 'number') {
-        genBtnFill.style.width = `${Math.min(100, Math.max(0, opts.progress))}%`
+      } else if (pct != null) {
+        genBtnFill.style.width = `${pct}%`
       }
     }
     if (genBtnLabel) {
       if (!on) {
         genBtnLabel.textContent = GEN_LABEL_DEFAULT
+      } else if (opts.total != null && opts.page != null && opts.phase === 'render') {
+        genBtnLabel.textContent = `Seite ${opts.page + 1}/${opts.total} · Rendern…`
       } else if (opts.total != null && opts.page != null) {
         genBtnLabel.textContent = `Seite ${opts.page + 1} von ${opts.total}…`
       } else {
         genBtnLabel.textContent = 'PDF wird erzeugt…'
       }
+    }
+    if (progressWrap) {
+      progressWrap.hidden = !on
+      progressWrap.setAttribute('aria-hidden', on ? 'false' : 'true')
+    }
+    if (progressBar) {
+      if (!on) {
+        progressBar.style.width = '0%'
+      } else if (pct != null) {
+        progressBar.style.width = `${pct}%`
+      }
+    }
+    if (progressTrack) {
+      if (!on) {
+        progressTrack.setAttribute('aria-valuenow', '0')
+      } else if (pct != null) {
+        progressTrack.setAttribute('aria-valuenow', String(Math.round(pct)))
+      }
+    }
+    if (progressText) {
+      if (!on) {
+        progressText.textContent = ''
+      } else if (opts.total != null && opts.page != null && opts.phase === 'render') {
+        progressText.textContent = `Seite ${opts.page + 1} von ${opts.total} — Layout wird gerendert (kurz warten…)`
+      } else if (opts.total != null && opts.page != null) {
+        progressText.textContent = `Seite ${opts.page + 1} von ${opts.total} — Vorbereitung`
+      } else {
+        progressText.textContent = 'PDF wird vorbereitet…'
+      }
+    }
+    if (progressPct) {
+      progressPct.textContent = on && pct != null ? `${Math.round(pct)}%` : ''
     }
   }
 
@@ -290,6 +716,28 @@ export function bootReferencesPdf(basePath) {
     const sc = getSelectedFromContainer(catContainer)
     const st = getSelectedFromContainer(tagContainer)
     return allReferences.filter((r) => refMatchesFilters(r, sc, st))
+  }
+
+  function updateExportCountPreview() {
+    if (!exportCountEl) return
+    const filtered = getFilteredReferences()
+    const n = filtered.filter((r) => selectedRefIds.has(r.id)).length
+    const numEl = exportCountEl.querySelector('[data-refs-count]')
+    const labelEl = exportCountEl.querySelector('[data-refs-label]')
+    const pagesEl = exportCountEl.querySelector('[data-pdf-pages]')
+    if (numEl) {
+      numEl.textContent = String(n)
+      numEl.classList.remove('refs-count-pop')
+      void numEl.offsetWidth
+      numEl.classList.add('refs-count-pop')
+    }
+    if (labelEl) {
+      labelEl.textContent = n === 1 ? 'Referenz' : 'Referenzen'
+    }
+    if (pagesEl) {
+      const p = n === 0 ? 0 : Math.ceil(n / REFS_PER_PAGE)
+      pagesEl.textContent = p === 0 ? '0 Seiten' : p === 1 ? '1 Seite' : `${p} Seiten`
+    }
   }
 
   function renderFilterSection() {
@@ -357,8 +805,10 @@ export function bootReferencesPdf(basePath) {
         const id = cb.getAttribute('data-id')
         if (cb.checked) selectedRefIds.add(id)
         else selectedRefIds.delete(id)
+        updateExportCountPreview()
       })
     })
+    updateExportCountPreview()
   }
 
   catSelectAll?.addEventListener('click', () => {
@@ -399,6 +849,7 @@ export function bootReferencesPdf(basePath) {
     const user = userEl?.value || ''
     const pass = passEl?.value || ''
     setStatus('Lade Referenzen…', false)
+    setLoadUiLoading(true)
     loadBtn.disabled = true
     try {
       allReferences = await fetchReferences(user, pass)
@@ -412,6 +863,7 @@ export function bootReferencesPdf(basePath) {
       if (tagContainer) tagContainer.innerHTML = ''
       if (refListEl) refListEl.innerHTML = ''
     } finally {
+      setLoadUiLoading(false)
       loadBtn.disabled = false
     }
   })
@@ -424,6 +876,7 @@ export function bootReferencesPdf(basePath) {
       setStatus('PDF-Bibliotheken fehlen (jsPDF / html2canvas).', true)
       return
     }
+    const pdfAuth = authHeader(userEl?.value || '', passEl?.value ?? '')
     const filtered = getFilteredReferences()
     const toExport = filtered.filter((r) => selectedRefIds.has(r.id))
     if (toExport.length === 0) {
@@ -433,9 +886,13 @@ export function bootReferencesPdf(basePath) {
     }
 
     genBtn.disabled = true
-    const total = toExport.length
-    setGenerateUiLoading(true, { page: 0, total, progress: 0 })
+    const refTotal = toExport.length
+    const chunks = splitIntoChunks(toExport, REFS_PER_PAGE)
+    const pdfPageCount = chunks.length
+    pdfLog('export start', `${refTotal} ref(s) → ${pdfPageCount} PDF page(s) · authField=${pdfAuth ? 'yes' : 'no'} (proxy may still inject .env)`)
+    setGenerateUiLoading(true, { page: 0, total: pdfPageCount, progress: 0 })
     setStatus('PDF wird erzeugt…', false)
+    await flushUi()
 
     try {
       const { jsPDF } = jspdf
@@ -445,29 +902,64 @@ export function bootReferencesPdf(basePath) {
 
       if (!exportRoot) throw new Error('Export container missing')
 
-      for (let i = 0; i < toExport.length; i += 1) {
-        setGenerateUiLoading(true, { page: i, total, progress: (i / total) * 100 })
-        const pageEl = buildReferencePageElement(toExport[i], { index: i, total, basePath })
+      for (let i = 0; i < chunks.length; i += 1) {
+        pdfLog('page', `${i + 1}/${pdfPageCount} — preload + build`)
+        setGenerateUiLoading(true, { page: i, total: pdfPageCount, progress: (i / pdfPageCount) * 100, phase: 'prepare' })
+        setStatus(`PDF: Seite ${i + 1} von ${pdfPageCount} — Bilder und Layout…`, false)
+        await flushUi()
+
+        const cards = await preloadRefCardImages(chunks[i], basePath, pdfAuth)
+        const pageEl = await buildReferenceListingPage(cards, {
+          pageIndex: i,
+          totalPages: pdfPageCount,
+          basePath,
+          totalRefCount: refTotal,
+        })
         exportRoot.innerHTML = ''
         exportRoot.appendChild(pageEl)
         await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))
+        await waitForImages(pageEl)
+        applyPlaceholderForBrokenImages(pageEl)
+        await new Promise((r) => setTimeout(r, 80))
+
+        setGenerateUiLoading(true, {
+          page: i,
+          total: pdfPageCount,
+          progress: ((i + 0.35) / pdfPageCount) * 100,
+          phase: 'render',
+        })
+        setStatus(`PDF: Seite ${i + 1} von ${pdfPageCount} — Rendern (CPU-intensiv, oft ~10–45 s je Seite)…`, false)
+        await flushUi()
+
+        pdfLog('page', `${i + 1}/${pdfPageCount} — html2canvas (UI kann hier „einfrieren“ — normal)`)
         const imgData = await pageToPdfImage(pageEl, html2canvas)
         if (i > 0) pdf.addPage()
         pdf.addImage(imgData, 'JPEG', 0, 0, pageW, pageH)
-        setGenerateUiLoading(true, { page: i, total, progress: ((i + 1) / total) * 100 })
+        setGenerateUiLoading(true, {
+          page: i,
+          total: pdfPageCount,
+          progress: ((i + 1) / pdfPageCount) * 100,
+          phase: 'prepare',
+        })
+        setStatus(`PDF: Seite ${i + 1} von ${pdfPageCount} — fertig.`, false)
+        await flushUi()
       }
 
       exportRoot.innerHTML = ''
       pdf.save('thinkport-referenzen.pdf')
-      setStatus('PDF fertig.', false)
+      pdfLog('export success', `saved thinkport-referenzen.pdf (${refTotal} refs, ${pdfPageCount} pages)`)
+      setStatus(`PDF fertig (${refTotal} Referenz(en), ${pdfPageCount} Seite(n)).`, false)
     } catch (e) {
       console.error(e)
+      pdfLog('export FAILED', e instanceof Error ? e.message : String(e))
       setStatus(e.message || 'PDF-Erzeugung fehlgeschlagen (z. B. CORS bei Bildern).', true)
     } finally {
       setGenerateUiLoading(false)
       genBtn.disabled = false
     }
   })
+
+  updateExportCountPreview()
 
   if (import.meta.env.DEV) {
     setStatus('Dev: optional .env mit THINKPORT_REFERENCES_USER / THINKPORT_REFERENCES_PASS für den Proxy.', false)

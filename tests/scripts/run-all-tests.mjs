@@ -12,6 +12,7 @@ const __dirname = dirname(__filename);
 const testsDir = __dirname;
 
 const testFiles = [
+  'references-pdf-table.test.mjs',
   'sample-data.test.mjs',
   'generate-card.test.mjs',
   'generate-ios-poster.test.mjs',

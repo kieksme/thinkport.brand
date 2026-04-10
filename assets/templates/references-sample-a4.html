@@ -3,44 +3,43 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Thinkport – Sample Reference PDF</title>
+  <title>Thinkport – Sample Reference PDF (Listing)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
-    :root {
-      --tp-dark-blue: #0b2649;
-      --tp-dark-gray: #333333;
-      --page-w: 210mm;
-      --page-h: 297mm;
+    /* Aligns with app/implementations/references-pdf.html export surface; wrapper visible for print/iframe */
+    #refs-pdf-export-root {
+      position: relative;
+      left: auto;
+      top: auto;
+      pointer-events: auto;
     }
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #f4f4f4;
-      font-family: "Montserrat", sans-serif;
-      font-size: 10pt;
-      color: var(--tp-dark-gray);
-    }
-    .tp-ref-page {
-      width: var(--page-w);
-      height: var(--page-h);
+    #refs-pdf-export-root .tp-ref-page {
+      width: 210mm;
+      height: 297mm;
       background: #ffffff;
       margin: 0 auto;
       position: relative;
       overflow: hidden;
+      font-family: "Montserrat", sans-serif;
+      font-size: 10pt;
+      color: #333333;
+      box-sizing: border-box;
     }
-    .print-mark {
+    #refs-pdf-export-root .tp-ref-page * {
+      box-sizing: border-box;
+    }
+    #refs-pdf-export-root .print-mark {
       position: absolute;
       left: 0;
       width: 8mm;
       border-top: 0.25mm solid #7a7a7a;
       z-index: 2;
     }
-    .fold-mark-top { top: 105mm; }
-    .fold-mark-bottom { top: 210mm; }
-    .hole-mark {
+    #refs-pdf-export-root .fold-mark-top { top: 105mm; }
+    #refs-pdf-export-root .fold-mark-bottom { top: 210mm; }
+    #refs-pdf-export-root .hole-mark {
       position: absolute;
       left: 3.3mm;
       top: 148.5mm;
@@ -52,7 +51,7 @@
       background: transparent;
       z-index: 2;
     }
-    .edge-barcode {
+    #refs-pdf-export-root .edge-barcode {
       position: absolute;
       right: 0.8mm;
       top: 200mm;
@@ -64,63 +63,46 @@
       overflow: hidden;
       background: #fff;
     }
-    .edge-barcode svg { width: 100%; height: 100%; display: block; }
-    .content {
+    #refs-pdf-export-root .edge-barcode svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+    #refs-pdf-export-root .content {
       position: absolute;
       left: 28mm;
       right: 28mm;
       top: 20mm;
       bottom: 42mm;
     }
-    .top-row {
+    #refs-pdf-export-root .top-row {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       min-height: 28mm;
     }
-    .logo img {
+    #refs-pdf-export-root .logo img {
       width: 64mm;
       height: auto;
       display: block;
       margin-top: -0.5mm;
     }
-    .sender-line {
+    #refs-pdf-export-root .sender-line {
       font-size: 7pt;
       letter-spacing: -0.08pt;
       white-space: nowrap;
-      color: var(--tp-dark-blue);
+      color: #0b2649;
       margin-bottom: 3.2mm;
     }
-    .ref-block { margin-top: 8mm; }
-    .ref-meta {
-      font-size: 9pt;
-      line-height: 1.35;
-      color: var(--tp-dark-blue);
-    }
-    .ref-meta div { margin-bottom: 2mm; }
-    .subject {
-      margin-top: 6mm;
-      color: var(--tp-dark-blue);
-      font-size: 11pt;
-      font-weight: 700;
-    }
-    .letter {
-      margin-top: 5mm;
-      color: var(--tp-dark-gray);
-      font-size: 9.5pt;
-      line-height: 1.42;
-    }
-    .letter p { margin: 0 0 4mm 0; }
-    .ref-excerpt { font-weight: 600; }
-    .page-number {
+    #refs-pdf-export-root .page-number {
       position: absolute;
       right: 28mm;
       bottom: 32mm;
       font-size: 9pt;
-      color: var(--tp-dark-gray);
+      color: #333333;
       font-weight: 500;
     }
-    .footer {
+    #refs-pdf-export-root .footer {
       position: absolute;
       left: 28mm;
       right: 28mm;
@@ -128,76 +110,276 @@
       border-top: 0.35mm solid #d6d6d6;
       padding-top: 3.5mm;
       font-size: 7.5pt;
-      color: var(--tp-dark-blue);
+      color: #0b2649;
     }
-    .footer-grid {
+    #refs-pdf-export-root .footer-grid {
       display: grid;
       grid-template-columns: 1.15fr 1fr 1fr 1.2fr;
       gap: 5mm;
       line-height: 1.2;
     }
-    .footer-title { color: var(--tp-dark-blue); font-weight: 600; }
+    #refs-pdf-export-root .footer-title {
+      color: #0b2649;
+      font-weight: 600;
+    }
+
+    /* Listing: up to three cards per page (same as live PDF export) */
+    #refs-pdf-export-root .tp-ref-page--listing .top-row {
+      min-height: 16mm;
+    }
+    #refs-pdf-export-root .tp-ref-page--listing .logo img {
+      width: 48mm;
+      height: auto;
+    }
+    #refs-pdf-export-root .content--listing {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    #refs-pdf-export-root .ref-listing-subject {
+      margin-top: 1.5mm;
+      font-size: 9pt;
+      font-weight: 700;
+      color: #0b2649;
+      letter-spacing: -0.01em;
+    }
+    #refs-pdf-export-root .ref-listing-meta {
+      margin-top: 0.8mm;
+      font-size: 7pt;
+      color: #555;
+    }
+    #refs-pdf-export-root .ref-listing-stack {
+      margin-top: 2mm;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5mm;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+    }
+    #refs-pdf-export-root .ref-card {
+      flex: 1 1 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      border: 0.15mm solid #e0e8f0;
+      border-radius: 1.2mm;
+      overflow: hidden;
+      background: #fff;
+    }
+    #refs-pdf-export-root .ref-card__row {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 3mm;
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+    #refs-pdf-export-root .ref-card__hero {
+      flex: 0 0 48mm;
+      width: 48mm;
+      min-width: 48mm;
+      min-height: 28mm;
+      align-self: stretch;
+      overflow: hidden;
+      background: #f0f4f8;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 0.8mm;
+      box-sizing: border-box;
+    }
+    #refs-pdf-export-root .ref-card__hero img {
+      max-width: 100%;
+      max-height: 28mm;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      object-position: left top;
+      display: block;
+    }
+    #refs-pdf-export-root .ref-card__noimg {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      min-height: 26mm;
+      padding: 1mm 0;
+      background: transparent;
+      color: #999;
+      font-size: 9pt;
+    }
+    #refs-pdf-export-root .ref-card__body {
+      padding: 1.2mm 1.8mm 1.2mm 0;
+      flex: 1 1 auto;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    #refs-pdf-export-root .ref-card__title {
+      margin: 0 0 0.6mm 0;
+      font-size: 10pt;
+      font-weight: 700;
+      color: #0b2649;
+      line-height: 1.25;
+    }
+    #refs-pdf-export-root .ref-card__meta {
+      margin: 0 0 0.8mm 0;
+      font-size: 8.5pt;
+      color: #5a6a7a;
+      line-height: 1.3;
+    }
+    #refs-pdf-export-root .ref-card__excerpt {
+      margin: 0;
+      font-size: 8pt;
+      line-height: 1.34;
+      color: #333;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+    }
+    #refs-pdf-export-root .ref-card__tags {
+      margin-top: 0.8mm;
+      padding-top: 0.7mm;
+      border-top: 0.12mm solid #e8edf3;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      align-content: flex-start;
+      gap: 0.9mm 1mm;
+    }
+    #refs-pdf-export-root .ref-tag {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-sizing: border-box;
+      min-height: 4.5mm;
+      padding: 0.35mm 1.5mm;
+      font-family: "Montserrat", sans-serif;
+      font-size: 6pt;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: 0.03em;
+      color: #0b2649;
+      background: transparent;
+      border: none;
+      border-radius: 2.5mm;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #e8e8e8;
+    }
   </style>
 </head>
 <body>
-  <main class="tp-ref-page">
-    <div class="print-mark fold-mark-top" aria-hidden="true"></div>
-    <div class="print-mark fold-mark-bottom" aria-hidden="true"></div>
-    <div class="hole-mark" aria-hidden="true"></div>
-    <div class="edge-barcode" aria-hidden="true">
-      <svg id="edge-barcode-svg" viewBox="0 0 240 64" preserveAspectRatio="none"></svg>
-    </div>
-    <section class="content">
-      <div class="top-row">
-        <div class="claim"></div>
-        <div class="logo">
-          <img src="../logos/venitus/thinkport-venitus-light.svg" alt="Thinkport - A Venitus Company" />
-        </div>
+  <div id="refs-pdf-export-root">
+    <main class="tp-ref-page tp-ref-page--listing">
+      <div class="print-mark fold-mark-top" aria-hidden="true"></div>
+      <div class="print-mark fold-mark-bottom" aria-hidden="true"></div>
+      <div class="hole-mark" aria-hidden="true"></div>
+      <div class="edge-barcode" aria-hidden="true">
+        <svg id="edge-barcode-svg" viewBox="0 0 240 64" preserveAspectRatio="none"></svg>
       </div>
-      <div class="ref-block">
-        <div class="sender-line">Thinkport GmbH – Referenz / Case Study</div>
-        <div class="ref-meta">
-          <div><strong>Kunde</strong> Beispielkunde AG</div>
-          <div><strong>Jahr</strong> 2025</div>
-          <div><strong>Kategorien</strong> Retail, Cloud</div>
-          <div><strong>Tags</strong> Migration, Kubernetes</div>
+      <section class="content content--listing">
+        <div class="top-row">
+          <div class="claim"></div>
+          <div class="logo">
+            <img src="../logos/venitus/thinkport-venitus-light.svg" alt="Thinkport - A Venitus Company" />
+          </div>
         </div>
-      </div>
-      <div class="subject">Digitale Plattform &amp; Cloud-Modernisierung</div>
-      <div class="letter">
-        <p class="ref-excerpt">Kurzer Teaser: Gemeinsam wurde eine skalierbare Referenzarchitektur umgesetzt und der Go-live im Kerngeschäft abgesichert.</p>
-        <p>Dies ist eine <strong>Beispiel-PDF</strong> für die Implementationsseite. Sie zeigt das gleiche A4-Raster wie das Briefpapier: Logo, Metadaten, Titel, Text und Footer. Der interaktive Generator nutzt Live-Daten aus der Thinkport References API.</p>
-        <p>Mit freundlichen Grüßen<br />Thinkport GmbH</p>
-      </div>
-    </section>
-    <div class="page-number">Seite 1 von 1</div>
-    <footer class="footer">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-title">Thinkport GmbH</div>
-          Arnsburger Straße 74<br />
-          60385 Frankfurt
+        <div class="sender-line">Thinkport GmbH – Referenzübersicht</div>
+        <p class="ref-listing-subject">Ausgewählte Referenzen</p>
+        <p class="ref-listing-meta">3 Einträge gesamt · Referenzen 1–3 · PDF-Seite 1 / 1 · Beispiel (statisch)</p>
+        <div class="ref-listing-stack">
+          <article class="ref-card">
+            <div class="ref-card__row">
+              <div class="ref-card__hero">
+                <img src="../../examples/linkedin/linkedin-culture-main-darkBlue-1128x376.jpg" alt="" />
+              </div>
+              <div class="ref-card__body">
+                <h3 class="ref-card__title">Data Pipeline für Auto-Sensordaten mit Kafka</h3>
+                <p class="ref-card__meta">Automotive • 2023</p>
+                <p class="ref-card__excerpt">Skalierbare Low-Latency-Plattform für Sensordaten; Predictive Maintenance, Flottenkommunikation und Notfall-Services.</p>
+                <div class="ref-card__tags">
+                  <span class="ref-tag">Streaming</span>
+                  <span class="ref-tag">Kafka</span>
+                  <span class="ref-tag">Cloud</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="ref-card">
+            <div class="ref-card__row">
+              <div class="ref-card__hero">
+                <img src="../../examples/linkedin/linkedin-photo-darkBlue-900x600.jpg" alt="" />
+              </div>
+              <div class="ref-card__body">
+                <h3 class="ref-card__title">Digitale Plattform &amp; Cloud-Modernisierung</h3>
+                <p class="ref-card__meta">Beispielkunde AG • 2025</p>
+                <p class="ref-card__excerpt">Vorschau-Layout wie der PDF-Export (drei Referenzen pro Seite). Live-Daten kommen aus der Thinkport References API.</p>
+                <div class="ref-card__tags">
+                  <span class="ref-tag">Retail</span>
+                  <span class="ref-tag">Cloud</span>
+                  <span class="ref-tag">Migration</span>
+                  <span class="ref-tag">Kubernetes</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="ref-card">
+            <div class="ref-card__row">
+              <div class="ref-card__hero">
+                <img src="../../examples/linkedin/linkedin-culture-module-darkBlue-502x282.jpg" alt="" />
+              </div>
+              <div class="ref-card__body">
+                <h3 class="ref-card__title">Zentrale Integrationsplattform</h3>
+                <p class="ref-card__meta">Telekommunikation • 2025</p>
+                <p class="ref-card__excerpt">Eventgetriebene Architektur zur Bündelung von Schnittstellen, Standardisierung und höhere Datenqualität in Kernprozessen.</p>
+                <div class="ref-card__tags">
+                  <span class="ref-tag">Integration</span>
+                  <span class="ref-tag">Confluent</span>
+                  <span class="ref-tag">Streaming</span>
+                </div>
+              </div>
+            </div>
+          </article>
         </div>
-        <div>
-          <div class="footer-title">www.thinkport.digital</div>
-          Telefon +49 151 63417156<br />
-          kontakt@th.inkport.digital
+      </section>
+      <div class="page-number">Seite 1 von 1</div>
+      <footer class="footer">
+        <div class="footer-grid">
+          <div>
+            <div class="footer-title">Thinkport GmbH</div>
+            Arnsburger Straße 74<br />
+            60385 Frankfurt
+          </div>
+          <div>
+            <div class="footer-title">www.thinkport.digital</div>
+            Telefon +49 151 63417156<br />
+            kontakt@th.inkport.digital
+          </div>
+          <div>
+            <div class="footer-title">Geschäftsführung</div>
+            Tobias Drechsler<br />
+            Dominik Fries<br />
+            Henning Breyer
+          </div>
+          <div>
+            <div class="footer-title">Handelsregister</div>
+            Amtsgericht Frankfurt am<br />
+            Main HRB 129804<br />
+            <span style="text-decoration: underline;">USt-IDNr:</span> DE510746560
+          </div>
         </div>
-        <div>
-          <div class="footer-title">Geschäftsführung</div>
-          Tobias Drechsler<br />
-          Dominik Fries<br />
-          Henning Breyer
-        </div>
-        <div>
-          <div class="footer-title">Handelsregister</div>
-          Amtsgericht Frankfurt am<br />
-          Main HRB 129804<br />
-          <span style="text-decoration: underline;">USt-IDNr:</span> DE510746560
-        </div>
-      </div>
-    </footer>
-  </main>
+      </footer>
+    </main>
+  </div>
   <script>
     (function() {
       var barcodeValue = 'https://thinkport.digital';

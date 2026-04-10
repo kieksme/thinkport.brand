@@ -1,0 +1,8 @@
+---
+description: Regenerate preview and sample outputs when source code or templates change (see AGENTS.md).
+alwaysApply: true
+---
+
+# Preview and generated assets
+
+Follow the canonical section in **AGENTS.md** (repository root): **Preview and generated assets**.
