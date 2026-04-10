@@ -3,7 +3,6 @@
  * Always calls same-origin `/api/thinkport/…` (Vite dev proxy or Netlify function); optional server PDF via VITE_THINKPORT_SERVER_PDF.
  * @see https://thinkportapi.netlify.app (Thinkport API, Basic Auth)
  */
-
 import {
   REFERENCES_QUERY,
   THINKPORT_API_ORIGIN,
