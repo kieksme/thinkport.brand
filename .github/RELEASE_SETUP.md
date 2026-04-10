@@ -35,6 +35,7 @@ Once the initial release is set up, release-please will:
 - Automatically create release PRs when you push to `main` (if there are changes)
 - You can merge the release PR to create a new release
 - The `release.yml` workflow will automatically package and upload all assets
+- The [`deploy.yml`](workflows/deploy.yml) workflow deploys GitHub Pages (and optionally pings Netlify via build hook) when that GitHub Release is **published** — not on every merge to `main`
 
 ## Commit Message Format
 

@@ -49,7 +49,9 @@ Redirects target **`/api/...`** from the site root. If you serve the built app u
 
 ## GitHub Actions → Netlify (optional)
 
-The [`Deploy to GitHub Pages`](.github/workflows/deploy.yml) workflow can **also** ping a [Netlify build hook](https://docs.netlify.com/configure-builds/build-hooks/) after a successful `build` job (same triggers as Pages: merged PRs to `main`, successful release workflow, manual dispatch).
+The [`Deploy to GitHub Pages`](.github/workflows/deploy.yml) workflow can **also** ping a [Netlify build hook](https://docs.netlify.com/configure-builds/build-hooks/) after a successful `build` job. Triggers match production Pages deploys: **published GitHub Release** (e.g. after merging the Release Please release PR) and **manual** `workflow_dispatch`. Merging ordinary PRs to `main` does **not** run this workflow.
+
+If Netlify is also connected with **Continuous deployment** on every push to `main`, production builds can still run on each push independently of GitHub Actions. To align Netlify production with releases only, rely on the build hook (and/or tag-based production deploys) and avoid auto-deploying `main` to production for the same site.
 
 1. In Netlify: **Site configuration → Build & deploy → Continuous deployment → Build hooks** → create a hook (e.g. branch `main`).
 2. In GitHub: **Repository → Settings → Secrets and variables → Actions** → add **`NETLIFY_BUILD_HOOK_URL`** with the full hook URL.

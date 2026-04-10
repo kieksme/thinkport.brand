@@ -1,15 +1,8 @@
 name: Deploy to GitHub Pages
 
 on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
-  workflow_run:
-    workflows: ["Create Release Assets"]
-    types:
-      - completed
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
@@ -24,20 +17,15 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Run on merged PRs, successful release workflow runs, and manual dispatches
-    if: >
-      (github.event_name == 'pull_request' && github.event.pull_request.merged == true) ||
-      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success') ||
-      github.event_name == 'workflow_dispatch'
     steps:
-      - name: Checkout (release workflow run)
-        if: github.event_name == 'workflow_run'
+      - name: Checkout (release tag)
+        if: github.event_name == 'release'
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event.release.tag_name }}
 
       - name: Checkout
-        if: github.event_name != 'workflow_run'
+        if: github.event_name != 'release'
         uses: actions/checkout@v4
 
       - name: Setup pnpm
